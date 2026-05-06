@@ -16,3 +16,4 @@ $routes->get('auth/profil', 'Auth::profil');
 
 // Route pour traiter l'envoi du login et rediriger
 $routes->post('auth/register', 'Auth::register');
+$routes->post('auth/register', 'Auth::register');
