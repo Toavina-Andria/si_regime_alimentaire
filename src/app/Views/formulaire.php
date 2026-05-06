@@ -1,0 +1,42 @@
+<!-- formulaire.php -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Compléter mon profil</title>
+<link rel="stylesheet" href="<?= base_url('assets/style.css') ?>">
+</head>
+<body>
+    <form action="profil.php" method="POST">
+        <h3>Bienvenue !</h3>
+        <p>Complétez vos informations pour votre programme de régime.</p>
+
+        <label>Date de naissance :</label>
+        <input type="date" name="date_naissance" required>
+
+        <label>Genre :</label>
+        <select name="genre">
+            <option value="homme">Homme</option>
+            <option value="femme">Femme</option>
+            <option value="autre">Autre</option>
+        </select>
+
+        <input type="text" name="adresse" placeholder="Adresse complète">
+
+        <label>Taille (cm) :</label>
+        <input type="number" name="taille_cm" step="0.01" placeholder="Ex: 175">
+
+        <label>Poids (kg) :</label>
+        <input type="number" name="poids_kg" step="0.01" placeholder="Ex: 70.5">
+
+        <label>Votre Objectif :</label>
+        <select name="objectif">
+            <option value="reduire_poids">Perdre du poids</option>
+            <option value="augmenter_poids">Prendre du poids</option>
+            <option value="imc_ideal">Maintenir (IMC Idéal)</option>
+        </select>
+        
+        <button type="submit">Enregistrer mon profil</button>
+    </form>
+</body>
+</html>
