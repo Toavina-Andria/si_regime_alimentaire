@@ -116,6 +116,6 @@ class Utilisateur extends Model
     // Vérifier mot de passe
     public function verifyPassword(string $password): bool
     {
-        return password_verify($password, $this['mot_de_passe']);
+        return password_verify($password, $this->getAttribute('mot_de_passe'));
     }
 }
