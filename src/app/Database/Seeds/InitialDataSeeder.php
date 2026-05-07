@@ -8,6 +8,71 @@ class InitialDataSeeder extends Seeder
 {
     public function run()
     {
+        $date_format = 'Y-m-d H:i:s';
+        // Insert 15 codebonus
+        $data = [
+            [
+                'code' => 'STARTFIT15',
+                'valeur_points' => 15,
+                'est_valide' => true,
+                'expires_at' => date($date_format, strtotime('+15 days')),
+            ],
+            [
+                'code' => 'GYMPOWER25',
+                'valeur_points' => 25,
+                'est_valide' => true,
+                'expires_at' => date($date_format, strtotime('+45 days')),
+            ],
+            [
+                'code' => 'CARDIO50',
+                'valeur_points' => 50,
+                'est_valide' => true,
+                'expires_at' => date($date_format, strtotime('+90 days')),
+            ],
+            [
+                'code' => 'MUSCLEBOOST35',
+                'valeur_points' => 35,
+                'est_valide' => true,
+                'expires_at' => date($date_format, strtotime('+60 days')),
+            ],
+            [
+                'code' => 'SUMMERBODY75',
+                'valeur_points' => 75,
+                'est_valide' => true,
+                'expires_at' => date($date_format, strtotime('+120 days')),
+            ],
+            [
+                'code' => 'FITLIFE100',
+                'valeur_points' => 100,
+                'est_valide' => true,
+                'expires_at' => date($date_format, strtotime('+180 days')),
+            ],
+            [
+                'code' => 'ENERGYUP45',
+                'valeur_points' => 45,
+                'est_valide' => true,
+                'expires_at' => date($date_format, strtotime('+75 days')),
+            ],
+            [
+                'code' => 'STRONG2026',
+                'valeur_points' => 60,
+                'est_valide' => true,
+                'expires_at' => date($date_format, strtotime('+150 days')),
+            ],
+            [
+                'code' => 'WELLNESS80',
+                'valeur_points' => 80,
+                'est_valide' => false,
+                'expires_at' => date($date_format, strtotime('-10 days')),
+            ],
+            [
+                'code' => 'NEWYEAR150',
+                'valeur_points' => 150,
+                'est_valide' => true,
+                'expires_at' => date($date_format, strtotime('+365 days')),
+            ],
+        ];
+        $this->db->table('code_bonus')->insertBatch($data);
         // Insert abonnements
         $data = [
             [
