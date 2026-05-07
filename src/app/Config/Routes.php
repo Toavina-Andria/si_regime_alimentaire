@@ -11,3 +11,8 @@ $routes->get('auth/profil', 'Auth::profil');
 $routes->post('auth/updateProfil', 'Auth::updateProfil');
 $routes->get('dashboard', 'Auth::dashboard');
 $routes->get('logout', 'Auth::logout');
+
+
+// Routes pour les régimes alimentaires
+$routes->get('regimes', 'RegimeController::index');
+$routes->get('regime/(:num)', 'RegimeController::show/$1');
