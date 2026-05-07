@@ -5,30 +5,18 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-// La page d'accueil affiche le login
-$routes->get('/', 'Auth::index');
+// La page d'accueil affiche le login $routes->get('/', 'Auth::index');
 
-// Route pour afficher le formulaire de profil
-$routes->get('auth/profil', 'Auth::profil');
 
-// Route pour traiter l'envoi du login et rediriger
-$routes->post('auth/register', 'Auth::register');
+
+
 $routes->get('/', 'Auth::index');
 $routes->post('auth/register', 'Auth::register');
 $routes->get('auth/profil', 'Auth::profil');
 $routes->post('auth/updateProfil', 'Auth::updateProfil');
 $routes->get('dashboard', 'Auth::dashboard');
-$routes->get('connexion', 'Auth::loginForm');
-$routes->post('auth/doLogin', 'Auth::doLogin');
-$routes->get('logout', 'Auth::logout');
-$routes->get('/dash', 'DashboardController::index');
-$routes->get('/code', 'CodeController::index');
-$routes->post('/code/verify', 'CodeController::verifier');
-// La page d'accueil affiche le login
-$routes->get('/', 'Auth::index');
+$routes->get('auth/logout', 'Auth::logout');
 
-// Route pour afficher le formulaire de profil
-$routes->get('auth/profil', 'Auth::profil');
-
-// Route pour traiter l'envoi du login et rediriger
-$routes->post('auth/register', 'Auth::register');
+// Optionnel : page de connexion pour les déjà inscrits (à créer si besoin)
+// $routes->get('connexion', 'Auth::loginForm');
+// $routes->post('auth/doLogin', 'Auth::doLogin');
