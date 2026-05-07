@@ -73,6 +73,46 @@ class InitialDataSeeder extends Seeder
             ],
         ];
         $this->db->table('code_bonus')->insertBatch($data);
+        // Insert regime
+        $data = [
+            [
+                'nom' => 'Good Chiken',
+                'description' => 'Régime riche en protéines de poulet pour la prise de masse musculaire.',
+                'pct_viande' => 50.00,
+                'pct_volaille' => 50.00,
+                'pct_poisson' => 0.00,
+                'variation_poids_kg' => 2.00,
+                'duree_jours' => 30,
+            ],
+            [
+                'nom' => 'Fish & Fit',
+                'description' => 'Régime équilibré avec une forte proportion de poisson pour la santé cardiovasculaire.',
+                'pct_viande' => 20.00,
+                'pct_volaille' => 30.00,
+                'pct_poisson' => 50.00,
+                'variation_poids_kg' => -1.50,
+                'duree_jours' => 30,
+            ],
+            [
+                'nom' => 'Vegan Power',
+                'description' => 'Régime végétalien riche en protéines végétales pour la prise de masse.',
+                'pct_viande' => 0.00,
+                'pct_volaille' => 0.00,
+                'pct_poisson' => 0.00,
+                'variation_poids_kg' => 1.00,
+                'duree_jours' => 30,
+            ],
+            [
+                'nom' => 'Balanced Diet',
+                'description' => 'Régime équilibré avec une proportion égale de viande, volaille et poisson pour une santé optimale.',
+                'pct_viande' => 33.33,
+                'pct_volaille' => 33.33,
+                'pct_poisson' => 33.34,
+                'variation_poids_kg' => 0.00,
+                'duree_jours' => 30,
+            ],
+        ];
+        $this->db->table('regime')->insertBatch($data);
         // Insert abonnements
         $data = [
             [
