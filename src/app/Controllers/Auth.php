@@ -10,7 +10,7 @@ class Auth extends BaseController
         return view('login');
     }
 
-    // Traite l'inscription (1ère étape : nom, prénom, email, mot de passe)
+    // Traite l'inscription (1ère étape) – mot de passe en clair
     public function register()
     {
         $rules = [
@@ -27,11 +27,12 @@ class Auth extends BaseController
         $db = \Config\Database::connect();
         $builder = $db->table('utilisateur');
 
+        // Stockage du mot de passe en clair (non hashé)
         $data = [
             'nom'          => $this->request->getPost('nom'),
             'prenom'       => $this->request->getPost('prenom'),
             'email'        => $this->request->getPost('email'),
-            'mot_de_passe' => password_hash($this->request->getPost('mot_de_passe'), PASSWORD_DEFAULT),
+            'mot_de_passe' => $this->request->getPost('mot_de_passe'), // ← en clair
             'created_at'   => date('Y-m-d H:i:s')
         ];
 
@@ -61,7 +62,7 @@ class Auth extends BaseController
         return view('formulaire');
     }
 
-    // Traite la mise à jour du profil (2ème étape : santé + objectif)
+    // Traite la mise à jour du profil (2ème étape)
     public function updateProfil()
     {
         if (!session()->get('logged_in')) {
@@ -70,7 +71,6 @@ class Auth extends BaseController
 
         $userId = session()->get('user_id');
 
-        // Validation des champs
         $rules = [
             'date_naissance' => 'required|valid_date',
             'genre'          => 'required|in_list[homme,femme]',
@@ -84,7 +84,6 @@ class Auth extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Données à mettre à jour
         $data = [
             'date_naissance' => $this->request->getPost('date_naissance'),
             'genre'          => $this->request->getPost('genre'),
@@ -103,11 +102,10 @@ class Auth extends BaseController
             return redirect()->back()->withInput()->with('error', 'Erreur mise à jour : ' . $error['message']);
         }
 
-        // Rediriger vers le tableau de bord
         return redirect()->to('/dashboard');
     }
 
-    // Tableau de bord (après profil complet)
+    // Tableau de bord
     public function dashboard()
     {
         if (!session()->get('logged_in')) {
