@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `email`           VARCHAR(255)     NOT NULL,
   `mot_de_passe`    VARCHAR(255)     NOT NULL COMMENT 'hash bcrypt',
   `date_naissance`  DATE,
-  `genre`           ENUM('homme','femme','autre') NOT NULL,
+  `genre`           ENUM('homme','femme') NOT NULL,
   `adresse`         VARCHAR(255),
   `taille_cm`       DECIMAL(5,2)     COMMENT 'en centimètres',
   `poids_kg`        DECIMAL(5,2)     COMMENT 'en kilogrammes',
@@ -225,3 +225,12 @@ INSERT INTO `activite_sportive` (`nom`, `description`, `intensite`, `calories_he
   ('HIIT',          'Entraînement haute intensité', 3, 750.00),
   ('Vélo',          'Cyclisme modéré',              2, 480.00),
   ('Yoga',          'Yoga et étirements',           1, 200.00);
+
+
+  ALTER TABLE `utilisateur` 
+  MODIFY `genre` ENUM('homme','femme') NULL,
+  MODIFY `objectif` ENUM('augmenter_poids','reduire_poids','imc_ideal') NULL,
+  MODIFY `date_naissance` DATE NULL,
+  MODIFY `taille_cm` DECIMAL(5,2) NULL,
+  MODIFY `poids_kg` DECIMAL(5,2) NULL,
+  MODIFY `adresse` VARCHAR(255) NULL;
