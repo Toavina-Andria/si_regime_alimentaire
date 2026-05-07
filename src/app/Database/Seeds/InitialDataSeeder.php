@@ -113,6 +113,74 @@ class InitialDataSeeder extends Seeder
             ],
         ];
         $this->db->table('regime')->insertBatch($data);
+        // insert regime_prix
+        $data = [
+            [
+                'regime_id' => 1,
+                'duree_jours' => 30,
+                'prix_base' => 49.99,
+            ],
+            [
+                'regime_id' => 1,
+                'duree_jours' => 60,
+                'prix_base' => 89.99,
+            ],
+            [
+                'regime_id' => 1,
+                'duree_jours' => 90,
+                'prix_base' => 129.99,
+            ],
+
+            [
+                'regime_id' => 2,
+                'duree_jours' => 30,
+                'prix_base' => 59.99,
+            ],
+            [
+                'regime_id' => 2,
+                'duree_jours' => 60,
+                'prix_base' => 109.99,
+            ],
+            [
+                'regime_id' => 2,
+                'duree_jours' => 90,
+                'prix_base' => 149.99,
+            ],
+
+            [
+                'regime_id' => 3,
+                'duree_jours' => 30,
+                'prix_base' => 44.99,
+            ],
+            [
+                'regime_id' => 3,
+                'duree_jours' => 60,
+                'prix_base' => 84.99,
+            ],
+            [
+                'regime_id' => 3,
+                'duree_jours' => 90,
+                'prix_base' => 119.99,
+            ],
+
+            [
+                'regime_id' => 4,
+                'duree_jours' => 30,
+                'prix_base' => 54.99,
+            ],
+            [
+                'regime_id' => 4,
+                'duree_jours' => 60,
+                'prix_base' => 99.99,
+            ],
+            [
+                'regime_id' => 4,
+                'duree_jours' => 90,
+                'prix_base' => 139.99,
+            ],
+        ];
+
+        $this->db->table('regime_prix')->insertBatch($data);
         // Insert abonnements
         $data = [
             [
