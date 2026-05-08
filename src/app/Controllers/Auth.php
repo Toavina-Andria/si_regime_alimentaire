@@ -52,7 +52,10 @@ class Auth extends BaseController
 
         return redirect()->to('/auth/profil');
     }
-
+    // affiche la page de connexion
+    public function login(){
+        return view('connexion');
+    }
     // Affiche le formulaire de complétion du profil (formulaire.php)
     public function profil()
     {

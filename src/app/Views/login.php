@@ -30,7 +30,7 @@
         <input type="password" id="pwd" name="mot_de_passe" required placeholder="Mot de passe (6 caractères min)">
 
         <button type="submit">Sign up</button>
-        <p>Déjà inscrit ? <a href="<?= site_url('connexion') ?>">Se connecter</a></p>
+        <p>Déjà inscrit ? <a href="<?= base_url('auth/connexion') ?>">Se connecter</a></p>
     </form>
 </body>
 </html>
