@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use App\Services\UtilisateurService;
+use App\Models\CodeBonus;
 class CodeController extends BaseController
 {
     public function index(): string
@@ -14,6 +15,9 @@ class CodeController extends BaseController
     {
         $code = $this->request->getPost('code');
         $id_user = 1;//TODO: attendre de la session session()->get('user_id');
+        echo "code: " . $code . " id_user: " . $id_user;
+        $codestr = new CodeBonus()->where('code', $code)->first();
+        echo "<br>"."code from db: " . $codestr['code'] . " est_valide: " . $codestr['est_valide'] . " expires_at: " . $codestr['expires_at'] ;
 
         $result = UtilisateurService::redeemCode($code, $id_user);
         $data = [];

@@ -7,7 +7,7 @@ use App\Models\TransactionPortefeuille;
 class UtilisateurService
 {
 
-    public static function redeemCode($code_bonus, $id_user)
+    public static function redeemCode(string $code_bonus, int $id_user)
     {
         try {
             if (!$id_user) {
@@ -18,37 +18,61 @@ class UtilisateurService
             }
             //  verifier si le code bonus existe et est valide
             // chercher code valide
-            $codeBonusModel = new CodeBonus();
-            $code = $codeBonusModel->where('code', $code_bonus)->first();
+            $code = new CodeBonus()->where('code', $code_bonus)->first();
             // test if code exist
-            if (!$code) {
-                throw new \Exception("Code bonus invalide");
+            if ($code == null) {
+                throw new \Exception("Code bonus invalide " . "+" . $code_bonus);
             }
+            echo "<br>code ok";
             // test vaidite code
             if (!$code['est_valide'] || strtotime($code['expires_at']) < time()) {
                 throw new \Exception("Code bonus expiré");
             }
+            echo "<br>code valide";
             // get user porte feuille
+            try {
+                $porteFeuille = new Portefeuille()->where('utilisateur_id', $id_user)->first();
+                echo "<br>porte feuille ok";
+            } catch (\Throwable $th) {
+                if ($th->getMessage() !== "Trying to access array offset on null") {
+                    throw new \Exception("Error fetching portefeuille: " . $th->getMessage());
+                } else {
+                    echo "<br>no portefeuille found for user id: " . $id_user;
+                    echo "<br>generating portefeuille for user id: " . $id_user;
+                    UtilisateurService::generetePortefeuilleForUser($id_user);
+                }
+            }
             $porteFeuille = new Portefeuille()->where('utilisateur_id', $id_user)->first();
-            if (!$porteFeuille){
-                UtilisateurService::generetePortefeuilleForUser($id_user);
-            }
+            echo "<br>create porte feuille ok";
             // test if code already used by user
-            $transactionModel = new TransactionPortefeuille()->where('code_bonus_id', $code['id'])
-                ->where('portefeuille_id', $porteFeuille['id'])
-                ->first();
-            if ($transactionModel) {
-                throw new \Exception("Code bonus déjà utilisé");
+            try {
+
+                $transaction = new TransactionPortefeuille()->where('code_bonus_id', $code['id'])
+                    ->where('portefeuille_id', $porteFeuille['id'])
+                    ->first();
+                if ($transaction) {
+                    throw new \Exception("Code bonus déjà utilisé");
+                }
+            } catch (\Throwable $th) {
+                if ($th->getMessage() !== "Trying to access array offset on null") {
+                    throw new \Exception("Error checking transaction: " . $th->getMessage());
+                }
             }
+            echo "<br>check transaction ok";
+            // test data for transaction
+            echo "<br>code id: " . $code['id'];
+            echo "<br>montant: " . $code['valeur_points'];
+            echo "<br>description: " . "Rachat du code bonus : " . $code_bonus;
+            echo "<br>portefeuille id: " . $porteFeuille['id'];
             // add transaction to transaction historique
-            $transaction = new TransactionPortefeuille();
-            $transaction->insert([
+            new TransactionPortefeuille()->insert([
                 'portefeuille_id' => $porteFeuille['id'],
                 'code_bonus_id' => $code['id'],
                 'montant' => $code['valeur_points'],
                 'type' => 'credit',
                 'description' => "Rachat du code bonus : " . $code_bonus
             ]);
+            echo "<br>insert transaction ok";
             // update porte feuille solde
             $porteFeuille->update($porteFeuille['id'], [
                 'solde_points' => $porteFeuille['solde_points'] + $code['valeur_points']
@@ -68,6 +92,7 @@ class UtilisateurService
             if (!$id_user) {
                 throw new \Exception("ID utilisateur manquant");
             }
+            echo "generetePortefeuilleForUser for user id: " . $id_user;
             $porteFeuilleModel = new Portefeuille();
             $porteFeuilleModel->insert(['utilisateur_id' => $id_user, 'solde_points' => 0]);
         } catch (\Throwable $th) {
