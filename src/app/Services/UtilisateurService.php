@@ -3,7 +3,6 @@ namespace App\Services;
 use App\Models\CodeBonus;
 use App\Models\Portefeuille;
 use App\Models\TransactionPortefeuille;
-use App\Models\Utilisateur;
 
 class UtilisateurService
 {
@@ -25,7 +24,10 @@ class UtilisateurService
             self::saveTransactionHistorique($id_user, $code['valeur_points'], $code['id'], 'credit', "Rachat du code bonus : " . $code_bonus);
 
             // update porte feuille solde
-            self::addPointsToPortefeuille($id_user, $code['valeur_points']);
+            $portefeuilleModel = new Portefeuille();
+            $portefeuilleModel->update($porteFeuille['id'], [
+                'solde_points' => $porteFeuille['solde_points'] + $code['valeur_points']
+            ]);
 
         } catch (\Throwable $th) {
             return ['success' => false, 'message' => $th->getMessage()];
@@ -56,7 +58,9 @@ class UtilisateurService
 
     private static function validatePortefeuille(int $id_user)
     {
-        self::validateUser($id_user);
+        if (!$id_user) {
+            throw new \Exception("ID utilisateur manquant");
+        }
 
         $portefeuilleModel = new Portefeuille();
         $porteFeuille = $portefeuilleModel->where('utilisateur_id', $id_user)->first();
@@ -90,7 +94,9 @@ class UtilisateurService
     public static function generetePortefeuilleForUser($id_user)
     {
         $porteFeuilleModel = new Portefeuille();
-        self::validateUser($id_user);
+        if (!$id_user) {
+            throw new \Exception("ID utilisateur manquant");
+        }
 
         $data = ['utilisateur_id' => $id_user, 'solde_points' => 0];
         if ($porteFeuilleModel->insert($data) === false) {
@@ -98,37 +104,6 @@ class UtilisateurService
             throw new \Exception("Erreur de création de portefeuille: " . $errors);
         }
     }
-    // get portefeuille by user id
-    public static function getPortefeuilleByUserId($id_user)
-    {
-        $portefeuilleModel = new Portefeuille();
-        return $portefeuilleModel->where('utilisateur_id', $id_user)->first();
-    }
-
-    // pay with points
-    public static function payWithPoints(int $id_user, int $points)
-    {
-        $porteFeuille = self::validatePortefeuille($id_user);
-        if ($porteFeuille['solde_points'] < $points) {
-            throw new \Exception("Solde insuffisant");
-        }
-        $portefeuilleModel = new Portefeuille();
-        $portefeuilleModel->update($porteFeuille['id'], [
-            'solde_points' => $porteFeuille['solde_points'] - $points
-        ]);
-
-    }
-
-    // add points to portefeuille
-    public static function addPointsToPortefeuille(int $id_user, int $points)
-    {
-        $porteFeuille = self::validatePortefeuille($id_user);
-        $portefeuilleModel = new Portefeuille();
-        $portefeuilleModel->update($porteFeuille['id'], [
-            'solde_points' => $porteFeuille['solde_points'] + $points
-        ]);
-    }
-
     // save transaction historique
     public static function saveTransactionHistorique(int $id_user, int $points, ?int $code_bonus_id, string $type, string $description)
     {
@@ -141,12 +116,5 @@ class UtilisateurService
             'type' => $type,
             'description' => $description
         ]);
-    }
-
-    public static function validateUser(int $id_user)
-    {
-        if (!$id_user) {
-            throw new \Exception("ID utilisateur manquant");
-        }
     }
 }
