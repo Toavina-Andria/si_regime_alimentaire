@@ -24,10 +24,7 @@ class UtilisateurService
             self::saveTransactionHistorique($id_user, $code['valeur_points'], $code['id'], 'credit', "Rachat du code bonus : " . $code_bonus);
 
             // update porte feuille solde
-            $portefeuilleModel = new Portefeuille();
-            $portefeuilleModel->update($porteFeuille['id'], [
-                'solde_points' => $porteFeuille['solde_points'] + $code['valeur_points']
-            ]);
+            self::addPointsToPortefeuille($id_user, $code['valeur_points']);
 
         } catch (\Throwable $th) {
             return ['success' => false, 'message' => $th->getMessage()];
@@ -104,6 +101,16 @@ class UtilisateurService
             throw new \Exception("Erreur de création de portefeuille: " . $errors);
         }
     }
+    // add points to portefeuille
+    public static function addPointsToPortefeuille(int $id_user, int $points)
+    {
+        $porteFeuille = self::validatePortefeuille($id_user);
+        $portefeuilleModel = new Portefeuille();
+        $portefeuilleModel->update($porteFeuille['id'], [
+            'solde_points' => $porteFeuille['solde_points'] + $points
+        ]);
+    }
+
     // save transaction historique
     public static function saveTransactionHistorique(int $id_user, int $points, ?int $code_bonus_id, string $type, string $description)
     {
