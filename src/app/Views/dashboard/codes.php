@@ -28,26 +28,26 @@
     <nav class="sidebar-nav">
       <div class="sidebar-section">
         <div class="sidebar-section-title">Vue d'ensemble</div>
-        <a href="<?= site_url('admin/dashboard') ?>" class="sidebar-link">
+        <a href="<?= base_url('admin/dashboard') ?>" class="sidebar-link">
           <span class="icon">📊</span>
           Tableau de bord
         </a>
       </div>
       <div class="sidebar-section">
         <div class="sidebar-section-title">Gestion</div>
-        <a href="<?= site_url('admin/regimes') ?>" class="sidebar-link">
+        <a href="<?= base_url('admin/regimes') ?>" class="sidebar-link">
           <span class="icon">🥗</span>
           Régimes alimentaires
         </a>
-        <a href="<?= site_url('admin/activites') ?>" class="sidebar-link">
+        <a href="<?= base_url('admin/activites') ?>" class="sidebar-link">
           <span class="icon">🏃</span>
           Activités sportives
         </a>
-        <a href="<?= site_url('admin/utilisateurs') ?>" class="sidebar-link">
+        <a href="<?= base_url('admin/utilisateurs') ?>" class="sidebar-link">
           <span class="icon">👥</span>
           Utilisateurs
         </a>
-        <a href="<?= site_url('admin/codes') ?>" class="sidebar-link active">
+        <a href="<?= base_url('admin/codes') ?>" class="sidebar-link active">
           <span class="icon">💰</span>
           Portefeuille & Codes
         </a>
@@ -73,7 +73,7 @@
           <div class="sidebar-profile-email"><?= session()->get('user_email') ?? '' ?></div>
         </div>
       </div>
-      <a href="<?= site_url('logout') ?>" class="sidebar-logout">
+      <a href="<?= base_url('logout') ?>" class="sidebar-logout">
         <span>🚪</span>
         Déconnexion
       </a>
@@ -91,7 +91,7 @@
           </svg>
         </button>
         <div class="breadcrumb">
-          <a href="<?= site_url('admin/dashboard') ?>">Accueil</a>
+          <a href="<?= base_url('admin/dashboard') ?>">Accueil</a>
           <span>/</span>
           <span class="current">Portefeuille & Codes</span>
         </div>
@@ -174,7 +174,7 @@
       <div class="modal-title">Générer un code bonus</div>
       <button class="modal-close">&times;</button>
     </div>
-    <form action="<?= site_url('admin/codes') ?>" method="POST">
+    <form action="<?= base_url('admin/codes') ?>" method="POST">
       <div class="modal-body">
         <div class="form-group">
           <label class="form-label">Code</label>

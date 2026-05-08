@@ -31,7 +31,7 @@
       <nav class="sidebar-nav">
         <div class="sidebar-section">
           <div class="sidebar-section-title">Vue d'ensemble</div>
-          <a href="<?= site_url('admin/dashboard') ?>" class="sidebar-link active">
+          <a href="<?= base_url('admin/dashboard') ?>" class="sidebar-link active">
             <span class="icon">📊</span>
             Tableau de bord
           </a>
@@ -39,19 +39,19 @@
 
         <div class="sidebar-section">
           <div class="sidebar-section-title">Gestion</div>
-          <a href="<?= site_url('admin/regimes') ?>" class="sidebar-link">
+          <a href="<?= base_url('admin/regimes') ?>" class="sidebar-link">
             <span class="icon">🥗</span>
             Régimes alimentaires
           </a>
-          <a href="<?= site_url('admin/activites') ?>" class="sidebar-link">
+          <a href="<?= base_url('admin/activites') ?>" class="sidebar-link">
             <span class="icon">🏃</span>
             Activités sportives
           </a>
-          <a href="<?= site_url('admin/utilisateurs') ?>" class="sidebar-link">
+          <a href="<?= base_url('admin/utilisateurs') ?>" class="sidebar-link">
             <span class="icon">👥</span>
             Utilisateurs
           </a>
-          <a href="<?= site_url('admin/codes') ?>" class="sidebar-link">
+          <a href="<?= base_url('admin/codes') ?>" class="sidebar-link">
             <span class="icon">💰</span>
             Portefeuille & Codes
           </a>
@@ -78,7 +78,7 @@
             <div class="sidebar-profile-email"><?= session()->get('user_email') ?? '' ?></div>
           </div>
         </div>
-        <a href="<?= site_url('logout') ?>" class="sidebar-logout">
+        <a href="<?= base_url('logout') ?>" class="sidebar-logout">
           <span>🚪</span>
           Déconnexion
         </a>
@@ -99,7 +99,7 @@
             </svg>
           </button>
           <div class="breadcrumb">
-            <a href="<?= site_url('admin/dashboard') ?>">Accueil</a>
+            <a href="<?= base_url('admin/dashboard') ?>">Accueil</a>
             <span>/</span>
             <span class="current">Tableau de bord</span>
           </div>
@@ -132,12 +132,12 @@
           <?php if ($categorie_imc): ?>
             <div style="font-size:0.8rem; margin-top:5px;">Catégorie : <?= $categorie_imc ?></div>
           <?php endif; ?>
-          <a href="<?= site_url('export/bilan') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px;">📄 Exporter mon bilan PDF</a>
-          <a href="<?= site_url('regimes') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px; margin-left: 10px;">🥗 Voir tous les régimes</a>
-          <a href="<?= site_url('stats') ?>" class="btn-outline" style="margin-top: 10px; display: inline-block;">📊 Mes statistiques</a>
-          <a href="<?= site_url('regime/admin') ?>" class="btn-outline">⚙️ Gérer les régimes</a>
-          <a href="<?= site_url('services') ?>" class="btn-outline" style="margin-top: 10px;">✨ Voir tous les services</a>
-        <a href="<?= site_url('analysis') ?>" class="btn-outline" style="margin-top: 10px;">📊 Analyse des données</a>
+          <a href="<?= base_url('export/bilan') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px;">📄 Exporter mon bilan PDF</a>
+          <a href="<?= base_url('regimes') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px; margin-left: 10px;">🥗 Voir tous les régimes</a>
+          <a href="<?= base_url('stats') ?>" class="btn-outline" style="margin-top: 10px; display: inline-block;">📊 Mes statistiques</a>
+          <a href="<?= base_url('regime/admin') ?>" class="btn-outline">⚙️ Gérer les régimes</a>
+          <a href="<?= base_url('services') ?>" class="btn-outline" style="margin-top: 10px;">✨ Voir tous les services</a>
+        <a href="<?= base_url('analysis') ?>" class="btn-outline" style="margin-top: 10px;">📊 Analyse des données</a>
         </div>
 
         <!-- Section Suggestions personnalisées (version corrigée) -->
@@ -207,7 +207,7 @@
                   <?php endif; ?>
 
                   <div class="suggestion-actions">
-                    <a href="<?= site_url('regime/' . $regime['id']) ?>" class="btn-outline">Voir détail</a>
+                    <a href="<?= base_url('regime/' . $regime['id']) ?>" class="btn-outline">Voir détail</a>
                     <button class="btn-primary btn-subscribe" data-id="<?= $regime['id'] ?>">Souscrire</button>
                   </div>
                 </div>
@@ -304,7 +304,7 @@
           <div class="table-card">
             <div class="table-card-header">
               <div class="table-card-title">Derniers régimes créés</div>
-              <a href="<?= site_url('admin/regimes') ?>" class="table-card-link">Voir tout →</a>
+              <a href="<?= base_url('admin/regimes') ?>" class="table-card-link">Voir tout →</a>
             </div>
             <table class="data-table">
               <thead>

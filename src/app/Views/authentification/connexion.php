@@ -47,7 +47,7 @@
         <div class="auth-error">✗ <?= session()->getFlashdata('error') ?></div>
       <?php endif; ?>
 
-      <form action="<?= site_url('auth/doLogin') ?>" method="POST">
+      <form action="<?= base_url('auth/doLogin') ?>" method="POST">
         <div class="form-group">
           <label for="email">Email</label>
           <input type="email" name="email" id="email" required placeholder="email@exemple.com">
@@ -60,7 +60,7 @@
       </form>
 
       <div class="auth-footer">
-        Pas encore de compte ? <a href="<?= site_url('register') ?>">Créer un compte</a>
+        Pas encore de compte ? <a href="<?= base_url('register') ?>">Créer un compte</a>
       </div>
     </div>
   </div>
