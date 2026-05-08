@@ -85,4 +85,28 @@ class RegimeService
         return $abonnentuserModel->insert($data);
     }
     // buy subscription
+    public static function buySubscription($userId, $abonnementId){
+        try {
+            UtilisateurService::validateUser($userId);
+            $abonnementModel = new Abonnement();
+            $abonnement = $abonnementModel->find($abonnementId);
+            if (!$abonnement) {
+                throw new \Exception("Abonnement non trouvé.");
+            }
+            $prixPayable = $abonnement['prix'];
+            if (!self::validateUserPoints($userId, $prixPayable)) {
+                throw new \Exception("Solde insuffisant pour acheter cet abonnement.");
+            }
+            // apply subscription
+            self::applySubscription($userId, $abonnementId);
+            // deduct points from user portefeuille
+            UtilisateurService::payWithPoints($userId, $prixPayable);
+            // save transaction historique
+            UtilisateurService::saveTransactionHistorique($userId, $prixPayable, null, 'debit', "Achat de l'abonnement : " . $abonnement['nom']);
+
+            return ['success' => true, 'message' => "Abonnement ". $abonnement['nom'].' - '.$abonnement['statut']." acheté avec succès"];
+        } catch (\Throwable $th) {
+            return ['success' => false, 'message' => $th->getMessage()];
+        }
+    }
 }
