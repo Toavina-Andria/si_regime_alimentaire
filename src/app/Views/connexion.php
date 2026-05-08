@@ -60,7 +60,7 @@
       </form>
 
       <div class="auth-footer">
-        Pas encore de compte ? <a href="<?= site_url('/') ?>">Créer un compte</a>
+        Pas encore de compte ? <a href="<?= site_url('register') ?>">Créer un compte</a>
       </div>
     </div>
   </div>
