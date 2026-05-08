@@ -12,25 +12,23 @@ class DashboardController extends BaseController
     }
 
     public function index()
-    {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
+{
+    $data = [
+        'imc'               => null,          // ← ajouté
+        'categorie_imc'     => null,          // ← ajouté
+        'kpi_users'         => $this->getTotalUsers(),
+        'kpi_users_trend'   => $this->getUserTrend(),
+        'kpi_regimes'       => $this->getActiveRegimes(),
+        'kpi_codes'         => $this->getCodesThisMonth(),
+        'kpi_gold'          => $this->getGoldRevenue(),
+        'chart_inscriptions' => $this->getMonthlyInscriptions(),
+        'chart_imc'         => $this->getIMCDistribution(),
+        'recent_regimes'    => $this->getRecentRegimes(),
+        'recent_activity'   => $this->getRecentActivity(),
+    ];
 
-        $data = [
-            'kpi_users'         => $this->getTotalUsers(),
-            'kpi_users_trend'   => $this->getUserTrend(),
-            'kpi_regimes'       => $this->getActiveRegimes(),
-            'kpi_codes'         => $this->getCodesThisMonth(),
-            'kpi_gold'          => $this->getGoldRevenue(),
-            'chart_inscriptions' => $this->getMonthlyInscriptions(),
-            'chart_imc'         => $this->getIMCDistribution(),
-            'recent_regimes'    => $this->getRecentRegimes(),
-            'recent_activity'   => $this->getRecentActivity(),
-        ];
-
-        return view('dashboard/index', $data);
-    }
+    return view('dashboard/index', $data);
+}
 
     public function regimes()
     {

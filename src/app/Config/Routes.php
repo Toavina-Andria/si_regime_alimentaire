@@ -5,22 +5,32 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Auth::index');
+$routes->get('/', 'Home::index');
+$routes->get('register', 'Auth::index');
+
+// Pages publiques / authentification
+$routes->get('/', 'Auth::index');                      // inscription
 $routes->post('auth/register', 'Auth::register');
 $routes->get('auth/profil', 'Auth::profil');
 $routes->post('auth/updateProfil', 'Auth::updateProfil');
-$routes->get('dashboard', 'UserDashboard::index');
+
+// Connexion – double accès pour compatibilité
+$routes->get('connexion', 'Auth::login');              // URL simple
+$routes->get('auth/connexion', 'Auth::login');         // alias avec auth/
+$routes->post('auth/doLogin', 'Auth::doLogin');
+
 $routes->get('logout', 'Auth::logout');
-$routes->get('auth/connexion', 'Auth::login');
 
 // Routes pour les régimes alimentaires
+$routes->get('regimes', 'Home::index');
+// Dashboard utilisateur (front office)
+$routes->get('dashboard', 'UserDashboard::index');
+
+// Consultation publique des régimes
 $routes->get('regimes', 'RegimeController::index');
 $routes->get('regime/(:num)', 'RegimeController::show/$1');
 
 // Route pour traiter l'envoi du login et rediriger
-$routes->post('auth/register', 'Auth::register');
-$routes->get('/', 'Auth::index');
-$routes->post('auth/register', 'Auth::register');
 $routes->get('auth/profil', 'Auth::profil');
 $routes->post('auth/updateProfil', 'Auth::updateProfil');
 $routes->get('dashboard', 'UserDashboard::index');
@@ -29,6 +39,7 @@ $routes->post('auth/doLogin', 'Auth::doLogin');
 $routes->get('logout', 'Auth::logout');
 
 // Routes Admin / Dashboard
+// Back Office (admin)
 $routes->group('admin', static function ($routes) {
     $routes->get('dashboard', 'DashboardController::index');
     $routes->get('regimes', 'DashboardController::regimes');

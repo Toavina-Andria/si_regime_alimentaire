@@ -87,4 +87,14 @@ class Utilisateur extends Model
     {
         return password_verify($password, $this->getAttribute('mot_de_passe'));
     }
+
+    // catégorie IMC selon valeur
+    public function categorieIMC(?float $imc = null): ?string
+    {
+        if ($imc === null) return null;
+        if ($imc < 18.5) return 'Poids insuffisant';
+        if ($imc < 25) return 'Poids normal';
+        if ($imc < 30) return 'Surpoids';
+        return 'Obésité';
+    }
 }

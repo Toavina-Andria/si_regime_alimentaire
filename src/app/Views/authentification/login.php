@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer un compte — NutriPlan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="<?= base_url('assets/style.css') ?>">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-brand">
+      <div class="auth-brand-content">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <path d="M28 4C14.745 4 4 14.745 4 28s10.745 24 24 24 24-10.745 24-24S41.255 4 28 4z" fill="rgba(255,255,255,0.2)"/>
+          <path d="M28 10c-3 6-9 10-14 14 4 5 8 11 10 18 5-3 10-8 14-14-5-4-9-10-10-18z" fill="rgba(255,255,255,0.35)"/>
+          <path d="M20 38c6 2 12 4 16 8 4-4 10-6 16-8" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <h1>NutriPlan</h1>
+        <p>Votre programme alimentaire<br>personnalisé</p>
+      </div>
+      <div class="auth-brand-features">
+        <div class="auth-brand-feature">
+          <span>🥗</span>
+          Régimes adaptés à vos objectifs
+        </div>
+        <div class="auth-brand-feature">
+          <span>📊</span>
+          Suivi de progression en temps réel
+        </div>
+        <div class="auth-brand-feature">
+          <span>🏃</span>
+          Activités physiques recommandées
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-form">
+      <div class="auth-form-header">
+        <h2>Créer un compte</h2>
+        <p>Rejoignez NutriPlan et commencez votre transformation</p>
+      </div>
+
+      <?php if (session()->getFlashdata('errors')): ?>
+        <div class="auth-error">
+          <?php foreach (session()->getFlashdata('errors') as $error): ?>
+            <p>✗ <?= $error ?></p>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+
+      <form action="<?= site_url('auth/register') ?>" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" name="nom" id="nom" required placeholder="Votre nom">
+          </div>
+          <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input type="text" name="prenom" id="prenom" required placeholder="Votre prénom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required placeholder="email@exemple.com">
+        </div>
+        <div class="form-group">
+          <label for="pwd">Mot de passe</label>
+          <input type="password" id="pwd" name="mot_de_passe" required placeholder="6 caractères minimum">
+        </div>
+        <button type="submit" class="auth-submit">Créer mon compte</button>
+      </form>
+
+      <div class="auth-footer">
+        Déjà inscrit ? <a href="<?= site_url('connexion') ?>">Se connecter</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

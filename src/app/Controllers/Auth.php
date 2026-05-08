@@ -2,15 +2,17 @@
 
 namespace App\Controllers;
 
+use App\Models\Utilisateur;
+
 class Auth extends BaseController
 {
-    // Affiche le formulaire d'inscription (login.php)
+    // Affiche le formulaire d'inscription
     public function index()
     {
-        return view('login');
+        return view('authentification/login');
     }
 
-    // Traite l'inscription (1ère étape) – mot de passe en clair
+    // Traite l'inscription (1ère étape)
     public function register()
     {
         $rules = [
@@ -27,12 +29,11 @@ class Auth extends BaseController
         $db = \Config\Database::connect();
         $builder = $db->table('utilisateur');
 
-        // Stockage du mot de passe en clair (non hashé)
         $data = [
             'nom'          => $this->request->getPost('nom'),
             'prenom'       => $this->request->getPost('prenom'),
             'email'        => $this->request->getPost('email'),
-            'mot_de_passe' => $this->request->getPost('mot_de_passe'), // ← en clair
+            'mot_de_passe' => $this->request->getPost('mot_de_passe'), // en clair
             'created_at'   => date('Y-m-d H:i:s')
         ];
 
@@ -52,17 +53,49 @@ class Auth extends BaseController
 
         return redirect()->to('/auth/profil');
     }
-    // affiche la page de connexion
-    public function login(){
-        return view('connexion');
+
+    // Affiche la page de connexion
+    public function login()
+    {
+        return view('authentification/connexion');
     }
-    // Affiche le formulaire de complétion du profil (formulaire.php)
+
+    // Traite la connexion
+    public function doLogin()
+    {
+        $db = \Config\Database::connect();
+        $builder = $db->table('utilisateur');
+
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('mot_de_passe');
+
+        $user = $builder->where('email', $email)->get()->getRowArray();
+
+        if ($user && $user['mot_de_passe'] === $password) {
+            session()->set([
+                'user_id'    => $user['id'],
+                'user_email' => $user['email'],
+                'user_nom'   => $user['nom'],
+                'logged_in'  => true
+            ]);
+
+            // Vérifier si le profil est complet
+            if (empty($user['date_naissance']) || empty($user['genre']) || empty($user['objectif'])) {
+                return redirect()->to('/auth/profil');
+            }
+            return redirect()->to('/dashboard');
+        } else {
+            return redirect()->back()->with('error', 'Email ou mot de passe incorrect');
+        }
+    }
+
+    // Affiche le formulaire de complétion du profil
     public function profil()
     {
         if (!session()->get('logged_in')) {
             return redirect()->to('/');
         }
-        return view('formulaire');
+        return view('authentification/formulaire');
     }
 
     // Traite la mise à jour du profil (2ème étape)
@@ -105,15 +138,6 @@ class Auth extends BaseController
             return redirect()->back()->withInput()->with('error', 'Erreur mise à jour : ' . $error['message']);
         }
 
-        return redirect()->to('/dashboard');
-    }
-
-    // Tableau de bord
-    public function dashboard()
-    {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
         return redirect()->to('/dashboard');
     }
 
