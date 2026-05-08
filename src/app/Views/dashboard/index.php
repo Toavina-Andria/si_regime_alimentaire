@@ -71,6 +71,7 @@
           <a href="<?= site_url('stats') ?>" class="btn-outline" style="margin-top: 10px; display: inline-block;">📊 Mes statistiques</a>
           <a href="<?= site_url('regime/admin') ?>" class="btn-outline">⚙️ Gérer les régimes</a>
           <a href="<?= site_url('services') ?>" class="btn-outline" style="margin-top: 10px;">✨ Voir tous les services</a>
+        <a href="<?= site_url('analysis') ?>" class="btn-outline" style="margin-top: 10px;">📊 Analyse des données</a>
         </div>
 
         <!-- Section Suggestions personnalisées (version corrigée) -->
