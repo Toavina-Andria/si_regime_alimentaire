@@ -36,3 +36,7 @@ $routes->group('admin', static function ($routes) {
     $routes->get('activites', 'DashboardController::activites');
     $routes->get('utilisateurs', 'DashboardController::utilisateurs');
 });
+
+// Route pour la vérification du code bonus
+$routes->post('code/verify', 'CodeController::verifier');
+$routes->get('code', 'CodeController::index');
