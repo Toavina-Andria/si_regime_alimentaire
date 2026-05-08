@@ -47,3 +47,6 @@ $routes->group('admin', static function ($routes) {
     $routes->get('activites', 'DashboardController::activites');
     $routes->get('utilisateurs', 'DashboardController::utilisateurs');
 });
+
+// Route pour l'export PDF du bilan personnel
+$routes->get('export/bilan', 'ExportController::bilan');

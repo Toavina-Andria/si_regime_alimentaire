@@ -122,7 +122,6 @@
           <h1 class="page-title">Tableau de bord</h1>
           <p class="page-subtitle">Vue d'ensemble de votre application NutriPlan</p>
         </div>
-
         <!-- Carte IMC personnelle -->
         <div class="kpi-card">
           <div class="kpi-card-header">
@@ -133,6 +132,7 @@
           <?php if ($categorie_imc): ?>
             <div style="font-size:0.8rem; margin-top:5px;">Catégorie : <?= $categorie_imc ?></div>
           <?php endif; ?>
+          <a href="<?= site_url('export/bilan') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px;">📄 Exporter mon bilan PDF</a>
         </div>
 
         <!-- Section Suggestions personnalisées (version corrigée) -->
