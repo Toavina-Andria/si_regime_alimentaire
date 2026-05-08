@@ -5,22 +5,19 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Auth::index');
+$routes->get('/', 'Home::index');
+$routes->get('register', 'Auth::index');
 $routes->post('auth/register', 'Auth::register');
 $routes->get('auth/profil', 'Auth::profil');
 $routes->post('auth/updateProfil', 'Auth::updateProfil');
 $routes->get('dashboard', 'UserDashboard::index');
 $routes->get('logout', 'Auth::logout');
-$routes->get('auth/connexion', 'Auth::login');
 
 // Routes pour les régimes alimentaires
-$routes->get('regimes', 'RegimeController::index');
+$routes->get('regimes', 'Home::index');
 $routes->get('regime/(:num)', 'RegimeController::show/$1');
 
 // Route pour traiter l'envoi du login et rediriger
-$routes->post('auth/register', 'Auth::register');
-$routes->get('/', 'Auth::index');
-$routes->post('auth/register', 'Auth::register');
 $routes->get('auth/profil', 'Auth::profil');
 $routes->post('auth/updateProfil', 'Auth::updateProfil');
 $routes->get('dashboard', 'UserDashboard::index');
