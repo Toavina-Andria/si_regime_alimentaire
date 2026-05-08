@@ -18,9 +18,46 @@ class RegimeService
     }
     // Souscription à un régime
     public static function souscrireRegime($userId, $regimePrixId)
+    {
+        try {
+            UtilisateurService::validateUser($userId);
+
+            $souscriptionModel = new SouscriptionRegime();
+            // get reime prix details
+            $regimePrixModel = new RegimePrix();
+            $regimePrix = $regimePrixModel->find($regimePrixId);
+            
+            $prixPayable = $regimePrix['prix'];
+            $tauxRemise = 0;
+            // check if user has abonnement actif
+            if ($abonne = self::isAbonne($userId)) {
+                // apply abonnement discount
+                $tauxRemise = $abonne['taux_reduction'] ?? 0;
+                $prixPayable *= (1 - $tauxRemise / 100);
+            }
+            if (!self::validateUserPoints($userId, $prixPayable)) {
+                throw new \Exception("Solde insuffisant pour souscrire à ce régime.");
+            }
+            // set the registration date and end date
+            $data = [
+                'utilisateur_id' => $userId,
+                'regime_prix_id' => $regimePrixId,
+                'date_debut' => date(self::$dateFormat),
+                'date_fin' => date(self::$dateFormat, strtotime('+' . $regimePrix['duree_jours'] . ' days')),
+                'prix_paye' => $prixPayable,
+                'remise_appliquee' => $tauxRemise
+            ];
+            $souscriptionModel->insert($data);
+            // deduct points from user portefeuille
+            UtilisateurService::payWithPoints($userId, $prixPayable);
+            // save transaction historique
+            UtilisateurService::saveTransactionHistorique($userId, $prixPayable, null, 'debit', "Souscription au régime : " . $regimePrixId);
 
             return ['success' => true, 'message' => "Souscription réussie"];
         } catch (\Throwable $th) {
+            return ['success' => false, 'message' => $th->getMessage()];
+        }
+    }
     // validate user solde points
     public static function validateUserPoints($userId, $prix)
     {        $portefeuilleModel = UtilisateurService::getPortefeuilleByUserId($userId);
