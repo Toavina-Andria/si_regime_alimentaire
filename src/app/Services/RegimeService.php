@@ -23,4 +23,12 @@ class RegimeService
         $soldePoints = $portefeuilleModel['solde_points'];
         return $soldePoints >= $prix;
     }
+    // est abonne a un abonnement
+    public static function isAbonne($userId){
+        $abonnentuserModel = new UtilisateurAbonnement();
+        $abonnement = $abonnentuserModel->where('utilisateur_id', $userId)
+            ->where('date_fin >=', date(self::$dateFormat))
+            ->first();
+        return $abonnement != null;
+    }
 }
