@@ -11,10 +11,13 @@ class CodeController extends BaseController
     }
 
     //---------------------------------insert code---------------------------------
-    public function verifier(): string
+    public function verifier()
     {
         $code = $this->request->getPost('code');
-        $id_user = 1;//TODO: attendre de la session session()->get('user_id');
+        $id_user = session()->get('user_id');
+        if ($id_user === null) {
+            return redirect()->to('/')->with('error', 'Vous devez être connecté pour utiliser un code bonus.');
+        }
 
         $result = UtilisateurService::redeemCode($code, $id_user);
         $data = [];
