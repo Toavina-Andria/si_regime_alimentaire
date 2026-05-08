@@ -58,3 +58,13 @@ $routes->get('export/bilan', 'ExportController::bilan');
 
 // Routes pour les statistiques utilisateur
 $routes->get('stats', 'StatsController::index');
+
+// Gestion des régimes (CRUD) – accessible aux utilisateurs connectés
+$routes->get('regime/admin', 'RegimeController::index');
+$routes->get('regime/admin/create', 'RegimeController::create');
+$routes->post('regime/admin/store', 'RegimeController::store');
+$routes->get('regime/admin/edit/(:num)', 'RegimeController::edit/$1');
+$routes->post('regime/admin/update/(:num)', 'RegimeController::update/$1');
+$routes->get('regime/admin/delete/(:num)', 'RegimeController::delete/$1');
+
+// (Conservez vos autres routes)

@@ -1,18 +1,12 @@
 <?php
 
-
 namespace App\Controllers;
 
-
 use App\Models\Regime;
-use App\Services\RegimeService;
-use App\Services\RegimePrixService;
-
 
 class RegimeController extends BaseController
 {
     private $regimeModel;
-    private $regimeService;
 
     public function __construct()
     {
@@ -21,66 +15,113 @@ class RegimeController extends BaseController
             exit('Accès non autorisé. Veuillez vous connecter.');
         }
 
+        // Optionnel : restreindre aux admins (exemple : email spécifique)
+        // if (session()->get('user_email') !== 'admin@exemple.com') {
+        //     exit('Accès réservé aux administrateurs.');
+        // }
+
         $this->regimeModel = new Regime();
-        $this->regimeService = new RegimeService();
     }
 
-    // ------------------------------------------------------------
-    // FRONT OFFICE (liste des régimes pour les utilisateurs)
-    // ------------------------------------------------------------
+    // Liste des régimes
     public function index()
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/connexion');
-        }
-
-        $regimeModel = new Regime();
-        $regimes = $regimeModel->orderBy('created_at', 'DESC')->findAll();
-
-        $db = \Config\Database::connect();
-        foreach ($regimes as &$r) {
-            $prixMin = $db->table('regime_prix')
-                ->select('prix_base, duree_jours')
-                ->where('regime_id', $r['id'])
-                ->orderBy('prix_base', 'ASC')
-                ->limit(1)
-                ->get()
-                ->getRowArray();
-            $r['prix_depart'] = $prixMin ? $prixMin['prix_base'] : null;
-            $r['duree_min'] = $prixMin ? $prixMin['duree_jours'] : null;
-        }
-
-        return view('regime/list', ['regimes' => $regimes]);
+        $regimes = $this->regimeModel->orderBy('created_at', 'DESC')->paginate(10);
+        return view('regime/admin_list', [
+            'regimes' => $regimes,
+            'pager'   => $this->regimeModel->pager
+        ]);
     }
 
-    public function show($id)
+    // Formulaire de création
+    public function create()
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/connexion');
+        return view('regime/admin_create');
+    }
+
+    // Enregistrement
+    public function store()
+    {
+        $rules = [
+            'nom'        => 'required|min_length[3]',
+            'pct_viande' => 'required|numeric|between[0,100]',
+            'pct_volaille' => 'required|numeric|between[0,100]',
+            'pct_poisson' => 'required|numeric|between[0,100]',
+            'variation_poids_kg' => 'required|numeric',
+            'duree_jours' => 'required|integer|greater_than[0]'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $regimeModel = new Regime();
-        $regime = $regimeModel->find($id);
+        $data = [
+            'nom'        => $this->request->getPost('nom'),
+            'description'=> $this->request->getPost('description'),
+            'pct_viande' => $this->request->getPost('pct_viande'),
+            'pct_volaille' => $this->request->getPost('pct_volaille'),
+            'pct_poisson' => $this->request->getPost('pct_poisson'),
+            'variation_poids_kg' => $this->request->getPost('variation_poids_kg'),
+            'duree_jours' => $this->request->getPost('duree_jours'),
+        ];
 
+        if ($this->regimeModel->insert($data)) {
+            return redirect()->to('/regime/admin')->with('message', 'Régime créé avec succès.');
+        } else {
+            return redirect()->back()->withInput()->with('error', 'Erreur lors de la création.');
+        }
+    }
+
+    // Formulaire d'édition
+    public function edit($id)
+    {
+        $regime = $this->regimeModel->find($id);
         if (!$regime) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
+        return view('regime/admin_edit', ['regime' => $regime]);
+    }
 
-        $regimePrix = RegimeService::getRegimePrixByRegimeId($id);
+    // Mise à jour
+    public function update($id)
+    {
+        $rules = [
+            'nom'        => 'required|min_length[3]',
+            'pct_viande' => 'required|numeric|between[0,100]',
+            'pct_volaille' => 'required|numeric|between[0,100]',
+            'pct_poisson' => 'required|numeric|between[0,100]',
+            'variation_poids_kg' => 'required|numeric',
+            'duree_jours' => 'required|integer|greater_than[0]'
+        ];
 
-        $db = \Config\Database::connect();
-        $activites = $db->table('regime_activite ra')
-            ->select('a.nom, a.description, a.intensite, a.calories_heure, ra.frequence_semaine')
-            ->join('activite_sportive a', 'a.id = ra.activite_id')
-            ->where('ra.regime_id', $id)
-            ->orderBy('a.intensite', 'ASC')
-            ->get()
-            ->getResultArray();
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
 
-        return view('regime/detail', [
-            'regime'    => $regime,
-            'prix'      => $regimePrix,
-            'activites' => $activites,
-        ]);
+        $data = [
+            'nom'        => $this->request->getPost('nom'),
+            'description'=> $this->request->getPost('description'),
+            'pct_viande' => $this->request->getPost('pct_viande'),
+            'pct_volaille' => $this->request->getPost('pct_volaille'),
+            'pct_poisson' => $this->request->getPost('pct_poisson'),
+            'variation_poids_kg' => $this->request->getPost('variation_poids_kg'),
+            'duree_jours' => $this->request->getPost('duree_jours'),
+        ];
+
+        if ($this->regimeModel->update($id, $data)) {
+            return redirect()->to('/regime/admin')->with('message', 'Régime mis à jour.');
+        } else {
+            return redirect()->back()->withInput()->with('error', 'Erreur lors de la mise à jour.');
+        }
+    }
+
+    // Suppression
+    public function delete($id)
+    {
+        if ($this->regimeModel->delete($id)) {
+            return redirect()->to('/regime/admin')->with('message', 'Régime supprimé.');
+        } else {
+            return redirect()->back()->with('error', 'Impossible de supprimer ce régime (peut-être lié à des souscriptions).');
+        }
     }
 }
