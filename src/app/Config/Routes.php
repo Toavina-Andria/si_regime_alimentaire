@@ -66,3 +66,8 @@ $routes->get('regime/admin/delete/(:num)', 'RegimeController::delete/$1');
 $routes->get('services', 'ServicesController::index');
 
 $routes->get('analysis', 'DataAnalysisController::index');
+
+// Routes pour les abonnements
+$routes->get('abonnement/(:num)', 'AbonnementController::index/$1');
+$routes->post('abonnement/souscrire', 'AbonnementController::souscrireRegime');
+$routes->get('abonnements', 'AbonnementController::liste');
