@@ -1,15 +1,21 @@
-<!-- login.php -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Créer un compte</title>
-<link rel="stylesheet" href="<?= base_url('assets/style.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/style.css') ?>">
 </head>
 <body>
-    <!-- L'action doit pointer vers ton script PHP de traitement -->
-    <form action="/auth/register" method="POST">
+    <form action="<?= site_url('auth/register') ?>" method="POST">
         <h3>Create Account</h3>
+
+        <?php if (session()->getFlashdata('errors')): ?>
+            <div class="error">
+                <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                    <p><?= $error ?></p>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
         <label for="nom">Nom :</label>
         <input type="text" name="nom" id="nom" required placeholder="Votre nom">
@@ -21,10 +27,10 @@
         <input type="email" id="email" name="email" required placeholder="email@exemple.com">
 
         <label for="pwd">Mot de passe :</label>
-        <input type="password" id="pwd" name="mot_de_passe" required placeholder="Password">
+        <input type="password" id="pwd" name="mot_de_passe" required placeholder="Mot de passe (6 caractères min)">
 
         <button type="submit">Sign up</button>
-        <p>Déjà inscrit ? <a href="connexion.php">Se connecter</a></p>
+        <p>Déjà inscrit ? <a href="<?= base_url('auth/connexion') ?>">Se connecter</a></p>
     </form>
 </body>
 </html>
