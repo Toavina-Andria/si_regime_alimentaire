@@ -101,6 +101,20 @@ class UtilisateurService
             throw new \Exception("Erreur de création de portefeuille: " . $errors);
         }
     }
+    // pay with points
+    public static function payWithPoints(int $id_user, int $points)
+    {
+        $porteFeuille = self::validatePortefeuille($id_user);
+        if ($porteFeuille['solde_points'] < $points) {
+            throw new \Exception("Solde insuffisant");
+        }
+        $portefeuilleModel = new Portefeuille();
+        $portefeuilleModel->update($porteFeuille['id'], [
+            'solde_points' => $porteFeuille['solde_points'] - $points
+        ]);
+
+    }
+
     // add points to portefeuille
     public static function addPointsToPortefeuille(int $id_user, int $points)
     {
