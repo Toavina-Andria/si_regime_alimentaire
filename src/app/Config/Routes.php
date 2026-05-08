@@ -51,29 +51,7 @@ $routes->group('admin', static function ($routes) {
     $routes->get('codes', 'DashboardController::codes');
     $routes->get('activites', 'DashboardController::activites');
     $routes->get('utilisateurs', 'DashboardController::utilisateurs');
-    $routes->get('parametres', 'DashboardController::parametres');
 });
 
 // Route pour l'export PDF du bilan personnel
 $routes->get('export/bilan', 'ExportController::bilan');
-
-// Routes pour les statistiques utilisateur
-$routes->get('stats', 'StatsController::index');
-
-// Gestion des régimes (CRUD) – accessible aux utilisateurs connectés
-$routes->get('regime/admin', 'RegimeController::index');
-$routes->get('regime/admin/create', 'RegimeController::create');
-$routes->post('regime/admin/store', 'RegimeController::store');
-$routes->get('regime/admin/edit/(:num)', 'RegimeController::edit/$1');
-$routes->post('regime/admin/update/(:num)', 'RegimeController::update/$1');
-$routes->get('regime/admin/delete/(:num)', 'RegimeController::delete/$1');
-
-// (Conservez vos autres routes)
-$routes->get('services', 'ServicesController::index');
-
-$routes->get('analysis', 'DataAnalysisController::index');
-
-// Routes pour les abonnements
-$routes->get('abonnement/(:num)', 'AbonnementController::index/$1');
-$routes->post('abonnement/souscrire', 'AbonnementController::souscrireRegime');
-$routes->get('abonnements', 'AbonnementController::liste');

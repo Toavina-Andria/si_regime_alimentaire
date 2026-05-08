@@ -56,6 +56,95 @@
           <h1 class="page-title">Tableau de bord</h1>
           <p class="page-subtitle">Vue d'ensemble de votre application NutriPlan</p>
         </div>
+        <!-- Carte IMC personnelle -->
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <div class="kpi-icon green">⚖️</div>
+          </div>
+          <div class="kpi-value"><?= $imc ?? '—' ?></div>
+          <div class="kpi-label">Votre IMC</div>
+          <?php if ($categorie_imc): ?>
+            <div style="font-size:0.8rem; margin-top:5px;">Catégorie : <?= $categorie_imc ?></div>
+          <?php endif; ?>
+          <a href="<?= site_url('export/bilan') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px;">📄 Exporter mon bilan PDF</a>
+        </div>
+
+        <!-- Section Suggestions personnalisées (version corrigée) -->
+        <div class="suggestions-section">
+          <div class="section-header">
+            <h2 class="section-title">🍽️ Régimes suggérés pour vous</h2>
+            <p class="section-subtitle">
+              Basés sur votre objectif :
+              <strong>
+                <?php
+                $obj = $user['objectif'] ?? '';
+                if ($obj === 'augmenter_poids') echo 'Prendre du poids';
+                elseif ($obj === 'reduire_poids') echo 'Perdre du poids';
+                elseif ($obj === 'imc_ideal') echo 'Atteindre votre IMC idéal';
+                else echo 'Non défini';
+                ?>
+              </strong>
+            </p>
+          </div>
+
+          <?php if (empty($suggestions)): ?>
+            <div class="alert alert-info">
+              Aucun régime ne correspond actuellement à votre objectif. Revenez plus tard ou modifiez votre profil.
+            </div>
+          <?php else: ?>
+            <div class="suggestions-grid">
+              <?php foreach ($suggestions as $s): ?>
+                <?php $regime = $s['regime']; ?>
+                <div class="suggestion-card">
+                  <div class="suggestion-header">
+                    <h3><?= esc($regime['nom']) ?></h3>
+                    <?php $var = $regime['variation_poids_kg']; ?>
+                    <?php if ($var > 0): ?>
+                      <span class="badge gain">+<?= $var ?> kg</span>
+                    <?php elseif ($var < 0): ?>
+                      <span class="badge loss"><?= $var ?> kg</span>
+                    <?php else: ?>
+                      <span class="badge stable">Stable</span>
+                    <?php endif; ?>
+                  </div>
+                  <p class="suggestion-desc"><?= esc($regime['description'] ?? 'Aucune description') ?></p>
+
+                  <div class="suggestion-diet">
+                    <span>🍖 Viande <?= $regime['pct_viande'] ?>%</span>
+                    <span>🐟 Poisson <?= $regime['pct_poisson'] ?>%</span>
+                    <span>🐔 Volaille <?= $regime['pct_volaille'] ?>%</span>
+                  </div>
+
+                  <?php if (!empty($s['prixOptions'])): ?>
+                    <div class="suggestion-prices">
+                      <strong>Tarifs :</strong>
+                      <?php foreach ($s['prixOptions'] as $p): ?>
+                        <span class="price-tag"><?= $p['duree_jours'] ?>j : <?= number_format($p['prix_base'], 2) ?>€</span>
+                      <?php endforeach; ?>
+                    </div>
+                  <?php endif; ?>
+
+                  <?php if (!empty($s['activites'])): ?>
+                    <div class="suggestion-activities">
+                      <strong>🏋️ Activités associées :</strong>
+                      <ul>
+                        <?php foreach ($s['activites'] as $act): ?>
+                          <li><?= esc($act['nom']) ?> – <?= $act['frequence_semaine'] ?>x/semaine</li>
+                        <?php endforeach; ?>
+                      </ul>
+                    </div>
+                  <?php endif; ?>
+
+                  <div class="suggestion-actions">
+                    <a href="<?= site_url('regime/' . $regime['id']) ?>" class="btn-outline">Voir détail</a>
+                    <button class="btn-primary btn-subscribe" data-id="<?= $regime['id'] ?>">Souscrire</button>
+                  </div>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
+        </div>
+
         <!-- KPI Cards -->
         <div class="kpi-grid">
           <div class="kpi-card">
