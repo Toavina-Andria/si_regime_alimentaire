@@ -48,6 +48,5 @@ $routes->group('admin', static function ($routes) {
     $routes->get('utilisateurs', 'DashboardController::utilisateurs');
 });
 
-// Route pour la vérification du code bonus
-$routes->post('code/verify', 'CodeController::verifier');
-$routes->get('code', 'CodeController::index');
+// Route pour l'export PDF du bilan personnel
+$routes->get('export/bilan', 'ExportController::bilan');
