@@ -83,9 +83,6 @@
     </div>
   </aside>
 
-  <!-- Sidebar Overlay (mobile) -->
-  <div class="sidebar-overlay" style="display:none; position:fixed; inset:0; background:rgba(26,26,26,0.3); z-index:99;"></div>
-
   <!-- Main Content -->
   <div class="main-content">
 
