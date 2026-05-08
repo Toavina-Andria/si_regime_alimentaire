@@ -3,6 +3,9 @@
 namespace App\Controllers;
 
 use App\Models\Utilisateur;
+use App\Models\Regime;
+use App\Models\SouscriptionRegime;
+use App\Models\CodeBonus;
 
 class UserDashboard extends BaseController
 {
@@ -16,175 +19,139 @@ class UserDashboard extends BaseController
     public function index()
     {
         if (!session()->get('logged_in')) {
-            return redirect()->to('/');
+            return redirect()->to('/connexion');
         }
 
-        // $userId = session()->get('user_id');
-        $userId = 1; // ← à remplacer par session()->get('user_id') une fois les tests terminés
+        $userId = session()->get('user_id');
+        $userModel = new Utilisateur();
+        $user = $userModel->find($userId);
+
+        // Calcul IMC et catégorie
+        $imc = null;
+        $categorieImc = null;
+        if ($user && !empty($user['taille_cm']) && !empty($user['poids_kg'])) {
+            $imc = $userModel->calculerIMC($user['taille_cm'], $user['poids_kg']);
+            $categorieImc = $userModel->categorieIMC($imc);
+        }
+
+        // KPI
+        $kpi_users = $userModel->countAll();
+        $kpi_regimes = (new Regime())->countAll();
+        $kpi_codes = (new CodeBonus())->where('est_valide', 1)->countAllResults();
         
-        $user   = new Utilisateur()->find($userId);
+        // Revenus Gold (remise 15%)
+        $goldRevenue = $this->db->table('souscription_regime')
+            ->select('SUM(prix_paye) as total')
+            ->where('remise_appliquee', 15.00)
+            ->get()
+            ->getRowArray();
+        $kpi_gold = $goldRevenue['total'] ?? 0;
 
-        $data = [
-            'user'              => $user,
-            'imc'               => $this->calculerIMC($user),
-            'subscription'      => $this->getSubscription($userId),
-            'current_regime'    => $this->getCurrentRegime($userId),
-            'weight_history'    => $this->getWeightHistory($userId),
-            'wallet'            => $this->getWallet($userId),
-            'streak_days'       => $this->getStreakDays($userId),
-            'total_days'        => $this->getTotalDays($userId),
-            'regime_history'    => $this->getRegimeHistory($userId),
-            'transactions'      => $this->getRecentTransactions($userId),
-        ];
+        // Graphiques
+        $chart_inscriptions = $this->getInscriptionsParMois();
+        $chart_imc = $this->getRepartitionIMC();
 
-        return view('dashboard/user/index', $data);
-    }
-
-    private function getUser(int $userId)
-    {
-        $builder = $this->db->table('utilisateur');
-        $builder->where('id', $userId);
-        return $builder->get()->getRowArray();
-    }
-
-    private function calculerIMC($user)
-    {
-        if (!$user || !$user['taille_cm'] || !$user['poids_kg']) {
-            return null;
-        }
-        $taille_m = $user['taille_cm'] / 100;
-        $imc = round($user['poids_kg'] / ($taille_m * $taille_m), 1);
-
-        if ($imc < 18.5) {
-            $label = 'Sous-poids';
-            $color = '#74C69D';
-        } elseif ($imc < 25) {
-            $label = 'Poids normal';
-            $color = '#2D6A4F';
-        } elseif ($imc < 30) {
-            $label = 'Surpoids';
-            $color = '#D4A853';
-        } else {
-            $label = 'Obésité';
-            $color = '#C1392B';
+        // Derniers régimes
+        $recent_regimes = (new Regime())
+            ->orderBy('created_at', 'DESC')
+            ->limit(5)
+            ->findAll();
+        foreach ($recent_regimes as &$r) {
+            $r['duree_display'] = $r['duree_jours'] . ' jours';
+            // Prix fictif (à adapter)
+            $r['prix'] = number_format(rand(29, 99), 2);
         }
 
-        return [
-            'value' => $imc,
-            'label' => $label,
-            'color' => $color,
-        ];
+        // Activité récente
+        $recent_activity = $this->getRecentActivity($userId);
+        $kpi_users_trend = 12; // tendance fictive
+
+        return view('dashboard/index', [
+            'user'               => $user,
+            'imc'                => $imc,
+            'categorie_imc'      => $categorieImc,
+            'kpi_users'          => $kpi_users,
+            'kpi_regimes'        => $kpi_regimes,
+            'kpi_codes'          => $kpi_codes,
+            'kpi_gold'           => $kpi_gold,
+            'kpi_users_trend'    => $kpi_users_trend,
+            'chart_inscriptions' => $chart_inscriptions,
+            'chart_imc'          => $chart_imc,
+            'recent_regimes'     => $recent_regimes,
+            'recent_activity'    => $recent_activity,
+        ]);
     }
 
-    private function getSubscription(int $userId)
+    private function getInscriptionsParMois()
     {
-        $builder = $this->db->table('utilisateur_abonnement ua');
-        $builder->select('a.nom as abonnement_nom, a.statut, a.taux_reduction, a.prix as abonnement_prix, a.description, ua.date_debut, ua.date_fin, ua.statut as souscription_statut');
-        $builder->join('abonnement a', 'a.id = ua.abonnement_id');
-        $builder->where('ua.utilisateur_id', $userId);
-        $builder->where('ua.statut', 'actif');
-        $builder->orderBy('ua.created_at', 'DESC');
-        $builder->limit(1);
-        return $builder->get()->getRowArray();
-    }
-
-    private function getCurrentRegime(int $userId)
-    {
-        $builder = $this->db->table('souscription_regime sr');
-        $builder->select('r.nom, r.description, r.pct_viande, r.pct_volaille, r.pct_poisson, r.variation_poids_kg, r.duree_jours as regime_duree, rp.duree_jours, rp.prix_base, sr.date_debut, sr.date_fin, sr.statut, sr.prix_paye, sr.remise_appliquee');
-        $builder->join('regime_prix rp', 'rp.id = sr.regime_prix_id');
-        $builder->join('regime r', 'r.id = rp.regime_id');
-        $builder->where('sr.utilisateur_id', $userId);
-        $builder->where('sr.statut', 'actif');
-        $builder->orderBy('sr.created_at', 'DESC');
-        $builder->limit(1);
-        return $builder->get()->getRowArray();
-    }
-
-    private function getWeightHistory(int $userId)
-    {
-        $builder = $this->db->table('historique_poids');
-        $builder->select('poids_kg, mesure_le');
-        $builder->where('utilisateur_id', $userId);
-        $builder->orderBy('mesure_le', 'ASC');
-        $builder->limit(30);
-        $results = $builder->get()->getResultArray();
+        $builder = $this->db->table('utilisateur')
+            ->select("DATE_FORMAT(created_at, '%Y-%m') as mois, COUNT(*) as total")
+            ->groupBy('mois')
+            ->orderBy('mois', 'DESC')
+            ->limit(12);
+        $result = $builder->get()->getResultArray();
+        $result = array_reverse($result);
 
         $labels = [];
         $values = [];
-        foreach ($results as $row) {
-            $labels[] = date('d/m', strtotime($row['mesure_le']));
-            $values[] = (float) $row['poids_kg'];
+        foreach ($result as $row) {
+            $labels[] = date('M Y', strtotime($row['mois'] . '-01'));
+            $values[] = (int) $row['total'];
         }
+        return ['labels' => $labels, 'values' => $values];
+    }
 
+    private function getRepartitionIMC()
+    {
+        $userModel = new Utilisateur();
+        $users = $userModel->findAll();
+        $categories = [
+            'Poids insuffisant' => 0,
+            'Poids normal'      => 0,
+            'Surpoids'          => 0,
+            'Obésité'           => 0
+        ];
+        foreach ($users as $u) {
+            if (!empty($u['taille_cm']) && !empty($u['poids_kg'])) {
+                $imc = $userModel->calculerIMC($u['taille_cm'], $u['poids_kg']);
+                $cat = $userModel->categorieIMC($imc);
+                if (isset($categories[$cat])) $categories[$cat]++;
+            }
+        }
         return [
-            'labels' => $labels,
-            'values' => $values,
+            'labels' => array_keys($categories),
+            'values' => array_values($categories),
+            'colors' => ['#2D6A4F', '#52B788', '#D4A853', '#B4432B']
         ];
     }
 
-    private function getWallet(int $userId)
+    private function getRecentActivity($userId)
     {
-        $builder = $this->db->table('portefeuille');
-        $builder->where('utilisateur_id', $userId);
-        return $builder->get()->getRowArray();
-    }
+        $souscriptionModel = new SouscriptionRegime();
+        $activities = $souscriptionModel
+            ->select('souscription_regime.created_at, regime.nom as regime_nom')
+            ->join('regime_prix', 'regime_prix.id = souscription_regime.regime_prix_id')
+            ->join('regime', 'regime.id = regime_prix.regime_id')
+            ->where('utilisateur_id', $userId)
+            ->orderBy('souscription_regime.created_at', 'DESC')
+            ->limit(5)
+            ->findAll();
 
-    private function getStreakDays(int $userId)
-    {
-        $builder = $this->db->table('souscription_regime');
-        $builder->select('date_debut, date_fin, statut');
-        $builder->where('utilisateur_id', $userId);
-        $builder->where('statut', 'actif');
-        $builder->orderBy('date_debut', 'DESC');
-        $builder->limit(1);
-        $regime = $builder->get()->getRowArray();
-
-        if (!$regime) return 0;
-
-        $start = new \DateTime($regime['date_debut']);
-        $now = new \DateTime();
-        return $start->diff($now)->days;
-    }
-
-    private function getTotalDays(int $userId)
-    {
-        $builder = $this->db->table('souscription_regime');
-        $builder->select('date_debut, date_fin, statut');
-        $builder->where('utilisateur_id', $userId);
-        $builder->orderBy('date_debut', 'ASC');
-        $regimes = $builder->get()->getResultArray();
-
-        $total = 0;
-        foreach ($regimes as $r) {
-            $start = new \DateTime($r['date_debut']);
-            $end = $r['date_fin'] ? new \DateTime($r['date_fin']) : new \DateTime();
-            $total += $start->diff($end)->days;
+        $result = [];
+        foreach ($activities as $act) {
+            $result[] = [
+                'type' => 'subscription',
+                'text' => "Souscription au régime « {$act['regime_nom']} »",
+                'time' => date('d/m/Y H:i', strtotime($act['created_at']))
+            ];
         }
-        return $total;
-    }
-
-    private function getRegimeHistory(int $userId)
-    {
-        $builder = $this->db->table('souscription_regime sr');
-        $builder->select('r.nom, sr.date_debut, sr.date_fin, sr.statut, sr.prix_paye');
-        $builder->join('regime_prix rp', 'rp.id = sr.regime_prix_id');
-        $builder->join('regime r', 'r.id = rp.regime_id');
-        $builder->where('sr.utilisateur_id', $userId);
-        $builder->where('sr.statut !=', 'actif');
-        $builder->orderBy('sr.date_debut', 'DESC');
-        $builder->limit(10);
-        return $builder->get()->getResultArray();
-    }
-
-    private function getRecentTransactions(int $userId)
-    {
-        $builder = $this->db->table('transaction_portefeuille tp');
-        $builder->select('tp.montant, tp.type, tp.description, tp.created_at');
-        $builder->join('portefeuille p', 'p.id = tp.portefeuille_id');
-        $builder->where('p.utilisateur_id', $userId);
-        $builder->orderBy('tp.created_at', 'DESC');
-        $builder->limit(5);
-        return $builder->get()->getResultArray();
+        if (empty($result)) {
+            $result[] = [
+                'type' => 'info',
+                'text' => "Aucune activité récente. Commencez un régime !",
+                'time' => date('d/m/Y H:i')
+            ];
+        }
+        return $result;
     }
 }
