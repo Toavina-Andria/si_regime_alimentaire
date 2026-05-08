@@ -16,7 +16,9 @@ class RegimeService
         $regimePrixModel = new RegimePrix();
         return $regimePrixModel->where('regime_id', $regimeId)->findAll();
     }
+    // Souscription à un régime
 
+            return ['success' => true, 'message' => "Souscription réussie"];
     // validate user solde points
     public static function validateUserPoints($userId, $prix)
     {        $portefeuilleModel = UtilisateurService::getPortefeuilleByUserId($userId);
