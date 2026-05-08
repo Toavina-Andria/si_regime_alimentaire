@@ -63,3 +63,4 @@ $routes->post('regime/admin/update/(:num)', 'RegimeController::update/$1');
 $routes->get('regime/admin/delete/(:num)', 'RegimeController::delete/$1');
 
 // (Conservez vos autres routes)
+$routes->get('services', 'ServicesController::index');

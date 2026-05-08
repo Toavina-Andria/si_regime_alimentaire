@@ -136,6 +136,7 @@
           <a href="<?= site_url('regimes') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px; margin-left: 10px;">🥗 Voir tous les régimes</a>
           <a href="<?= site_url('stats') ?>" class="btn-outline" style="margin-top: 10px; display: inline-block;">📊 Mes statistiques</a>
           <a href="<?= site_url('regime/admin') ?>" class="btn-outline">⚙️ Gérer les régimes</a>
+          <a href="<?= site_url('services') ?>" class="btn-outline" style="margin-top: 10px;">✨ Voir tous les services</a>
         </div>
 
         <!-- Section Suggestions personnalisées (version corrigée) -->
