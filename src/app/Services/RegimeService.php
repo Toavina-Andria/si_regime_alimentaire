@@ -31,4 +31,16 @@ class RegimeService
             ->first();
         return $abonnement != null;
     }
+    // s'abonner a un abonnement
+    public static function applySubscription($userId, $abonnementId)
+    {
+        $abonnentuserModel = new UtilisateurAbonnement();
+        $data = [
+            'utilisateur_id' => $userId,
+            'abonnement_id' => $abonnementId,
+            'date_debut' => date(self::$dateFormat),
+            'date_fin' => date(self::$dateFormat, strtotime('+30 days')),
+        ];
+        return $abonnentuserModel->insert($data);
+    }
 }
