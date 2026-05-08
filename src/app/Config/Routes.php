@@ -5,6 +5,8 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+$routes->get('/', 'Home::index');
+$routes->get('register', 'Auth::index');
 
 // Pages publiques / authentification
 $routes->get('/', 'Auth::index');                      // inscription
@@ -19,6 +21,8 @@ $routes->post('auth/doLogin', 'Auth::doLogin');
 
 $routes->get('logout', 'Auth::logout');
 
+// Routes pour les régimes alimentaires
+$routes->get('regimes', 'Home::index');
 // Dashboard utilisateur (front office)
 $routes->get('dashboard', 'UserDashboard::index');
 
@@ -26,6 +30,15 @@ $routes->get('dashboard', 'UserDashboard::index');
 $routes->get('regimes', 'RegimeController::index');
 $routes->get('regime/(:num)', 'RegimeController::show/$1');
 
+// Route pour traiter l'envoi du login et rediriger
+$routes->get('auth/profil', 'Auth::profil');
+$routes->post('auth/updateProfil', 'Auth::updateProfil');
+$routes->get('dashboard', 'UserDashboard::index');
+$routes->get('connexion', 'Auth::loginForm');
+$routes->post('auth/doLogin', 'Auth::doLogin');
+$routes->get('logout', 'Auth::logout');
+
+// Routes Admin / Dashboard
 // Back Office (admin)
 $routes->group('admin', static function ($routes) {
     $routes->get('dashboard', 'DashboardController::index');

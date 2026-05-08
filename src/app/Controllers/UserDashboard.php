@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\Utilisateur;
+
+use App\Models\Utilisateur;
 use App\Models\Regime;
 use App\Models\SouscriptionRegime;
 use App\Models\CodeBonus;
@@ -22,6 +24,55 @@ class UserDashboard extends BaseController
             return redirect()->to('/connexion');
         }
 
+        // $userId = session()->get('user_id');
+        $userId = 1; // ← à remplacer par session()->get('user_id') une fois les tests terminés
+        
+        $user   = new Utilisateur()->find($userId);
+
+        $data = [
+            'user'              => $user,
+            'imc'               => $this->calculerIMC($user),
+            'subscription'      => $this->getSubscription($userId),
+            'current_regime'    => $this->getCurrentRegime($userId),
+            'weight_history'    => $this->getWeightHistory($userId),
+            'wallet'            => $this->getWallet($userId),
+            'streak_days'       => $this->getStreakDays($userId),
+            'total_days'        => $this->getTotalDays($userId),
+            'regime_history'    => $this->getRegimeHistory($userId),
+            'transactions'      => $this->getRecentTransactions($userId),
+        ];
+
+        return view('dashboard/user/index', $data);
+    }
+
+    private function getUser(int $userId)
+    {
+        $builder = $this->db->table('utilisateur');
+        $builder->where('id', $userId);
+        return $builder->get()->getRowArray();
+    }
+
+    private function calculerIMC($user)
+    {
+        if (!$user || !$user['taille_cm'] || !$user['poids_kg']) {
+            return null;
+        }
+        $taille_m = $user['taille_cm'] / 100;
+        $imc = round($user['poids_kg'] / ($taille_m * $taille_m), 1);
+
+        if ($imc < 18.5) {
+            $label = 'Sous-poids';
+            $color = '#74C69D';
+        } elseif ($imc < 25) {
+            $label = 'Poids normal';
+            $color = '#2D6A4F';
+        } elseif ($imc < 30) {
+            $label = 'Surpoids';
+            $color = '#D4A853';
+        } else {
+            $label = 'Obésité';
+            $color = '#C1392B';
+        }
         $userId = session()->get('user_id');
         $userModel = new Utilisateur();
         $user = $userModel->find($userId);

@@ -31,6 +31,7 @@ Application pour sélectionner un régime alimentaire adapté selon les objectif
    database.default.password = password     # Mot de passe MySQL
    database.default.DBDriver = MySQLi       # Pilote de base de données
    database.default.port = 3306             # Port MySQL (3306 par défaut)
+   app_baseURL = 'http://localhost:8080'    #Nécessaire pour pouvoir lancer les URL du projets
    ```
 
 ### Étape 2 : Installation des dépendances

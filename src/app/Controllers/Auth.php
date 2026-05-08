@@ -89,6 +89,9 @@ class Auth extends BaseController
         }
     }
 
+    public function loginForm(){
+        return view('connexion');
+    }
     // Affiche le formulaire de complétion du profil (formulaire.php)
     public function profil()
     {
