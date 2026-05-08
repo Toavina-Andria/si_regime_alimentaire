@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\Utilisateur;
+
 class UserDashboard extends BaseController
 {
     private $db;
@@ -17,8 +19,10 @@ class UserDashboard extends BaseController
             return redirect()->to('/');
         }
 
-        $userId = session()->get('user_id');
-        $user   = $this->getUser($userId);
+        // $userId = session()->get('user_id');
+        $userId = 1; // ← à remplacer par session()->get('user_id') une fois les tests terminés
+        
+        $user   = new Utilisateur()->find($userId);
 
         $data = [
             'user'              => $user,
