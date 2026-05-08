@@ -6,6 +6,7 @@ use App\Models\Utilisateur;
 use App\Models\Regime;
 use App\Models\SouscriptionRegime;
 use App\Models\CodeBonus;
+use App\Services\SuggestionService;
 
 class UserDashboard extends BaseController
 {
@@ -18,7 +19,6 @@ class UserDashboard extends BaseController
 
     public function index()
     {
-        // Vérifier connexion
         if (!session()->get('logged_in')) {
             return redirect()->to('/connexion');
         }
@@ -27,7 +27,7 @@ class UserDashboard extends BaseController
         $userModel = new Utilisateur();
         $user = $userModel->find($userId);
 
-        // 1. Calcul IMC et catégorie
+        // 1. IMC
         $imc = null;
         $categorieImc = null;
         if ($user && !empty($user['taille_cm']) && !empty($user['poids_kg'])) {
@@ -35,12 +35,18 @@ class UserDashboard extends BaseController
             $categorieImc = $userModel->categorieIMC($imc);
         }
 
-        // 2. KPI (statistiques globales)
+        // 2. Suggestions de régimes via le service
+        $suggestionService = new SuggestionService();
+        $suggestions = [];
+        if (!empty($user['objectif'])) {
+            $suggestions = $suggestionService->getSuggestions($user['objectif'], $imc);
+        }
+
+        // 3. KPI
         $kpi_users = $userModel->countAll();
         $kpi_regimes = (new Regime())->countAll();
         $kpi_codes = (new CodeBonus())->where('est_valide', 1)->countAllResults();
 
-        // Revenus Gold (remise 15%)
         $goldRevenue = $this->db->table('souscription_regime')
             ->select('SUM(prix_paye) as total')
             ->where('remise_appliquee', 15.00)
@@ -48,21 +54,17 @@ class UserDashboard extends BaseController
             ->getRowArray();
         $kpi_gold = $goldRevenue['total'] ?? 0;
 
-        // Tendance utilisateurs (variation sur 30 jours)
         $kpi_users_trend = $this->getUserTrend();
-
-        // 3. Graphiques
         $chart_inscriptions = $this->getInscriptionsParMois();
         $chart_imc = $this->getRepartitionIMC();
 
-        // 4. Derniers régimes créés
+        // 4. Derniers régimes créés (admin)
         $recent_regimes = (new Regime())
             ->orderBy('created_at', 'DESC')
             ->limit(5)
             ->findAll();
         foreach ($recent_regimes as &$r) {
             $r['duree_display'] = $r['duree_jours'] . ' jours';
-            // Prix de base (premier prix trouvé)
             $prixRow = $this->db->table('regime_prix')
                 ->where('regime_id', $r['id'])
                 ->orderBy('duree_jours', 'ASC')
@@ -72,14 +74,13 @@ class UserDashboard extends BaseController
             $r['prix'] = $prixRow ? number_format($prixRow['prix_base'], 2) : '—';
         }
 
-        // 5. Activité récente de l'utilisateur (souscriptions)
         $recent_activity = $this->getRecentActivity($userId);
 
-        // Transmission à la vue
         return view('dashboard/index', [
             'user'               => $user,
             'imc'                => $imc,
             'categorie_imc'      => $categorieImc,
+            'suggestions'        => $suggestions,
             'kpi_users'          => $kpi_users,
             'kpi_users_trend'    => $kpi_users_trend,
             'kpi_regimes'        => $kpi_regimes,
@@ -92,7 +93,7 @@ class UserDashboard extends BaseController
         ]);
     }
 
-    // Tendance des inscriptions (variation entre -30 et -60 jours)
+    // --- Méthodes privées (inchangées) ---
     private function getUserTrend()
     {
         $lastMonth = $this->db->table('utilisateur')
@@ -110,7 +111,6 @@ class UserDashboard extends BaseController
         return $lastMonth > 0 ? 100 : 0;
     }
 
-    // Nombre d'inscriptions par mois (12 derniers mois)
     private function getInscriptionsParMois()
     {
         $builder = $this->db->table('utilisateur')
@@ -130,7 +130,6 @@ class UserDashboard extends BaseController
         return ['labels' => $labels, 'values' => $values];
     }
 
-    // Répartition des catégories IMC chez tous les utilisateurs
     private function getRepartitionIMC()
     {
         $userModel = new Utilisateur();
@@ -155,7 +154,6 @@ class UserDashboard extends BaseController
         ];
     }
 
-    // Activité récente de l'utilisateur (ses souscriptions à des régimes)
     private function getRecentActivity($userId)
     {
         $souscriptionModel = new SouscriptionRegime();
