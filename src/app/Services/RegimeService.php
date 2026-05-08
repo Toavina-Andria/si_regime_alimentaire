@@ -84,4 +84,5 @@ class RegimeService
         ];
         return $abonnentuserModel->insert($data);
     }
+    // buy subscription
 }
