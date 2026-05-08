@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="dashboard-layout">
-        <?= $this->include('bar/sidebar') ?>
         <!-- Main Content direct (pas de sidebar partielle) -->
         <div class="main-content">
             <header class="topbar">
@@ -16,7 +15,7 @@
                     <h1 class="page-title">🥗 Tous les régimes</h1>
                 </div>
                 <div class="topbar-right">
-                    <a href="<?= base_url('dashboard') ?>" class="btn-outline">← Retour au tableau de bord</a>
+                    <a href="<?= site_url('dashboard') ?>" class="btn-outline">← Retour au tableau de bord</a>
                 </div>
             </header>
 
@@ -48,7 +47,7 @@
                                 </div>
                             <?php endif; ?>
                             <div class="suggestion-actions">
-                                <a href="<?= base_url('regime/' . $regime['id']) ?>" class="btn-primary">Voir le détail</a>
+                                <a href="<?= site_url('regime/' . $regime['id']) ?>" class="btn-primary">Voir le détail</a>
                             </div>
                         </div>
                     <?php endforeach; ?>

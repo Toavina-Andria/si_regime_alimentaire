@@ -67,6 +67,7 @@
             <div style="font-size:0.8rem; margin-top:5px;">Catégorie : <?= $categorie_imc ?></div>
           <?php endif; ?>
           <a href="<?= site_url('export/bilan') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px;">📄 Exporter mon bilan PDF</a>
+            <a href="<?= site_url('regimes') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px; margin-left: 10px;">🥗 Voir tous les régimes</a>
         </div>
 
         <!-- Section Suggestions personnalisées (version corrigée) -->
