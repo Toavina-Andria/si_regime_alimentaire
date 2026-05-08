@@ -30,6 +30,9 @@ class UtilisateurService
             }
             // get user porte feuille
             $porteFeuille = new Portefeuille()->where('utilisateur_id', $id_user)->first();
+            if (!$porteFeuille){
+                $this->generetePortefeuilleForUser($id_user);
+            }
             // test if code already used by user
             $transactionModel = new TransactionPortefeuille()->where('code_bonus_id', $code['id'])
                 ->where('portefeuille_id', $porteFeuille['id'])
@@ -59,5 +62,16 @@ class UtilisateurService
 
     }
 
-
+    public function generetePortefeuilleForUser($id_user)
+    {
+        try {
+            if (!$id_user) {
+                throw new \Exception("ID utilisateur manquant");
+            }
+            $porteFeuilleModel = new Portefeuille();
+            $porteFeuilleModel->insert(['utilisateur_id' => $id_user, 'solde_points' => 0]);
+        } catch (\Throwable $th) {
+            return ['success' => false, 'message' => $th->getMessage()];
+        }
+    }
 }
