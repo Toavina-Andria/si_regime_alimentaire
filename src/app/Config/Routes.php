@@ -68,3 +68,5 @@ $routes->get('regime/admin/delete/(:num)', 'RegimeController::delete/$1');
 
 // (Conservez vos autres routes)
 $routes->get('services', 'ServicesController::index');
+
+$routes->get('analysis', 'DataAnalysisController::index');
