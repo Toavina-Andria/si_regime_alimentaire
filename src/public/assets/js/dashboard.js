@@ -10,20 +10,24 @@ document.addEventListener('DOMContentLoaded', function () {
 function initSidebar() {
   const hamburger = document.querySelector('.hamburger');
   const sidebar = document.querySelector('.sidebar');
-  const overlay = document.querySelector('.sidebar-overlay');
+  let overlay = document.querySelector('.sidebar-overlay');
+
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+  }
 
   if (hamburger && sidebar) {
     hamburger.addEventListener('click', function () {
       sidebar.classList.toggle('open');
-      if (overlay) overlay.classList.toggle('active');
+      overlay.classList.toggle('active');
     });
 
-    if (overlay) {
-      overlay.addEventListener('click', function () {
-        sidebar.classList.remove('open');
-        overlay.classList.remove('active');
-      });
-    }
+    overlay.addEventListener('click', function () {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+    });
   }
 }
 
