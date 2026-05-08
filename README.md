@@ -44,7 +44,6 @@ composer install
 
 Exécutez les migrations pour créer les tables de la base de données :
 ```bash
-php spark migrate
 ```
 
 ### Étape 4 : Lancement de l'application
