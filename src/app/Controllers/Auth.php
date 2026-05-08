@@ -114,7 +114,7 @@ class Auth extends BaseController
         if (!session()->get('logged_in')) {
             return redirect()->to('/');
         }
-        return redirect()->to('/admin/dashboard');
+        return redirect()->to('/dashboard');
     }
 
     // Déconnexion
