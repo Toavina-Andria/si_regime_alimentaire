@@ -7,7 +7,7 @@ use App\Models\TransactionPortefeuille;
 class UtilisateurService
 {
 
-    public function redeemCode($code_bonus, $id_user)
+    public static function redeemCode($code_bonus, $id_user)
     {
         try {
             if (!$id_user) {
@@ -31,7 +31,7 @@ class UtilisateurService
             // get user porte feuille
             $porteFeuille = new Portefeuille()->where('utilisateur_id', $id_user)->first();
             if (!$porteFeuille){
-                $this->generetePortefeuilleForUser($id_user);
+                UtilisateurService::generetePortefeuilleForUser($id_user);
             }
             // test if code already used by user
             $transactionModel = new TransactionPortefeuille()->where('code_bonus_id', $code['id'])
@@ -62,7 +62,7 @@ class UtilisateurService
 
     }
 
-    public function generetePortefeuilleForUser($id_user)
+    public static function generetePortefeuilleForUser($id_user)
     {
         try {
             if (!$id_user) {
