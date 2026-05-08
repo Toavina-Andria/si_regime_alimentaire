@@ -21,14 +21,7 @@ class UtilisateurService
             self::validateTransaction($code['id'], $porteFeuille['id']);
 
             // add transaction to transaction historique
-            $transactionModel = new TransactionPortefeuille();
-            $transactionModel->insert([
-                'portefeuille_id' => $porteFeuille['id'],
-                'code_bonus_id' => $code['id'],
-                'montant' => $code['valeur_points'],
-                'type' => 'credit',
-                'description' => "Rachat du code bonus : " . $code_bonus
-            ]);
+            self::saveTransactionHistorique($id_user, $code['valeur_points'], $code['id'], 'credit', "Rachat du code bonus : " . $code_bonus);
 
             // update porte feuille solde
             $portefeuilleModel = new Portefeuille();
@@ -110,5 +103,18 @@ class UtilisateurService
             $errors = implode(', ', $porteFeuilleModel->errors());
             throw new \Exception("Erreur de création de portefeuille: " . $errors);
         }
+    }
+    // save transaction historique
+    public static function saveTransactionHistorique(int $id_user, int $points, ?int $code_bonus_id, string $type, string $description)
+    {
+        $porteFeuille = self::validatePortefeuille($id_user);
+        $transactionModel = new TransactionPortefeuille();
+        $transactionModel->insert([
+            'portefeuille_id' => $porteFeuille['id'],
+            'code_bonus_id' => $code_bonus_id,
+            'montant' => $points,
+            'type' => $type,
+            'description' => $description
+        ]);
     }
 }
