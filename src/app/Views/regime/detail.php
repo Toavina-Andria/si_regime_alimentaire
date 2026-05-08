@@ -1,25 +1,91 @@
-<h1><?= $regime['nom'] ?></h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= esc($regime['nom']) ?> – NutriPlan</title>
+    <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <div class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <h1 class="page-title"><?= esc($regime['nom']) ?></h1>
+                </div>
+                <div class="topbar-right">
+                    <a href="<?= site_url('regimes') ?>" class="btn-outline">← Retour à la liste</a>
+                </div>
+            </header>
 
-<p><?= $regime['description'] ?></p>
-<p><?= $regime['variation_poids_kg'] ?></p>
-<p><?= $regime['duree_jours'] ?></p>
+            <main class="page-content">
+                <!-- Informations générales -->
+                <div class="suggestion-card" style="max-width: 800px; margin-bottom: 20px;">
+                    <p><strong>Description :</strong> <?= nl2br(esc($regime['description'] ?? 'Aucune description')) ?></p>
+                    <p><strong>Variation de poids :</strong> 
+                        <?php $var = $regime['variation_poids_kg']; ?>
+                        <?= $var > 0 ? '+' : '' ?><?= $var ?> kg
+                    </p>
+                    <p><strong>Durée recommandée :</strong> <?= $regime['duree_jours'] ?> jours</p>
+                    <div class="suggestion-diet">
+                        <span>🍖 Viande <?= $regime['pct_viande'] ?>%</span>
+                        <span>🐟 Poisson <?= $regime['pct_poisson'] ?>%</span>
+                        <span>🐔 Volaille <?= $regime['pct_volaille'] ?>%</span>
+                    </div>
+                </div>
 
-<table>
-    <tr>
-        <th>% Viande</th>
-        <th>% Volaille</th>
-        <th>% Poisson</th>
-    </tr>
-    <tr>
-        <td><?= $regime['pct_viande'] ?>%</td>
-        <td><?= $regime['pct_volaille'] ?>%</td>
-        <td><?= $regime['pct_poisson'] ?>%</td>
-    </tr>
-</table>
+                <!-- Prix selon durée -->
+                <?php if (!empty($prix)): ?>
+                <div class="chart-card" style="margin-bottom: 20px;">
+                    <div class="chart-card-header">
+                        <div class="chart-card-title">💰 Tarifs selon la durée</div>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Durée</th>
+                                <th>Prix</th>
+                                <th></th>
+                            </table>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($prix as $p): ?>
+                            <tr>
+                                <td><?= $p['duree_jours'] ?> jours</td>
+                                <td><?= number_format($p['prix_base'], 2) ?> €</td>
+                                <td>
+                                    <button class="btn-primary btn-subscribe" data-id="<?= $regime['id'] ?>" data-duree="<?= $p['duree_jours'] ?>">
+                                        Souscrire
+                                    </button>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php endif; ?>
 
-<!-- prix diponible pour le regime -->
-<ul>
-    <?php foreach ($prix as $p): ?>
-    <li> duree de <?= $p['duree_jours'] ?> ,coute <?= $p['prix_base'] ?>€</li>
-    <?php endforeach; ?>
-</ul>
+                <!-- Activités sportives associées -->
+                <?php if (!empty($activites)): ?>
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div class="chart-card-title">🏋️ Activités sportives associées</div>
+                    </div>
+                    <div class="suggestions-grid" style="grid-template-columns: 1fr;">
+                        <?php foreach ($activites as $act): ?>
+                        <div class="suggestion-card">
+                            <h3><?= esc($act['nom']) ?></h3>
+                            <p><?= esc($act['description'] ?? 'Aucune description') ?></p>
+                            <p>Intensité : <?= $act['intensite'] == 1 ? 'Faible' : ($act['intensite'] == 2 ? 'Modérée' : 'Intense') ?></p>
+                            <p>Calories/heure : <?= $act['calories_heure'] ?> kcal</p>
+                            <p>Fréquence recommandée : <?= $act['frequence_semaine'] ?>x/semaine</p>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
