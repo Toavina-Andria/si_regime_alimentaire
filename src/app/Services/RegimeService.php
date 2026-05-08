@@ -17,8 +17,10 @@ class RegimeService
         return $regimePrixModel->where('regime_id', $regimeId)->findAll();
     }
     // Souscription à un régime
+    public static function souscrireRegime($userId, $regimePrixId)
 
             return ['success' => true, 'message' => "Souscription réussie"];
+        } catch (\Throwable $th) {
     // validate user solde points
     public static function validateUserPoints($userId, $prix)
     {        $portefeuilleModel = UtilisateurService::getPortefeuilleByUserId($userId);
