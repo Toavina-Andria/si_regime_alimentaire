@@ -6,13 +6,13 @@ use App\Models\Utilisateur;
 
 class Auth extends BaseController
 {
-    // Affiche le formulaire d'inscription (login.php)
+    // Affiche le formulaire d'inscription
     public function index()
     {
-        return view('login');
+        return view('authentification/login');
     }
 
-    // Traite l'inscription (1ère étape) – mot de passe en clair
+    // Traite l'inscription (1ère étape)
     public function register()
     {
         $rules = [
@@ -54,13 +54,13 @@ class Auth extends BaseController
         return redirect()->to('/auth/profil');
     }
 
-    // Affiche la page de connexion (connexion.php)
+    // Affiche la page de connexion
     public function login()
     {
-        return view('connexion');
+        return view('authentification/connexion');
     }
 
-    // Traite la connexion (authentification)
+    // Traite la connexion
     public function doLogin()
     {
         $db = \Config\Database::connect();
@@ -89,16 +89,13 @@ class Auth extends BaseController
         }
     }
 
-    public function loginForm(){
-        return view('connexion');
-    }
-    // Affiche le formulaire de complétion du profil (formulaire.php)
+    // Affiche le formulaire de complétion du profil
     public function profil()
     {
         if (!session()->get('logged_in')) {
             return redirect()->to('/');
         }
-        return view('formulaire');
+        return view('authentification/formulaire');
     }
 
     // Traite la mise à jour du profil (2ème étape)
@@ -142,31 +139,6 @@ class Auth extends BaseController
         }
 
         return redirect()->to('/dashboard');
-    }
-
-    // Tableau de bord avec calcul IMC
-    public function dashboard()
-    {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
-
-        $userId = session()->get('user_id');
-        $userModel = new Utilisateur();
-        $user = $userModel->find($userId);
-
-        $imc = null;
-        $categorie = null;
-        if ($user && !empty($user['taille_cm']) && !empty($user['poids_kg'])) {
-            $imc = $userModel->calculerIMC($user['taille_cm'], $user['poids_kg']);
-            $categorie = $userModel->categorieIMC($imc);
-        }
-
-        return view('dashboard/index', [
-            'imc'        => $imc,
-            'categorie'  => $categorie,
-            'user'       => $user
-        ]);
     }
 
     // Déconnexion
