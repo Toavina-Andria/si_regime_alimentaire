@@ -17,3 +17,5 @@ application/logs/*
 !application/logs/.htaccess
 /vendor/
 src/writable
+conception.md
+INSTRUCTION.md
