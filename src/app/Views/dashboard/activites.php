@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NutriPlan — Portefeuille & Codes</title>
+  <title>NutriPlan — Activités sportives</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -39,7 +39,7 @@
           <span class="icon">🥗</span>
           Régimes alimentaires
         </a>
-        <a href="<?= site_url('admin/activites') ?>" class="sidebar-link">
+        <a href="<?= site_url('admin/activites') ?>" class="sidebar-link active">
           <span class="icon">🏃</span>
           Activités sportives
         </a>
@@ -47,7 +47,7 @@
           <span class="icon">👥</span>
           Utilisateurs
         </a>
-        <a href="<?= site_url('admin/codes') ?>" class="sidebar-link active">
+        <a href="<?= site_url('admin/codes') ?>" class="sidebar-link">
           <span class="icon">💰</span>
           Portefeuille & Codes
         </a>
@@ -93,7 +93,7 @@
         <div class="breadcrumb">
           <a href="<?= site_url('admin/dashboard') ?>">Accueil</a>
           <span>/</span>
-          <span class="current">Portefeuille & Codes</span>
+          <span class="current">Activités sportives</span>
         </div>
       </div>
       <div class="topbar-right">
@@ -111,49 +111,52 @@
     <main class="page-content">
       <div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
         <div>
-          <h1 class="page-title">Portefeuille & Codes</h1>
-          <p class="page-subtitle">Gérez les codes bonus et consultez les transactions</p>
+          <h1 class="page-title">Activités sportives</h1>
+          <p class="page-subtitle">Gérez les activités physiques associées aux régimes</p>
         </div>
-        <button class="btn btn-gold" data-modal="modalCode">+ Générer un code</button>
+        <button class="btn btn-primary" data-modal="modalActivite">+ Nouvelle activité</button>
       </div>
 
       <div class="table-card">
         <table class="data-table">
           <thead>
             <tr>
-              <th>Code</th>
-              <th>Montant</th>
-              <th>Statut</th>
-              <th>Date d'expiration</th>
-              <th>Créé le</th>
+              <th>Nom</th>
+              <th>Description</th>
+              <th>Intensité</th>
+              <th>Calories/heure</th>
+              <th>Date</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            <?php if (empty($codes)): ?>
+            <?php if (empty($activites)): ?>
             <tr>
               <td colspan="6" style="text-align:center; color:var(--color-text-muted); padding:48px;">
-                <div style="font-size:36px; margin-bottom:12px; opacity:0.5;">🎟️</div>
-                <div style="font-size:16px; font-weight:600; margin-bottom:4px;">Aucun code bonus</div>
-                <div style="font-size:13px;">Générez votre premier code bonus</div>
+                <div style="font-size:36px; margin-bottom:12px; opacity:0.5;">🏃</div>
+                <div style="font-size:16px; font-weight:600; margin-bottom:4px;">Aucune activité</div>
+                <div style="font-size:13px;">Ajoutez votre première activité sportive</div>
               </td>
             </tr>
             <?php else: ?>
-            <?php foreach ($codes as $c): ?>
+            <?php foreach ($activites as $a): ?>
             <tr>
-              <td><code style="font-family:var(--font-mono); background:var(--color-bg); padding:2px 8px; border-radius:4px; font-size:13px;"><?= esc($c['code']) ?></code></td>
-              <td><strong><?= $c['valeur_points'] ?> €</strong></td>
+              <td><strong><?= esc($a['nom']) ?></strong></td>
+              <td style="color:var(--color-text-secondary); max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><?= esc($a['description']) ?></td>
               <td>
-                <?php if ($c['est_valide']): ?>
-                <span class="pill pill-success">✅ Validé</span>
+                <?php if ($a['intensite'] == 1): ?>
+                <span class="pill pill-success">Faible</span>
+                <?php elseif ($a['intensite'] == 2): ?>
+                <span class="pill pill-warning">Modéré</span>
                 <?php else: ?>
-                <span class="pill pill-danger">❌ Expiré</span>
+                <span class="pill pill-danger">Intense</span>
                 <?php endif; ?>
               </td>
-              <td><?= $c['expires_at'] ? date('d/m/Y', strtotime($c['expires_at'])) : '—' ?></td>
-              <td><?= date('d/m/Y', strtotime($c['created_at'])) ?></td>
+              <td><?= $a['calories_heure'] ?> kcal</td>
+              <td><?= date('d/m/Y', strtotime($a['created_at'])) ?></td>
               <td>
                 <div class="action-btns">
+                  <button class="action-btn" title="Modifier">✏️</button>
                   <button class="action-btn delete" title="Supprimer">🗑️</button>
                 </div>
               </td>
@@ -167,31 +170,41 @@
   </div>
 </div>
 
-<!-- Modal Générer un code -->
-<div class="modal-overlay" id="modalCode">
+<!-- Modal Nouvelle Activité -->
+<div class="modal-overlay" id="modalActivite">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">Générer un code bonus</div>
+      <div class="modal-title">Nouvelle activité sportive</div>
       <button class="modal-close">&times;</button>
     </div>
-    <form action="<?= site_url('admin/codes') ?>" method="POST">
+    <form action="<?= site_url('admin/activites') ?>" method="POST">
       <div class="modal-body">
         <div class="form-group">
-          <label class="form-label">Code</label>
-          <input type="text" class="form-input" name="code" placeholder="ex: NUTRI2026" value="NUTRI-<?= strtoupper(substr(md5(uniqid()), 0, 6)) ?>">
+          <label class="form-label">Nom de l'activité</label>
+          <input type="text" class="form-input" name="nom" required placeholder="ex: Marche rapide">
         </div>
         <div class="form-group">
-          <label class="form-label">Montant (€)</label>
-          <input type="number" class="form-input" name="valeur_points" min="1" step="0.5" required placeholder="ex: 10">
+          <label class="form-label">Description</label>
+          <textarea class="form-input" name="description" rows="3" placeholder="Description..." style="resize:vertical;"></textarea>
         </div>
-        <div class="form-group">
-          <label class="form-label">Date d'expiration</label>
-          <input type="date" class="form-input" name="expires_at">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label class="form-label">Intensité</label>
+            <select class="form-input form-select" name="intensite">
+              <option value="1">Faible</option>
+              <option value="2" selected>Modéré</option>
+              <option value="3">Intense</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Calories / heure</label>
+            <input type="number" class="form-input" name="calories_heure" min="0" step="10" placeholder="ex: 300">
+          </div>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-ghost modal-close">Annuler</button>
-        <button type="submit" class="btn btn-gold">Générer le code</button>
+        <button type="submit" class="btn btn-primary">Ajouter l'activité</button>
       </div>
     </form>
   </div>

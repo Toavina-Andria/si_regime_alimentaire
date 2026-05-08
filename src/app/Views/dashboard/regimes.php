@@ -80,8 +80,6 @@
     </div>
   </aside>
 
-  <div class="sidebar-overlay" style="display:none; position:fixed; inset:0; background:rgba(26,26,26,0.3); z-index:99;"></div>
-
   <div class="main-content">
     <header class="topbar">
       <div class="topbar-left">
