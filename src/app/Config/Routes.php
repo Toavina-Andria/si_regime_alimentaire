@@ -55,3 +55,6 @@ $routes->group('admin', static function ($routes) {
 
 // Route pour l'export PDF du bilan personnel
 $routes->get('export/bilan', 'ExportController::bilan');
+
+// Routes pour les statistiques utilisateur
+$routes->get('stats', 'StatsController::index');
