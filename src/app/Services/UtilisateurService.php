@@ -145,4 +145,11 @@ class UtilisateurService
             'description' => $description
         ]);
     }
+
+    public static function validateUser(int $id_user)
+    {
+        if (!$id_user) {
+            throw new \Exception("ID utilisateur manquant");
+        }
+    }
 }
