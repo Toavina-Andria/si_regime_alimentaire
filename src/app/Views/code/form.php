@@ -5,8 +5,8 @@
 </form>
 <?php if (isset($status)) {
     if ($status === 0) { ?>
-        <p style="color: red;"><?= $msg ?></p>
+        <p style="color: red;"><?= $message ?></p>
     <?php } else { ?>
-        <p style="color: green;"><?= $msg ?></p>
+        <p style="color: green;"><?= $message ?></p>
     <?php }
 } ?>
