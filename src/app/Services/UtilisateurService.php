@@ -101,6 +101,13 @@ class UtilisateurService
             throw new \Exception("Erreur de création de portefeuille: " . $errors);
         }
     }
+    // get portefeuille by user id
+    public static function getPortefeuilleByUserId($id_user)
+    {
+        $portefeuilleModel = new Portefeuille();
+        return $portefeuilleModel->where('utilisateur_id', $id_user)->first();
+    }
+
     // pay with points
     public static function payWithPoints(int $id_user, int $points)
     {
