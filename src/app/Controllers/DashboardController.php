@@ -227,9 +227,10 @@ class DashboardController extends BaseController
 
         foreach ($codes as $c) {
             $activity[] = [
-                'text' => $c['text'],
-                'time' => $this->timeAgo($c['created_at']),
-                'type' => 'gold',
+                'text'      => $c['text'],
+                'time'      => $this->timeAgo($c['created_at']),
+                'timestamp' => strtotime($c['created_at']),
+                'type'      => 'gold',
             ];
         }
 
@@ -242,9 +243,10 @@ class DashboardController extends BaseController
 
         foreach ($regimes as $r) {
             $activity[] = [
-                'text' => $r['text'],
-                'time' => $this->timeAgo($r['created_at']),
-                'type' => 'green',
+                'text'      => $r['text'],
+                'time'      => $this->timeAgo($r['created_at']),
+                'timestamp' => strtotime($r['created_at']),
+                'type'      => 'green',
             ];
         }
 
@@ -257,14 +259,15 @@ class DashboardController extends BaseController
 
         foreach ($users as $u) {
             $activity[] = [
-                'text' => $u['text'],
-                'time' => $this->timeAgo($u['created_at']),
-                'type' => 'green',
+                'text'      => $u['text'],
+                'time'      => $this->timeAgo($u['created_at']),
+                'timestamp' => strtotime($u['created_at']),
+                'type'      => 'green',
             ];
         }
 
         usort($activity, function ($a, $b) {
-            return $a['time'] <=> $b['time'];
+            return $b['timestamp'] - $a['timestamp'];
         });
 
         return array_slice($activity, 0, 5);
