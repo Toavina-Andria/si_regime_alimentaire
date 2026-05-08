@@ -234,17 +234,3 @@ INSERT INTO `activite_sportive` (`nom`, `description`, `intensite`, `calories_he
   MODIFY `taille_cm` DECIMAL(5,2) NULL,
   MODIFY `poids_kg` DECIMAL(5,2) NULL,
   MODIFY `adresse` VARCHAR(255) NULL;
-
-  CREATE TABLE IF NOT EXISTS `code_bonus` (
-  `id`              INT UNSIGNED     NOT NULL AUTO_INCREMENT,
-  `code`            VARCHAR(50)      NOT NULL,
-  `valeur_points`   DECIMAL(10,2)    NOT NULL,
-  `est_valide`      TINYINT(1)       NOT NULL DEFAULT 1,
-  `expires_at`      TIMESTAMP        NULL,
-  `created_by`      INT UNSIGNED     NULL COMMENT 'ID utilisateur qui a créé le code',  -- ← ajout de la colonne
-  `created_at`      TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_code_bonus` (`code`),
-  KEY `idx_cb_created_by` (`created_by`),
-  CONSTRAINT `fk_cb_created_by` FOREIGN KEY (`created_by`) REFERENCES `utilisateur` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB;
