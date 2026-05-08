@@ -5,15 +5,17 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'DashboardController::index');
-$routes->get('/code', 'CodeController::index');
-$routes->post('/code/verify', 'CodeController::verifier');
-// La page d'accueil affiche le login
 $routes->get('/', 'Auth::index');
-
-// Route pour afficher le formulaire de profil
+$routes->post('auth/register', 'Auth::register');
 $routes->get('auth/profil', 'Auth::profil');
+$routes->post('auth/updateProfil', 'Auth::updateProfil');
+$routes->get('dashboard', 'Auth::dashboard');
+$routes->get('logout', 'Auth::logout');
 
+
+// Routes pour les régimes alimentaires
+$routes->get('regimes', 'RegimeController::index');
+$routes->get('regime/(:num)', 'RegimeController::show/$1');
 // Route pour traiter l'envoi du login et rediriger
 $routes->post('auth/register', 'Auth::register');
 $routes->get('/', 'Auth::index');
