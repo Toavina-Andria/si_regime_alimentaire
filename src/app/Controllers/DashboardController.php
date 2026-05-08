@@ -71,6 +71,19 @@ class DashboardController extends BaseController
         return view('dashboard/activites', $data);
     }
 
+    public function utilisateurs()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/');
+        }
+
+        $builder = $this->db->table('utilisateur');
+        $builder->orderBy('created_at', 'DESC');
+        $data['utilisateurs'] = $builder->get()->getResultArray();
+
+        return view('dashboard/utilisateurs', $data);
+    }
+
     private function getTotalUsers()
     {
         return $this->db->table('utilisateur')->countAllResults();
