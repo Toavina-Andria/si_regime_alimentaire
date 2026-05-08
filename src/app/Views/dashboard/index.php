@@ -159,7 +159,8 @@
             </div>
           <?php else: ?>
             <div class="suggestions-grid">
-              <?php foreach ($suggestions as $regime): ?>
+              <?php foreach ($suggestions as $s): ?>
+                <?php $regime = $s['regime']; ?>
                 <div class="suggestion-card">
                   <div class="suggestion-header">
                     <h3><?= esc($regime['nom']) ?></h3>
@@ -180,20 +181,20 @@
                     <span>🐔 Volaille <?= $regime['pct_volaille'] ?>%</span>
                   </div>
 
-                  <?php if (!empty($regime['prix_options'])): ?>
+                  <?php if (!empty($s['prixOptions'])): ?>
                     <div class="suggestion-prices">
                       <strong>Tarifs :</strong>
-                      <?php foreach ($regime['prix_options'] as $p): ?>
+                      <?php foreach ($s['prixOptions'] as $p): ?>
                         <span class="price-tag"><?= $p['duree_jours'] ?>j : <?= number_format($p['prix_base'], 2) ?>€</span>
                       <?php endforeach; ?>
                     </div>
                   <?php endif; ?>
 
-                  <?php if (!empty($regime['activites'])): ?>
+                  <?php if (!empty($s['activites'])): ?>
                     <div class="suggestion-activities">
                       <strong>🏋️ Activités associées :</strong>
                       <ul>
-                        <?php foreach ($regime['activites'] as $act): ?>
+                        <?php foreach ($s['activites'] as $act): ?>
                           <li><?= esc($act['nom']) ?> – <?= $act['frequence_semaine'] ?>x/semaine</li>
                         <?php endforeach; ?>
                       </ul>

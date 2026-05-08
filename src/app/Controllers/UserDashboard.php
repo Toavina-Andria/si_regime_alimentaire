@@ -7,6 +7,8 @@ use App\Models\Regime;
 use App\Models\SouscriptionRegime;
 use App\Models\CodeBonus;
 use App\Services\SuggestionService;
+use App\Services\SuggestionAugmenterPoids;
+use App\Services\SuggestionDiminuerPoids;
 
 class UserDashboard extends BaseController
 {
@@ -35,11 +37,23 @@ class UserDashboard extends BaseController
             $categorieImc = $userModel->categorieIMC($imc);
         }
 
-        // 2. Suggestions de régimes via le service
-        $suggestionService = new SuggestionService();
+        // 2. Suggestions de régimes selon l'objectif
         $suggestions = [];
         if (!empty($user['objectif'])) {
-            $suggestions = $suggestionService->getSuggestions($user['objectif'], $imc);
+            switch ($user['objectif']) {
+                case 'augmenter_poids':
+                    $service = new SuggestionAugmenterPoids();
+                    $suggestions = $service->getSuggestions();
+                    break;
+                case 'reduire_poids':
+                    $service = new SuggestionDiminuerPoids();
+                    $suggestions = $service->getSuggestions();
+                    break;
+                case 'imc_ideal':
+                    $service = new SuggestionService();
+                    $suggestions = $service->getSuggestions($user['objectif'], $imc);
+                    break;
+            }
         }
 
         // 3. KPI
@@ -93,7 +107,8 @@ class UserDashboard extends BaseController
         ]);
     }
 
-    // --- Méthodes privées (inchangées) ---
+    // --- Méthodes privées existantes ---
+
     private function getUserTrend()
     {
         $lastMonth = $this->db->table('utilisateur')
