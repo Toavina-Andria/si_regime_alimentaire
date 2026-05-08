@@ -20,6 +20,7 @@ class TransactionPortefeuille extends Model
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
+    protected $updatedField  = ''; // pas de champ updated_at dans ta table
 
     // Relationships
     public function portefeuille()

@@ -17,8 +17,9 @@ class Portefeuille extends Model
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
+    protected $createdField  = ''; // Disabled because it does not exist in the database
     protected $updatedField  = 'updated_at';
 
     // Relationships
