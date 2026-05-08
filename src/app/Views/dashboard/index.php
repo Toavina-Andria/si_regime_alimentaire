@@ -7,16 +7,83 @@
   <title>NutriPlan — Tableau de bord</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
 </head>
 
 <body>
   <div class="dashboard-layout">
 
-    <?= $this->include('bar/sidebar') ?>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2z" fill="#2D6A4F" />
+          <path d="M16 6c-1.5 3-4.5 5-7 7 2 2.5 4 5.5 5 9 2.5-1.5 5-4 7-7-2.5-2-4.5-5-5-9z" fill="#D4A853" opacity="0.8" />
+          <path d="M11 20c3 1 6 2 8 4 2-2 5-3 8-4" stroke="#52B788" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        <div class="sidebar-logo-text">
+          NutriPlan
+          <small>Admin Panel</small>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Vue d'ensemble</div>
+          <a href="<?= base_url('admin/dashboard') ?>" class="sidebar-link active">
+            <span class="icon">📊</span>
+            Tableau de bord
+          </a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Gestion</div>
+          <a href="<?= base_url('admin/regimes') ?>" class="sidebar-link">
+            <span class="icon">🥗</span>
+            Régimes alimentaires
+          </a>
+          <a href="<?= base_url('admin/activites') ?>" class="sidebar-link">
+            <span class="icon">🏃</span>
+            Activités sportives
+          </a>
+          <a href="<?= base_url('admin/utilisateurs') ?>" class="sidebar-link">
+            <span class="icon">👥</span>
+            Utilisateurs
+          </a>
+          <a href="<?= base_url('admin/codes') ?>" class="sidebar-link">
+            <span class="icon">💰</span>
+            Portefeuille & Codes
+          </a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Configuration</div>
+          <a href="#" class="sidebar-link">
+            <span class="icon">⚙️</span>
+            Paramètres
+          </a>
+          <a href="#" class="sidebar-link">
+            <span class="icon">📄</span>
+            Logs & Historique
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-profile">
+          <div class="sidebar-avatar"><?= strtoupper(substr(session()->get('user_nom') ?? 'A', 0, 1)) ?></div>
+          <div class="sidebar-profile-info">
+            <div class="sidebar-profile-name"><?= session()->get('user_nom') ?? 'Admin' ?></div>
+            <div class="sidebar-profile-email"><?= session()->get('user_email') ?? '' ?></div>
+          </div>
+        </div>
+        <a href="<?= base_url('logout') ?>" class="sidebar-logout">
+          <span>🚪</span>
+          Déconnexion
+        </a>
+      </div>
+    </aside>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -25,8 +92,7 @@
       <header class="topbar">
         <div class="topbar-left">
           <button class="hamburger" aria-label="Menu">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
               <line x1="3" y1="6" x2="21" y2="6" />
               <line x1="3" y1="12" x2="21" y2="12" />
               <line x1="3" y1="18" x2="21" y2="18" />
@@ -66,12 +132,12 @@
           <?php if ($categorie_imc): ?>
             <div style="font-size:0.8rem; margin-top:5px;">Catégorie : <?= $categorie_imc ?></div>
           <?php endif; ?>
-          <a href="<?= site_url('export/bilan') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px;">📄 Exporter mon bilan PDF</a>
-          <a href="<?= site_url('regimes') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px; margin-left: 10px;">🥗 Voir tous les régimes</a>
-          <a href="<?= site_url('stats') ?>" class="btn-outline" style="margin-top: 10px; display: inline-block;">📊 Mes statistiques</a>
-          <a href="<?= site_url('regime/admin') ?>" class="btn-outline">⚙️ Gérer les régimes</a>
-          <a href="<?= site_url('services') ?>" class="btn-outline" style="margin-top: 10px;">✨ Voir tous les services</a>
-        <a href="<?= site_url('analysis') ?>" class="btn-outline" style="margin-top: 10px;">📊 Analyse des données</a>
+          <a href="<?= base_url('export/bilan') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px;">📄 Exporter mon bilan PDF</a>
+          <a href="<?= base_url('regimes') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px; margin-left: 10px;">🥗 Voir tous les régimes</a>
+          <a href="<?= base_url('stats') ?>" class="btn-outline" style="margin-top: 10px; display: inline-block;">📊 Mes statistiques</a>
+          <a href="<?= base_url('regime/admin') ?>" class="btn-outline">⚙️ Gérer les régimes</a>
+          <a href="<?= base_url('services') ?>" class="btn-outline" style="margin-top: 10px;">✨ Voir tous les services</a>
+        <a href="<?= base_url('analysis') ?>" class="btn-outline" style="margin-top: 10px;">📊 Analyse des données</a>
         </div>
 
         <!-- Section Suggestions personnalisées (version corrigée) -->
@@ -141,7 +207,7 @@
                   <?php endif; ?>
 
                   <div class="suggestion-actions">
-                    <a href="<?= site_url('regime/' . $regime['id']) ?>" class="btn-outline">Voir détail</a>
+                    <a href="<?= base_url('regime/' . $regime['id']) ?>" class="btn-outline">Voir détail</a>
                     <button class="btn-primary btn-subscribe" data-id="<?= $regime['id'] ?>">Souscrire</button>
                   </div>
                 </div>
@@ -186,6 +252,7 @@
             <div class="kpi-label">Revenus option Gold (€)</div>
           </div>
         </div>
+
         <!-- Charts -->
         <div class="charts-grid">
           <div class="chart-card">
@@ -196,7 +263,8 @@
               </div>
             </div>
             <div class="chart-container bar">
-              <canvas id="chartInscriptions" data-labels='<?= json_encode($chart_inscriptions['labels']) ?>'
+              <canvas id="chartInscriptions"
+                data-labels='<?= json_encode($chart_inscriptions['labels']) ?>'
                 data-values='<?= json_encode($chart_inscriptions['values']) ?>'>
               </canvas>
             </div>
@@ -210,7 +278,8 @@
               </div>
             </div>
             <div class="chart-container donut">
-              <canvas id="chartIMC" data-labels='<?= json_encode($chart_imc['labels']) ?>'
+              <canvas id="chartIMC"
+                data-labels='<?= json_encode($chart_imc['labels']) ?>'
                 data-values='<?= json_encode($chart_imc['values']) ?>'
                 data-colors='<?= json_encode($chart_imc['colors']) ?>'>
               </canvas>

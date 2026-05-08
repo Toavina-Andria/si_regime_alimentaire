@@ -42,7 +42,7 @@
     <div class="main-content">
         <header class="topbar">
             <h1 class="page-title">📊 Analyse des données</h1>
-            <a href="<?= site_url('dashboard') ?>" class="btn-outline">← Retour</a>
+            <a href="<?= base_url('dashboard') ?>" class="btn-outline">← Retour</a>
         </header>
 
         <!-- KPI globaux -->

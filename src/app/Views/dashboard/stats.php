@@ -14,7 +14,7 @@
                 <h1 class="page-title">📊 Mes statistiques</h1>
             </div>
             <div class="topbar-right">
-                <a href="<?= site_url('dashboard') ?>" class="btn-outline">← Retour au tableau de bord</a>
+                <a href="<?= base_url('dashboard') ?>" class="btn-outline">← Retour au tableau de bord</a>
             </div>
         </header>
 

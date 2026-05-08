@@ -14,7 +14,7 @@
                     <h1 class="page-title"><?= esc($regime['nom']) ?></h1>
                 </div>
                 <div class="topbar-right">
-                    <a href="<?= site_url('regimes') ?>" class="btn-outline">← Retour à la liste</a>
+                    <a href="<?= base_url('regimes') ?>" class="btn-outline">← Retour à la liste</a>
                 </div>
             </header>
 
