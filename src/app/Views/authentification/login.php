@@ -51,7 +51,7 @@
         </div>
       <?php endif; ?>
 
-      <form action="<?= site_url('auth/register') ?>" method="POST">
+      <form action="<?= base_url('auth/register') ?>" method="POST">
         <div class="form-row">
           <div class="form-group">
             <label for="nom">Nom</label>
@@ -74,7 +74,7 @@
       </form>
 
       <div class="auth-footer">
-        Déjà inscrit ? <a href="<?= site_url('connexion') ?>">Se connecter</a>
+        Déjà inscrit ? <a href="<?= base_url('connexion') ?>">Se connecter</a>
       </div>
     </div>
   </div>

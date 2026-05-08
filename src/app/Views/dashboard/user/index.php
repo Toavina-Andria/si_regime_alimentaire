@@ -375,7 +375,7 @@
         <p><?= esc($user['email']) ?> · Membre depuis <?= date('F Y', strtotime($user['created_at'] ?? 'now')) ?></p>
       </div>
     </div>
-    <a href="<?= site_url('logout') ?>" class="ud-logout">
+    <a href="<?= base_url('logout') ?>" class="ud-logout">
       <span>🚪</span>
       Déconnexion
     </a>

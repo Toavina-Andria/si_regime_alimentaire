@@ -51,7 +51,7 @@
         </div>
       <?php endif; ?>
 
-      <form action="<?= site_url('auth/updateProfil') ?>" method="POST">
+      <form action="<?= base_url('auth/updateProfil') ?>" method="POST">
         <div class="form-row">
           <div class="form-group">
             <label>Date de naissance</label>

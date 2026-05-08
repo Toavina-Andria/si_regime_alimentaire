@@ -11,7 +11,7 @@
     <?php if (session()->getFlashdata('errors')): ?>
         <div class="alert alert-danger"><?= implode('<br>', session()->getFlashdata('errors')) ?></div>
     <?php endif; ?>
-    <form action="<?= site_url('regime/admin/update/' . $regime['id']) ?>" method="POST">
+    <form action="<?= base_url('regime/admin/update/' . $regime['id']) ?>" method="POST">
         <?= csrf_field() ?>
         <label>Nom</label>
         <input type="text" name="nom" value="<?= esc($regime['nom']) ?>" required>
@@ -35,7 +35,7 @@
         <input type="number" name="duree_jours" min="1" value="<?= $regime['duree_jours'] ?>" required>
 
         <button type="submit" class="btn-primary">Mettre à jour</button>
-        <a href="<?= site_url('regime/admin') ?>" class="btn-outline">Annuler</a>
+        <a href="<?= base_url('regime/admin') ?>" class="btn-outline">Annuler</a>
     </form>
 </div>
 </body>

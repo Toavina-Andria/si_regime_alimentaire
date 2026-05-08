@@ -10,7 +10,7 @@
     <div class="main-content">
         <div class="page-header">
             <h1 class="page-title">Gestion des régimes</h1>
-            <a href="<?= site_url('regime/admin/create') ?>" class="btn-primary">➕ Nouveau régime</a>
+            <a href="<?= base_url('regime/admin/create') ?>" class="btn-primary">➕ Nouveau régime</a>
         </div>
 
         <?php if (session()->getFlashdata('message')): ?>
@@ -37,15 +37,15 @@
                     <td><?= $r['variation_poids_kg'] > 0 ? '+' : '' ?><?= $r['variation_poids_kg'] ?> kg</td>
                     <td><?= $r['duree_jours'] ?> j</td>
                     <td>
-                        <a href="<?= site_url('regime/admin/edit/' . $r['id']) ?>" class="btn-outline">✏️</a>
-                        <a href="<?= site_url('regime/admin/delete/' . $r['id']) ?>" class="btn-outline" onclick="return confirm('Supprimer ce régime ?')">🗑️</a>
+                        <a href="<?= base_url('regime/admin/edit/' . $r['id']) ?>" class="btn-outline">✏️</a>
+                        <a href="<?= base_url('regime/admin/delete/' . $r['id']) ?>" class="btn-outline" onclick="return confirm('Supprimer ce régime ?')">🗑️</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
         <?= $pager->links() ?>
-        <p><a href="<?= site_url('dashboard') ?>" class="btn-outline">← Retour au tableau de bord</a></p>
+        <p><a href="<?= base_url('dashboard') ?>" class="btn-outline">← Retour au tableau de bord</a></p>
     </div>
 </div>
 </body>

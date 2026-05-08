@@ -332,7 +332,7 @@
 
 <!-- Nav -->
 <nav class="hp-nav">
-  <a href="<?= site_url('/') ?>" class="hp-nav-logo">
+  <a href="<?= base_url('/') ?>" class="hp-nav-logo">
     <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
       <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2z" fill="#2D6A4F"/>
       <path d="M16 6c-1.5 3-4.5 5-7 7 2 2.5 4 5.5 5 9 2.5-1.5 5-4 7-7-2.5-2-4.5-5-5-9z" fill="#D4A853" opacity="0.8"/>
@@ -340,13 +340,16 @@
     NutriPlan
   </a>
   <div class="hp-nav-links">
-    <a href="<?= site_url('/') ?>#regimes" class="hp-btn-outline" style="border:none;color:var(--color-text-secondary);">Régimes</a>
-    <a href="<?= site_url('/') ?>#activites" class="hp-btn-outline" style="border:none;color:var(--color-text-secondary);">Activités</a>
+    <a href="<?= base_url('/abonnements') ?>" class="hp-btn-outline" style="border:none;color:var(--color-text-secondary);">Abonnements</a>
+    <a href="<?= base_url('/code') ?>" class="hp-btn-outline" style="border:none;color:var(--color-text-secondary);">Code Cadeau</a>
+
+    <a href="<?= base_url('/') ?>#regimes" class="hp-btn-outline" style="border:none;color:var(--color-text-secondary);">Régimes</a>
+    <a href="<?= base_url('/') ?>#activites" class="hp-btn-outline" style="border:none;color:var(--color-text-secondary);">Activités</a>
     <?php if (session()->get('logged_in')): ?>
-    <a href="<?= site_url('dashboard') ?>" class="btn btn-primary" style="padding:8px 20px;font-size:14px;">Mon espace</a>
+    <a href="<?= base_url('dashboard') ?>" class="btn btn-primary" style="padding:8px 20px;font-size:14px;">Mon espace</a>
     <?php else: ?>
-    <a href="<?= site_url('connexion') ?>" class="hp-btn-outline">Connexion</a>
-    <a href="<?= site_url('register') ?>" class="btn btn-primary" style="padding:8px 20px;font-size:14px;">S'inscrire</a>
+    <a href="<?= base_url('connexion') ?>" class="hp-btn-outline">Connexion</a>
+    <a href="<?= base_url('register') ?>" class="btn btn-primary" style="padding:8px 20px;font-size:14px;">S'inscrire</a>
     <?php endif; ?>
   </div>
 </nav>
@@ -360,10 +363,10 @@
       <p>Des régimes personnalisés adaptés à vos objectifs, un suivi de progression en temps réel, et des activités recommandées pour atteindre votre poids de forme.</p>
       <div class="hp-hero-btns">
         <?php if (session()->get('logged_in')): ?>
-        <a href="<?= site_url('dashboard') ?>" class="hp-btn-white">Mon tableau de bord →</a>
+        <a href="<?= base_url('dashboard') ?>" class="hp-btn-white">Mon tableau de bord →</a>
         <?php else: ?>
-        <a href="<?= site_url('register') ?>" class="hp-btn-white">Commencer maintenant →</a>
-        <a href="<?= site_url('connexion') ?>" class="hp-btn-outline" style="border-color:rgba(255,255,255,0.4);color:white;">J'ai déjà un compte</a>
+        <a href="<?= base_url('register') ?>" class="hp-btn-white">Commencer maintenant →</a>
+        <a href="<?= base_url('connexion') ?>" class="hp-btn-outline" style="border-color:rgba(255,255,255,0.4);color:white;">J'ai déjà un compte</a>
         <?php endif; ?>
       </div>
     </div>
@@ -422,12 +425,12 @@
               <?= $r['prix_options'][0]['prix'] ?>€
               <small>/ <?= $r['prix_options'][0]['duree'] ?>j</small>
             </div>
-            <a href="<?= site_url('regime/' . $r['id']) ?>" class="btn btn-primary btn-sm">Voir détails</a>
+            <a href="<?= base_url('regime/' . $r['id']) ?>" class="btn btn-primary btn-sm">Voir détails</a>
           </div>
           <?php else: ?>
           <div class="hp-regime-meta">
             <div class="hp-regime-price">Nous contacter</div>
-            <a href="<?= site_url('regime/' . $r['id']) ?>" class="btn btn-primary btn-sm">Voir détails</a>
+            <a href="<?= base_url('regime/' . $r['id']) ?>" class="btn btn-primary btn-sm">Voir détails</a>
           </div>
           <?php endif; ?>
         </div>
@@ -492,9 +495,9 @@
     <h2>Prêt à transformer votre alimentation ?</h2>
     <p>Rejoignez NutriPlan et commencez votre programme personnalisé dès aujourd'hui.</p>
     <?php if (session()->get('logged_in')): ?>
-    <a href="<?= site_url('dashboard') ?>" class="btn btn-primary" style="padding:16px 40px;font-size:18px;">Accéder à mon espace →</a>
+    <a href="<?= base_url('dashboard') ?>" class="btn btn-primary" style="padding:16px 40px;font-size:18px;">Accéder à mon espace →</a>
     <?php else: ?>
-    <a href="<?= site_url('register') ?>" class="btn btn-primary" style="padding:16px 40px;font-size:18px;">Créer mon compte gratuit →</a>
+    <a href="<?= base_url('register') ?>" class="btn btn-primary" style="padding:16px 40px;font-size:18px;">Créer mon compte gratuit →</a>
     <?php endif; ?>
   </section>
 </div>

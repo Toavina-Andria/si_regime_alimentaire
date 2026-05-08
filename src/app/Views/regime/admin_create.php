@@ -139,7 +139,7 @@
                 </div>
             <?php endif; ?>
 
-            <form action="<?= site_url('regime/admin/store') ?>" method="POST">
+            <form action="<?= base_url('regime/admin/store') ?>" method="POST">
                 <?= csrf_field() ?>
 
                 <div class="form-group">
@@ -179,7 +179,7 @@
 
                 <div class="form-actions">
                     <button type="submit" class="btn-primary">💾 Créer le régime</button>
-                    <a href="<?= site_url('regime/admin') ?>" class="btn-outline">↩️ Annuler</a>
+                    <a href="<?= base_url('regime/admin') ?>" class="btn-outline">↩️ Annuler</a>
                 </div>
             </form>
         </div>
