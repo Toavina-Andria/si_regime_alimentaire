@@ -12,6 +12,7 @@ use App\Models\UtilisateurAbonnement;
 use App\Services\SuggestionAugmenterPoids;
 use App\Services\SuggestionDiminuerPoids;
 use App\Services\SuggestionService;
+use App\Services\UtilisateurService;
 
 class DashboardService
 {
@@ -23,7 +24,7 @@ class DashboardService
     private TransactionPortefeuille $transactionPortefeuilleModel;
     private UtilisateurAbonnement $utilisateurAbonnementModel;
     private string $dateFormat = 'Y-m-d H:i:s';
-    
+
     public function __construct()
     {
         $this->utilisateurModel = new Utilisateur();
@@ -221,6 +222,25 @@ class DashboardService
             'categorie_imc' => $categorieImc,
         ];
     }
+    public function getUserObjective(int $userId): ?string
+    {
+        $user = $this->getUserById($userId);
+        $obj = $user['objectif'] ?? '';
+        switch ($obj) {
+            case 'augmenter_poids':
+                $obj = 'Prendre du poids';
+                break;
+            case 'reduire_poids':
+                $obj = 'Perdre du poids';
+                break;
+            case 'imc_ideal':
+                $obj = 'Atteindre votre IMC idéal';
+                break;
+            default:
+                $obj = 'Non défini';
+        }
+        return $obj;
+    }
 
     public function getUserSuggestions(int $userId): array
     {
@@ -307,7 +327,12 @@ class DashboardService
             'colors' => ['#2D6A4F', '#52B788', '#D4A853', '#B4432B'],
         ];
     }
-
+    public function getWallet(int $userId): ?array
+    {
+        UtilisateurService::validateUser($userId);
+        return UtilisateurService::getPortefeuilleByUserId($userId);
+   
+    }
     public function getUserRecentActivity(int $userId): array
     {
         $activities = $this->souscriptionRegimeModel
