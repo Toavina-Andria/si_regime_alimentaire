@@ -25,6 +25,7 @@ class DashboardController extends BaseController
         'chart_imc'         => $this->getIMCDistribution(),
         'recent_regimes'    => $this->getRecentRegimes(),
         'recent_activity'   => $this->getRecentActivity(),
+
     ];
 
     return view('dashboard/index', $data);

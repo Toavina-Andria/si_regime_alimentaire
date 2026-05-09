@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Regime;
 use App\Models\RegimePrix;
 use App\Models\RegimeActivite;
-use App\Models\ActiviteSportive;
 
 class SuggestionService
 {
@@ -17,51 +16,34 @@ class SuggestionService
     }
 
     /**
-     * Retourne une liste de régimes suggérés en fonction de l'objectif et de l'IMC.
-     *
-     * @param string $objectif   'augmenter_poids', 'reduire_poids', 'imc_ideal'
-     * @param float|null $imc    IMC actuel de l'utilisateur (si connu)
-     * @return array
+     * Retourne une liste de régimes suggérés pour l'IMC idéal.
+     * Chaque élément contient : ['regime' => [], 'prixOptions' => [], 'activites' => []]
      */
     public function getSuggestions(string $objectif, ?float $imc = null): array
     {
-        $regimeModel = new Regime();
+        // Pour l'IMC idéal, on cherche les régimes équilibrés (variation proche de zéro)
+        $regimes = (new Regime())
+            ->where('variation_poids_kg >=', -0.5)
+            ->where('variation_poids_kg <=', 0.5)
+            ->findAll();
 
-        // 1. Récupérer tous les régimes actifs
-        $allRegimes = $regimeModel->findAll();
-
-        // 2. Filtrer selon l'objectif
         $suggestions = [];
-        foreach ($allRegimes as $regime) {
-            $variation = (float) $regime['variation_poids_kg'];
-            $ok = false;
+        foreach ($regimes as $regime) {
+            $prixOptions = $this->getPrixByRegime($regime['id']);
+            $activites = $this->getActivitesByRegime($regime['id']);
 
-            if ($objectif === 'augmenter_poids' && $variation > 0) {
-                $ok = true;
-            } elseif ($objectif === 'reduire_poids' && $variation < 0) {
-                $ok = true;
-            } elseif ($objectif === 'imc_ideal') {
-                // Régimes équilibrés (variation proche de zéro)
-                if (abs($variation) <= 0.5) {
-                    $ok = true;
-                }
-            }
+            $suggestions[] = [
+                'regime'      => $regime,
+                'prixOptions' => $prixOptions,
+                'activites'   => $activites,
+            ];
 
-            if ($ok) {
-                // Compléter avec les prix et les activités
-                $regime['prix_options'] = $this->getPrixByRegime($regime['id']);
-                $regime['activites'] = $this->getActivitesByRegime($regime['id']);
-                $suggestions[] = $regime;
-            }
+            if (count($suggestions) >= 3) break;
         }
 
-        // Limiter à 3 suggestions
-        return array_slice($suggestions, 0, 3);
+        return $suggestions;
     }
 
-    /**
-     * Récupère les différentes durées et prix pour un régime.
-     */
     private function getPrixByRegime(int $regimeId): array
     {
         $prixModel = new RegimePrix();
@@ -79,9 +61,6 @@ class SuggestionService
         return $result;
     }
 
-    /**
-     * Récupère les activités sportives associées à un régime.
-     */
     private function getActivitesByRegime(int $regimeId): array
     {
         $builder = $this->db->table('regime_activite ra');
