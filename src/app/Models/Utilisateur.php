@@ -12,7 +12,7 @@ class Utilisateur extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['nom', 'prenom', 'email', 'mot_de_passe', 'date_naissance', 'genre', 'adresse', 'taille_cm', 'poids_kg', 'objectif', 'est_admin'];
+    protected $allowedFields = ['nom', 'prenom', 'email', 'mot_de_passe', 'date_naissance', 'genre', 'adresse', 'taille_cm', 'poids_kg', 'objectif'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -25,16 +25,6 @@ class Utilisateur extends Model
     protected $dateFormat = 'datetime';
     protected $createdField = 'created_at';
     protected $updatedField = '';  // pas de champ updated_at dans ta table
-
-    public function getByObjectif(string $objectif): array
-    {
-        return $this->where('objectif', $objectif)->orderBy('created_at', 'DESC')->findAll();
-    }
-
-    public function getRecent(int $limit = 10): array
-    {
-        return $this->orderBy('created_at', 'DESC')->findAll($limit);
-    }
 
     // Validation par défaut (pour l'insertion initiale – seulement email/mdp)
     protected $validationRules = [
