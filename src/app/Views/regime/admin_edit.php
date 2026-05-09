@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
 </head>
 <body>
+<div class="dashboard-layout">
+    <?= $this->include('bar/sidebar') ?>
 <div class="main-content" style="max-width: 600px; margin: 40px auto;">
     <h1>✏️ Modifier le régime</h1>
     <?php if (session()->getFlashdata('errors')): ?>
@@ -37,6 +39,7 @@
         <button type="submit" class="btn-primary">Mettre à jour</button>
         <a href="<?= base_url('regime/admin') ?>" class="btn-outline">Annuler</a>
     </form>
+</div>
 </div>
 </body>
 </html>

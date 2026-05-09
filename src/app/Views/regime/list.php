@@ -8,6 +8,7 @@
 </head>
 <body>
     <div class="dashboard-layout">
+        <?= $this->include('bar/sidebar') ?>
         <!-- Main Content direct (pas de sidebar partielle) -->
         <div class="main-content">
             <header class="topbar">
