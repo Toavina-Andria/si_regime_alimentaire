@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class Utilisateur extends Model
 {
-    protected $table            = 'utilisateur';
-    protected $primaryKey       = 'id';
+    protected $table = 'utilisateur';
+    protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
-    protected $protectFields    = true;
-    protected $allowedFields    = ['nom', 'prenom', 'email', 'mot_de_passe', 'date_naissance', 'genre', 'adresse', 'taille_cm', 'poids_kg', 'objectif'];
+    protected $returnType = 'array';
+    protected $useSoftDeletes = false;
+    protected $protectFields = true;
+    protected $allowedFields = ['nom', 'prenom', 'email', 'mot_de_passe', 'date_naissance', 'genre', 'adresse', 'taille_cm', 'poids_kg', 'objectif'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -22,15 +22,15 @@ class Utilisateur extends Model
 
     // Dates
     protected $useTimestamps = true;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = null;  // pas de champ updated_at dans ta table
+    protected $dateFormat = 'datetime';
+    protected $createdField = 'created_at';
+    protected $updatedField = '';  // pas de champ updated_at dans ta table
 
     // Validation par défaut (pour l'insertion initiale – seulement email/mdp)
     protected $validationRules = [
-        'nom'          => 'required|string|max_length[100]',
-        'prenom'       => 'required|string|max_length[100]',
-        'email'        => 'required|valid_email|is_unique[utilisateur.email,id,{id}]',
+        'nom' => 'required|string|max_length[100]',
+        'prenom' => 'required|string|max_length[100]',
+        'email' => 'required|valid_email|is_unique[utilisateur.email,id,{id}]',
         'mot_de_passe' => 'required|min_length[6]|max_length[255]',
         // Les autres champs ne sont pas requis ici (seront ajoutés plus tard)
     ];
@@ -49,13 +49,40 @@ class Utilisateur extends Model
     protected $beforeUpdate = ['hashPassword'];
 
     // Règles spécifiques pour la mise à jour du profil (deuxième étape)
-    public $validationRulesProfil = [
-        'date_naissance'   => 'required|valid_date[Y-m-d]',
-        'genre'            => 'required|in_list[homme,femme]',
-        'taille_cm'        => 'required|numeric|greater_than[50]|less_than[300]',
-        'poids_kg'         => 'required|numeric|greater_than[20]|less_than[500]',
-        'objectif'         => 'required|in_list[augmenter_poids,reduire_poids,imc_ideal]',
-        'adresse'          => 'permit_empty|max_length[255]',
+    public static $validationRulesProfil = [
+        'date_naissance' => 'required|valid_date[Y-m-d]',
+        'genre' => 'required|in_list[homme,femme]',
+        'taille_cm' => 'required|numeric|greater_than[50]|less_than[300]',
+        'poids_kg' => 'required|numeric|greater_than[20]|less_than[500]',
+        'objectif' => 'required|in_list[augmenter_poids,reduire_poids,imc_ideal]',
+        'adresse' => 'permit_empty|max_length[255]',
+    ];
+    public static $validationMessagesProfil = [
+        'date_naissance' => [
+            'valid_date' => 'La date de naissance doit être au format YYYY-MM-DD.'
+        ],
+        'genre' => [
+            'in_list' => 'Le genre doit être "homme" ou "femme".'
+        ],
+        'taille_cm' => [
+            'greater_than' => 'La taille doit être supérieure à 50 cm.',
+            'less_than' => 'La taille doit être inférieure à 300 cm.'
+        ],
+        'poids_kg' => [
+            'greater_than' => 'Le poids doit être supérieur à 20 kg.',
+            'less_than' => 'Le poids doit être inférieur à 500 kg.'
+        ],
+        'objectif' => [
+            'in_list' => 'L\'objectif doit être "augmenter_poids", "reduire_poids" ou "imc_ideal".'
+        ]
+    ];
+    // rule nom prenoms email mot_de_passe sont requis à l'inscription, les autres champs sont requis à la mise à jour du profil (validation dans controller)
+    public static $validationRulesInscription = [
+        'nom' => 'required|string|max_length[100]',
+        'prenom' => 'required|string|max_length[100]',
+        'email' => 'required|valid_email|is_unique[utilisateur.email,id,{id}]',
+        'mot_de_passe' => 'required|min_length[6]|max_length[255]',
+        // Les autres champs ne sont pas requis à l'inscription
     ];
 
     // Hachage automatique
@@ -91,10 +118,14 @@ class Utilisateur extends Model
     // catégorie IMC selon valeur
     public function categorieIMC(?float $imc = null): ?string
     {
-        if ($imc === null) return null;
-        if ($imc < 18.5) return 'Poids insuffisant';
-        if ($imc < 25) return 'Poids normal';
-        if ($imc < 30) return 'Surpoids';
+        if ($imc === null)
+            return null;
+        if ($imc < 18.5)
+            return 'Poids insuffisant';
+        if ($imc < 25)
+            return 'Poids normal';
+        if ($imc < 30)
+            return 'Surpoids';
         return 'Obésité';
     }
 }
