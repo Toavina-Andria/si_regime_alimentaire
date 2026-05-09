@@ -3,6 +3,7 @@ namespace App\Services;
 use App\Models\CodeBonus;
 use App\Models\Portefeuille;
 use App\Models\TransactionPortefeuille;
+use App\Models\Utilisateur;
 
 class UtilisateurService
 {
@@ -55,9 +56,7 @@ class UtilisateurService
 
     private static function validatePortefeuille(int $id_user)
     {
-        if (!$id_user) {
-            throw new \Exception("ID utilisateur manquant");
-        }
+        self::validateUser($id_user);
 
         $portefeuilleModel = new Portefeuille();
         $porteFeuille = $portefeuilleModel->where('utilisateur_id', $id_user)->first();
@@ -91,9 +90,7 @@ class UtilisateurService
     public static function generetePortefeuilleForUser($id_user)
     {
         $porteFeuilleModel = new Portefeuille();
-        if (!$id_user) {
-            throw new \Exception("ID utilisateur manquant");
-        }
+        self::validateUser($id_user);
 
         $data = ['utilisateur_id' => $id_user, 'solde_points' => 0];
         if ($porteFeuilleModel->insert($data) === false) {
