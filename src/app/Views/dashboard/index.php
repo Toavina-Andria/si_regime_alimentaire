@@ -7,7 +7,9 @@
   <title>NutriPlan — Tableau de bord</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
 </head>
 
@@ -92,7 +94,8 @@
       <header class="topbar">
         <div class="topbar-left">
           <button class="hamburger" aria-label="Menu">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
               <line x1="3" y1="6" x2="21" y2="6" />
               <line x1="3" y1="12" x2="21" y2="12" />
               <line x1="3" y1="18" x2="21" y2="18" />
@@ -122,100 +125,6 @@
           <h1 class="page-title">Tableau de bord</h1>
           <p class="page-subtitle">Vue d'ensemble de votre application NutriPlan</p>
         </div>
-        <!-- Carte IMC personnelle -->
-        <div class="kpi-card">
-          <div class="kpi-card-header">
-            <div class="kpi-icon green">⚖️</div>
-          </div>
-          <div class="kpi-value"><?= $imc ?? '—' ?></div>
-          <div class="kpi-label">Votre IMC</div>
-          <?php if ($categorie_imc): ?>
-            <div style="font-size:0.8rem; margin-top:5px;">Catégorie : <?= $categorie_imc ?></div>
-          <?php endif; ?>
-          <a href="<?= base_url('export/bilan') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px;">📄 Exporter mon bilan PDF</a>
-          <a href="<?= base_url('regimes') ?>" class="btn-outline" style="display: inline-block; margin-top: 10px; margin-left: 10px;">🥗 Voir tous les régimes</a>
-          <a href="<?= base_url('stats') ?>" class="btn-outline" style="margin-top: 10px; display: inline-block;">📊 Mes statistiques</a>
-          <a href="<?= base_url('regime/admin') ?>" class="btn-outline">⚙️ Gérer les régimes</a>
-          <a href="<?= base_url('services') ?>" class="btn-outline" style="margin-top: 10px;">✨ Voir tous les services</a>
-          <a href="<?= base_url('analysis') ?>" class="btn-outline" style="margin-top: 10px;">📊 Analyse des données</a>
-        </div>
-
-        <!-- Section Suggestions personnalisées (version corrigée) -->
-        <div class="suggestions-section">
-          <div class="section-header">
-            <h2 class="section-title">🍽️ Régimes suggérés pour vous</h2>
-            <p class="section-subtitle">
-              Basés sur votre objectif :
-              <strong>
-                <?php
-                $obj = $user['objectif'] ?? '';
-                if ($obj === 'augmenter_poids') echo 'Prendre du poids';
-                elseif ($obj === 'reduire_poids') echo 'Perdre du poids';
-                elseif ($obj === 'imc_ideal') echo 'Atteindre votre IMC idéal';
-                else echo 'Non défini';
-                ?>
-              </strong>
-            </p>
-          </div>
-
-          <?php if (empty($suggestions)): ?>
-            <div class="alert alert-info">
-              Aucun régime ne correspond actuellement à votre objectif. Revenez plus tard ou modifiez votre profil.
-            </div>
-          <?php else: ?>
-            <div class="suggestions-grid">
-              <?php foreach ($suggestions as $s): ?>
-                <?php $regime = $s['regime']; ?>
-                <div class="suggestion-card">
-                  <div class="suggestion-header">
-                    <h3><?= esc($regime['nom']) ?></h3>
-                    <?php $var = $regime['variation_poids_kg']; ?>
-                    <?php if ($var > 0): ?>
-                      <span class="badge gain">+<?= $var ?> kg</span>
-                    <?php elseif ($var < 0): ?>
-                      <span class="badge loss"><?= $var ?> kg</span>
-                    <?php else: ?>
-                      <span class="badge stable">Stable</span>
-                    <?php endif; ?>
-                  </div>
-                  <p class="suggestion-desc"><?= esc($regime['description'] ?? 'Aucune description') ?></p>
-
-                  <div class="suggestion-diet">
-                    <span>🍖 Viande <?= $regime['pct_viande'] ?>%</span>
-                    <span>🐟 Poisson <?= $regime['pct_poisson'] ?>%</span>
-                    <span>🐔 Volaille <?= $regime['pct_volaille'] ?>%</span>
-                  </div>
-
-                  <?php if (!empty($s['prixOptions'])): ?>
-                    <div class="suggestion-prices">
-                      <strong>Tarifs :</strong>
-                      <?php foreach ($s['prixOptions'] as $p): ?>
-                        <span class="price-tag"><?= $p['duree_jours'] ?>j : <?= number_format($p['prix_base'], 2) ?>€</span>
-                      <?php endforeach; ?>
-                    </div>
-                  <?php endif; ?>
-
-                  <?php if (!empty($s['activites'])): ?>
-                    <div class="suggestion-activities">
-                      <strong>🏋️ Activités associées :</strong>
-                      <ul>
-                        <?php foreach ($s['activites'] as $act): ?>
-                          <li><?= esc($act['nom']) ?> – <?= $act['frequence_semaine'] ?>x/semaine</li>
-                        <?php endforeach; ?>
-                      </ul>
-                    </div>
-                  <?php endif; ?>
-
-                  <div class="suggestion-actions">
-                    <a href="<?= base_url('regime/' . $regime['id']) ?>" class="btn-outline">Voir détail</a>
-                    <button class="btn-primary btn-subscribe" data-id="<?= $regime['id'] ?>">Souscrire</button>
-                  </div>
-                </div>
-              <?php endforeach; ?>
-            </div>
-          <?php endif; ?>
-        </div>
-
         <!-- KPI Cards -->
         <div class="kpi-grid">
           <div class="kpi-card">
@@ -252,7 +161,6 @@
             <div class="kpi-label">Revenus option Gold (€)</div>
           </div>
         </div>
-
         <!-- Charts -->
         <div class="charts-grid">
           <div class="chart-card">
@@ -263,8 +171,7 @@
               </div>
             </div>
             <div class="chart-container bar">
-              <canvas id="chartInscriptions"
-                data-labels='<?= json_encode($chart_inscriptions['labels']) ?>'
+              <canvas id="chartInscriptions" data-labels='<?= json_encode($chart_inscriptions['labels']) ?>'
                 data-values='<?= json_encode($chart_inscriptions['values']) ?>'>
               </canvas>
             </div>
@@ -278,8 +185,7 @@
               </div>
             </div>
             <div class="chart-container donut">
-              <canvas id="chartIMC"
-                data-labels='<?= json_encode($chart_imc['labels']) ?>'
+              <canvas id="chartIMC" data-labels='<?= json_encode($chart_imc['labels']) ?>'
                 data-values='<?= json_encode($chart_imc['values']) ?>'
                 data-colors='<?= json_encode($chart_imc['colors']) ?>'>
               </canvas>
