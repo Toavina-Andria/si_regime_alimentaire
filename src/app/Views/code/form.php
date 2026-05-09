@@ -10,3 +10,4 @@
         <p style="color: green;"><?= $message ?></p>
     <?php }
 } ?>
+    <?= $this->include('bar/sidebar') ?>
