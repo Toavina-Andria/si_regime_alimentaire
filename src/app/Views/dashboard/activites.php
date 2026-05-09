@@ -12,73 +12,7 @@
 <body>
 <div class="dashboard-layout">
 
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2z" fill="#2D6A4F"/>
-        <path d="M16 6c-1.5 3-4.5 5-7 7 2 2.5 4 5.5 5 9 2.5-1.5 5-4 7-7-2.5-2-4.5-5-5-9z" fill="#D4A853" opacity="0.8"/>
-        <path d="M11 20c3 1 6 2 8 4 2-2 5-3 8-4" stroke="#52B788" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      <div class="sidebar-logo-text">
-        NutriPlan
-        <small>Admin Panel</small>
-      </div>
-    </div>
-
-    <nav class="sidebar-nav">
-      <div class="sidebar-section">
-        <div class="sidebar-section-title">Vue d'ensemble</div>
-        <a href="<?= base_url('admin/dashboard') ?>" class="sidebar-link">
-          <span class="icon">📊</span>
-          Tableau de bord
-        </a>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-section-title">Gestion</div>
-        <a href="<?= base_url('admin/regimes') ?>" class="sidebar-link">
-          <span class="icon">🥗</span>
-          Régimes alimentaires
-        </a>
-        <a href="<?= base_url('admin/activites') ?>" class="sidebar-link active">
-          <span class="icon">🏃</span>
-          Activités sportives
-        </a>
-        <a href="<?= base_url('admin/utilisateurs') ?>" class="sidebar-link">
-          <span class="icon">👥</span>
-          Utilisateurs
-        </a>
-        <a href="<?= base_url('admin/codes') ?>" class="sidebar-link">
-          <span class="icon">💰</span>
-          Portefeuille & Codes
-        </a>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-section-title">Configuration</div>
-        <a href="#" class="sidebar-link">
-          <span class="icon">⚙️</span>
-          Paramètres
-        </a>
-        <a href="#" class="sidebar-link">
-          <span class="icon">📄</span>
-          Logs & Historique
-        </a>
-      </div>
-    </nav>
-
-    <div class="sidebar-footer">
-      <div class="sidebar-profile">
-        <div class="sidebar-avatar"><?= strtoupper(substr(session()->get('user_nom') ?? 'A', 0, 1)) ?></div>
-        <div class="sidebar-profile-info">
-          <div class="sidebar-profile-name"><?= session()->get('user_nom') ?? 'Admin' ?></div>
-          <div class="sidebar-profile-email"><?= session()->get('user_email') ?? '' ?></div>
-        </div>
-      </div>
-      <a href="<?= base_url('logout') ?>" class="sidebar-logout">
-        <span>🚪</span>
-        Déconnexion
-      </a>
-    </div>
-  </aside>
+  <?= $this->include('bar/sidebar') ?>
 
   <div class="main-content">
     <header class="topbar">

@@ -14,6 +14,7 @@
 
 <body>
     <div class="dashboard-layout services-page">
+        <?= $this->include('bar/sidebar') ?>
         <!-- Topbar simplifié -->
         <div class="main-content" style="padding: 0;">
             <div class="services-hero">

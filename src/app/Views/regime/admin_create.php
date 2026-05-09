@@ -127,6 +127,7 @@
 </head>
 <body>
 <div class="dashboard-layout">
+    <?= $this->include('bar/sidebar') ?>
     <div class="main-content" style="background: #f5f7f6; min-height: 100vh;">
         <div class="form-card">
             <div class="form-title">

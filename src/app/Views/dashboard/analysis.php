@@ -39,6 +39,7 @@
 </head>
 <body>
 <div class="dashboard-layout">
+    <?= $this->include('bar/sidebar') ?>
     <div class="main-content">
         <header class="topbar">
             <h1 class="page-title">📊 Analyse des données</h1>
