@@ -18,6 +18,7 @@
 <body>
   <div class="dashboard-layout">
 
+    <?= $this->include('bar/sidebar') ?>
     <!-- Header -->
     <div class="main-content">
 

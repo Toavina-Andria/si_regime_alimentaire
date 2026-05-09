@@ -7,6 +7,7 @@
 </head>
 <body>
 <div class="dashboard-layout">
+    <?= $this->include('bar/sidebar') ?>
     <div class="main-content">
         <div class="page-header">
             <h1 class="page-title">Gestion des régimes</h1>
