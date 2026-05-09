@@ -36,27 +36,16 @@ class AuthService
     {
         $userModel = new Utilisateur();
         $user = $userModel->where('email', $email)->first();
-        $redirect = redirect()->back()->with('error', 'Email ou mot de passe incorrect');
 
         if ($user) {
             $storedPassword = (string) ($user['mot_de_passe'] ?? '');
             $passwordIsValid = $storedPassword === $password || password_verify($password, $storedPassword);
-
             if ($passwordIsValid) {
-                session()->set([
-                    'user_id' => $user['id'],
-                    'user_email' => $user['email'],
-                    'user_nom' => $user['nom'],
-                    'logged_in' => true,
-                ]);
-
-                $redirect = empty($user['date_naissance']) || empty($user['genre']) || empty($user['objectif'])
-                    ? redirect()->to('/auth/profil')
-                    : redirect()->to('/dashboard');
+                return $user;
             }
         }
 
-        return $redirect;
+        return null;
     }
     public static function updateProfil(int $id_user, array $data)
     {
