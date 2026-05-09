@@ -58,6 +58,24 @@ class AuthService
 
         return $redirect;
     }
+    public static function updateProfil(int $id_user, array $data)
+    {
+        try {
+            UtilisateurService::validateUser($id_user);
+
+            $utilisateurModel = new Utilisateur();
+            if ($utilisateurModel->update($id_user, $data) === false) { // Use model rather than builder
+                $errors = $utilisateurModel->errors();
+                $errorMsg = !empty($errors) ? implode(', ', $errors) : "Erreur inconnue lors de la mise à jour";
+                throw new \Exception($errorMsg);
+            }
+
+        } catch (\Throwable $th) {
+            return ['success' => false, 'message' => $th->getMessage()];
+        }
+
+        return ['success' => true, 'message' => 'Profil mis à jour avec succès'];
+    }
     public static function logout()
     {
         session()->destroy();
