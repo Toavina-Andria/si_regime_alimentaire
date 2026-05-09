@@ -144,7 +144,6 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-ghost modal-close">Annuler</button>
         <button id="regimeSubmitBtn" type="submit" class="btn btn-primary">Créer le régime</button>
       </div>
     </form>
@@ -214,6 +213,59 @@
         }
       });
     });
+     // Submit the form via fetch to send AJAX headers and handle JSON responses
+    if (form) {
+      var originalSubmitText = submitBtn ? submitBtn.textContent : 'Envoyer';
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (!form.action) return;
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Envoi...';
+        }
+
+        var fd = new FormData(form);
+        try {
+          var res = await fetch(form.action, {
+            method: (form.method || 'POST'),
+            body: fd,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Accept': 'application/json'
+            },
+            credentials: 'same-origin'
+          });
+
+          var contentType = (res.headers.get('content-type') || '').toLowerCase();
+
+          if (contentType.indexOf('application/json') !== -1) {
+            var data = await res.json();
+            if (data && data.success) {
+              if (typeof closeModal === 'function') {
+                closeModal(modal);
+              }
+              window.location.reload();
+            } else {
+              var msg = (data && (data.message || data.error)) || 'Erreur lors de l\u2019enregistrement.';
+              alert(msg);
+            }
+          } else if (res.redirected) {
+            // Follow server redirect (PRG) when controller returns a redirect
+            window.location = res.url;
+          } else {
+            // Fallback: reload to reflect changes
+            window.location.reload();
+          }
+        } catch (err) {
+          alert('Erreur réseau — impossible d\u2019envoyer le formulaire.');
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalSubmitText;
+          }
+        }
+      });
+    }
   });
 </script>
 </body>
