@@ -34,8 +34,8 @@ class UserDashboard extends BaseController
         $chart_imc = $this->dashboardService->getRepartitionIMC();
         $recent_regimes = $this->dashboardService->getRecentRegimes(true, true);
         $recent_activity = $this->getRecentActivity($userId);
-        // $current_regime = $this->dashboardService->getCurrentRegime($userId);
         $wale = $this->dashboardService->getWallet($userId);
+        $subscription = $this->dashboardService->getUserGoldSubscription($userId);
         return view('dashboard/user/index', [
             'active'             => 'user-dashboard',
             'user'               => $user,
@@ -45,7 +45,7 @@ class UserDashboard extends BaseController
             'suggestions'        => $suggestions,
             'streak_days'        => $user['streak_days'] ?? 0,
             'total_days'         => $user['total_days'] ?? 0,
-            'subscription'       => $user['subscription'] ?? null,// For future use if needed
+            'subscription'       => $subscription,// For future use if needed
             'current_regime'     =>  null,
             'wallet'             => $wale ?? null,
             'kpi_users'          => $kpi_users,
