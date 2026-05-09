@@ -20,6 +20,7 @@ class SouscriptionRegime extends Model
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
+    protected $updatedField  = '';
 
     // Relationships
     public function utilisateur()
