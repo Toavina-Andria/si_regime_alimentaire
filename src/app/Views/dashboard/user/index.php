@@ -20,7 +20,7 @@
 
     <!-- Header -->
     <div class="main-content">
-      
+
       <main class="page-content">
         <div class="ud-header">
           <div class="ud-header-left">
@@ -72,102 +72,82 @@
             <div class="ud-stat-label">⚖️ IMC actuel</div>
           </div>
         </div>
+        <div class="suggestions-section">
+          <div class="section-header">
+            <h2 class="section-title">🍽️ Régimes suggérés pour vous</h2>
+            <p class="section-subtitle">
+              Basés sur votre objectif :
+              <strong>
+                <?= $objective ?>
+              </strong>
+            </p>
+          </div>
+
+          <?php if (empty($suggestions)): ?>
+            <div class="alert alert-info">
+              Aucun régime ne correspond actuellement à votre objectif. Revenez plus tard ou modifiez votre profil.
+            </div>
+          <?php else: ?>
+            <div class="suggestions-grid">
+              <?php foreach ($suggestions as $s): ?>
+                <?php $regime = $s['regime']; ?>
+                <div class="suggestion-card">
+                  <div class="suggestion-header">
+                    <h3><?= esc($regime['nom']) ?></h3>
+                    <?php $var = $regime['variation_poids_kg']; ?>
+                    <?php if ($var > 0): ?>
+                      <span class="badge gain">+<?= $var ?> kg</span>
+                    <?php elseif ($var < 0): ?>
+                      <span class="badge loss"><?= $var ?> kg</span>
+                    <?php else: ?>
+                      <span class="badge stable">Stable</span>
+                    <?php endif; ?>
+                  </div>
+                  <p class="suggestion-desc"><?= esc($regime['description'] ?? 'Aucune description') ?></p>
+
+                  <div class="suggestion-diet">
+                    <span>🍖 Viande <?= $regime['pct_viande'] ?>%</span>
+                    <span>🐟 Poisson <?= $regime['pct_poisson'] ?>%</span>
+                    <span>🐔 Volaille <?= $regime['pct_volaille'] ?>%</span>
+                  </div>
+
+                  <?php if (!empty($s['prixOptions'])): ?>
+                    <div class="suggestion-prices">
+                      <strong>Tarifs :</strong>
+                      <?php foreach ($s['prixOptions'] as $p): ?>
+                        <span class="price-tag"><?= $p['duree_jours'] ?>j : <?= number_format($p['prix_base'], 2) ?>€</span>
+                      <?php endforeach; ?>
+                    </div>
+                  <?php endif; ?>
+
+                  <?php if (!empty($s['activites'])): ?>
+                    <div class="suggestion-activities">
+                      <strong>🏋️ Activités associées :</strong>
+                      <ul>
+                        <?php foreach ($s['activites'] as $act): ?>
+                          <li><?= esc($act['nom']) ?> – <?= $act['frequence_semaine'] ?>x/semaine</li>
+                        <?php endforeach; ?>
+                      </ul>
+                    </div>
+                  <?php endif; ?>
+
+                  <div class="suggestion-actions">
+                    <a href="<?= base_url('regime/' . $regime['id']) ?>" class="btn-outline">Voir détail</a>
+                    <button class="btn-primary btn-subscribe" data-id="<?= $regime['id'] ?>">Souscrire</button>
+                  </div>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
+        </div>
+
 
         <!-- Main Grid -->
         <div class="ud-grid">
           <!-- imc -->
-          <div class="kpi-card">
-            <div class="kpi-card-header">
-              <div class="kpi-icon green">⚖️</div>
-            </div>
-            <div class="kpi-value"><?= $imc ?? '—' ?></div>
-            <div class="kpi-label">Votre IMC</div>
-            <?php if ($categorie_imc): ?>
-              <div style="font-size:0.8rem; margin-top:5px;">Catégorie : <?= $categorie_imc ?></div>
-            <?php endif; ?>
-            <a href="<?= base_url('export/bilan') ?>" class="btn-outline"
-              style="display: inline-block; margin-top: 10px;">📄 Exporter mon bilan PDF</a>
-            <a href="<?= base_url('regimes') ?>" class="btn-outline"
-              style="display: inline-block; margin-top: 10px; margin-left: 10px;">🥗 Voir tous les régimes</a>
-            <a href="<?= base_url('stats') ?>" class="btn-outline" style="margin-top: 10px; display: inline-block;">📊
-              Mes
-              statistiques</a>
-            <a href="<?= base_url('regime/admin') ?>" class="btn-outline">⚙️ Gérer les régimes</a>
-            <a href="<?= base_url('services') ?>" class="btn-outline" style="margin-top: 10px;">✨ Voir tous les
-              services</a>
-            <a href="<?= base_url('analysis') ?>" class="btn-outline" style="margin-top: 10px;">📊 Analyse des
-              données</a>
-          </div>
+
 
           <!-- Section Suggestions personnalisées (version corrigée) -->
-          <div class="suggestions-section">
-            <div class="section-header">
-              <h2 class="section-title">🍽️ Régimes suggérés pour vous</h2>
-              <p class="section-subtitle">
-                Basés sur votre objectif :
-                <strong>
-                  <?= $objective ?>
-                </strong>
-              </p>
-            </div>
-
-            <?php if (empty($suggestions)): ?>
-              <div class="alert alert-info">
-                Aucun régime ne correspond actuellement à votre objectif. Revenez plus tard ou modifiez votre profil.
-              </div>
-            <?php else: ?>
-              <div class="suggestions-grid">
-                <?php foreach ($suggestions as $s): ?>
-                  <?php $regime = $s['regime']; ?>
-                  <div class="suggestion-card">
-                    <div class="suggestion-header">
-                      <h3><?= esc($regime['nom']) ?></h3>
-                      <?php $var = $regime['variation_poids_kg']; ?>
-                      <?php if ($var > 0): ?>
-                        <span class="badge gain">+<?= $var ?> kg</span>
-                      <?php elseif ($var < 0): ?>
-                        <span class="badge loss"><?= $var ?> kg</span>
-                      <?php else: ?>
-                        <span class="badge stable">Stable</span>
-                      <?php endif; ?>
-                    </div>
-                    <p class="suggestion-desc"><?= esc($regime['description'] ?? 'Aucune description') ?></p>
-
-                    <div class="suggestion-diet">
-                      <span>🍖 Viande <?= $regime['pct_viande'] ?>%</span>
-                      <span>🐟 Poisson <?= $regime['pct_poisson'] ?>%</span>
-                      <span>🐔 Volaille <?= $regime['pct_volaille'] ?>%</span>
-                    </div>
-
-                    <?php if (!empty($s['prixOptions'])): ?>
-                      <div class="suggestion-prices">
-                        <strong>Tarifs :</strong>
-                        <?php foreach ($s['prixOptions'] as $p): ?>
-                          <span class="price-tag"><?= $p['duree_jours'] ?>j : <?= number_format($p['prix_base'], 2) ?>€</span>
-                        <?php endforeach; ?>
-                      </div>
-                    <?php endif; ?>
-
-                    <?php if (!empty($s['activites'])): ?>
-                      <div class="suggestion-activities">
-                        <strong>🏋️ Activités associées :</strong>
-                        <ul>
-                          <?php foreach ($s['activites'] as $act): ?>
-                            <li><?= esc($act['nom']) ?> – <?= $act['frequence_semaine'] ?>x/semaine</li>
-                          <?php endforeach; ?>
-                        </ul>
-                      </div>
-                    <?php endif; ?>
-
-                    <div class="suggestion-actions">
-                      <a href="<?= base_url('regime/' . $regime['id']) ?>" class="btn-outline">Voir détail</a>
-                      <button class="btn-primary btn-subscribe" data-id="<?= $regime['id'] ?>">Souscrire</button>
-                    </div>
-                  </div>
-                <?php endforeach; ?>
-              </div>
-            <?php endif; ?>
-          </div>
 
           <!-- KPI Cards -->
 
