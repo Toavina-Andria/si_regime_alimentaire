@@ -44,6 +44,7 @@ class DashboardController extends BaseController
 
         $regimeModel = new Regime();
         $data['regimes'] = $regimeModel->orderBy('created_at', 'DESC')->findAll();
+        $data['active'] = 'regimes';
 
         return view('dashboard/regimes', $data);
     }
