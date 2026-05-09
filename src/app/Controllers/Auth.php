@@ -68,7 +68,11 @@ class Auth extends BaseController
     {
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('mot_de_passe');
-        return AuthService::attemptLogin($email, $password);
+        $user = AuthService::attemptLogin($email, $password);
+        $this->setSession($user);
+        return empty($user['date_naissance']) || empty($user['genre']) || empty($user['objectif'])
+                    ? redirect()->to('/auth/profil')
+                    : redirect()->to('/dashboard');
     }
 
     // Affiche le formulaire de complétion du profil
