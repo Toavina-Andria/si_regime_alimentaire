@@ -28,11 +28,6 @@ helper('navigation');
                     <span class="icon">📊</span>
                     Tableau de bord
                 </a>
-                <a href="<?= base_url('admin/analytics') ?>"
-                    class="sidebar-link <?= navActive('admin/analytics') ?>">
-                    <span class="icon">📈</span>
-                    Analytics
-                </a>
             </div>
 
             <div class="sidebar-section">
