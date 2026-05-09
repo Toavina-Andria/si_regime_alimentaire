@@ -22,16 +22,6 @@ class Abonnement extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = '';
 
-    public function getByStatut(string $statut): array
-    {
-        return $this->where('statut', $statut)->orderBy('created_at', 'DESC')->findAll();
-    }
-
-    public function getRecent(int $limit = 10): array
-    {
-        return $this->orderBy('created_at', 'DESC')->findAll($limit);
-    }
-
     // Relationships
     public function utilisateurs()
     {
