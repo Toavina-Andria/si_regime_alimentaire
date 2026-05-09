@@ -2,10 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Abonnement;
-use App\Models\ActiviteSportive;
 use App\Models\CodeBonus;
-use App\Models\HistoriquePoids;
 use App\Models\Regime;
 use App\Models\RegimePrix;
 use App\Models\SouscriptionRegime;
@@ -15,7 +12,6 @@ use App\Models\UtilisateurAbonnement;
 use App\Services\SuggestionAugmenterPoids;
 use App\Services\SuggestionDiminuerPoids;
 use App\Services\SuggestionService;
-use App\Services\UtilisateurService;
 
 class DashboardService
 {
@@ -26,11 +22,8 @@ class DashboardService
     private CodeBonus $codeBonusModel;
     private TransactionPortefeuille $transactionPortefeuilleModel;
     private UtilisateurAbonnement $utilisateurAbonnementModel;
-    private HistoriquePoids $historiquePoidsModel;
-    private Abonnement $abonnementModel;
-    private ActiviteSportive $activiteSportiveModel;
     private string $dateFormat = 'Y-m-d H:i:s';
-
+    
     public function __construct()
     {
         $this->utilisateurModel = new Utilisateur();
@@ -40,9 +33,6 @@ class DashboardService
         $this->codeBonusModel = new CodeBonus();
         $this->transactionPortefeuilleModel = new TransactionPortefeuille();
         $this->utilisateurAbonnementModel = new UtilisateurAbonnement();
-        $this->historiquePoidsModel = new HistoriquePoids();
-        $this->abonnementModel = new Abonnement();
-        $this->activiteSportiveModel = new ActiviteSportive();
     }
 
     public function getTotalUsers(): int
@@ -209,27 +199,7 @@ class DashboardService
 
         return array_slice($activity, 0, 5);
     }
-    // get user abonnement actif
-    public static function getUserGoldSubscription($userId)
-    {
-        $abonnementModel = new UtilisateurAbonnement();
-        $abo =$abonnementModel
-        ->select('a.* , utilisateur_abonnement.date_debut, utilisateur_abonnement.date_fin')
-        ->join('abonnement a', 'a.id = utilisateur_abonnement.abonnement_id')
-        ->where('utilisateur_id', $userId)
-        ->where('a.statut', 'gold')
-        ->where('utilisateur_abonnement.date_fin >=', date('Y-m-d H:i:s'))
-        ->first();
-        
-        return [
-            'statut' => $abo['statut'] ?? null,
-            'nom' => $abo['nom'] ?? null,
-            'taux_reduction' => $abo['taux_reduction'] ?? null,
-            'date_debut' => $abo['date_debut'] ?? null,
-            'date_fin' => $abo['date_fin'] ?? null,
-        ];
-        
-    }
+
     public function getUserById(int $userId): ?array
     {
         return $this->utilisateurModel->find($userId);
@@ -250,25 +220,6 @@ class DashboardService
             'imc' => $imc,
             'categorie_imc' => $categorieImc,
         ];
-    }
-    public function getUserObjective(int $userId): ?string
-    {
-        $user = $this->getUserById($userId);
-        $obj = $user['objectif'] ?? '';
-        switch ($obj) {
-            case 'augmenter_poids':
-                $obj = 'Prendre du poids';
-                break;
-            case 'reduire_poids':
-                $obj = 'Perdre du poids';
-                break;
-            case 'imc_ideal':
-                $obj = 'Atteindre votre IMC idéal';
-                break;
-            default:
-                $obj = 'Non défini';
-        }
-        return $obj;
     }
 
     public function getUserSuggestions(int $userId): array
@@ -356,12 +307,7 @@ class DashboardService
             'colors' => ['#2D6A4F', '#52B788', '#D4A853', '#B4432B'],
         ];
     }
-    public function getWallet(int $userId): ?array
-    {
-        UtilisateurService::validateUser($userId);
-        return UtilisateurService::getPortefeuilleByUserId($userId);
-   
-    }
+
     public function getUserRecentActivity(int $userId): array
     {
         $activities = $this->souscriptionRegimeModel
@@ -390,143 +336,6 @@ class DashboardService
         }
 
         return $result;
-    }
-
-    public function getCurrentRegime(int $userId): ?array
-    {
-        $sub = $this->souscriptionRegimeModel
-            ->select('souscription_regime.*, regime.nom, regime.description, regime.pct_viande, regime.pct_volaille, regime.pct_poisson, regime.variation_poids_kg, regime.duree_jours, regime_prix.prix_base')
-            ->join('regime_prix', 'regime_prix.id = souscription_regime.regime_prix_id')
-            ->join('regime', 'regime.id = regime_prix.regime_id')
-            ->where('souscription_regime.utilisateur_id', $userId)
-            ->where('souscription_regime.statut', 'actif')
-            ->where('souscription_regime.date_debut <=', date('Y-m-d'))
-            ->where('souscription_regime.date_fin >=', date('Y-m-d'))
-            ->first();
-
-        return $sub ?: null;
-    }
-
-    public function getStreakDays(int $userId): int
-    {
-        $current = $this->getCurrentRegime($userId);
-        if (!$current) {
-            return 0;
-        }
-        $start = new \DateTime($current['date_debut']);
-        $now = new \DateTime();
-        return (int) $start->diff($now)->days;
-    }
-
-    public function getTotalDays(int $userId): int
-    {
-        $subs = $this->souscriptionRegimeModel
-            ->select('date_debut, date_fin')
-            ->where('utilisateur_id', $userId)
-            ->findAll();
-
-        $total = 0;
-        foreach ($subs as $sub) {
-            $start = new \DateTime($sub['date_debut']);
-            $end = new \DateTime($sub['date_fin']);
-            $total += $start->diff($end)->days;
-        }
-        return $total;
-    }
-
-    public function getWeightHistory(int $userId): array
-    {
-        $records = $this->historiquePoidsModel
-            ->where('utilisateur_id', $userId)
-            ->orderBy('mesure_le', 'ASC')
-            ->findAll();
-
-        $labels = [];
-        $values = [];
-        foreach ($records as $r) {
-            $labels[] = date('d/m/Y', strtotime($r['mesure_le']));
-            $values[] = (float) $r['poids_kg'];
-        }
-
-        return [
-            'labels' => $labels,
-            'values' => $values,
-        ];
-    }
-
-    public function getWalletTransactions(int $userId): array
-    {
-        $wallet = $this->getWallet($userId);
-        if (!$wallet) {
-            return [];
-        }
-
-        return $this->transactionPortefeuilleModel
-            ->where('portefeuille_id', $wallet['id'])
-            ->orderBy('created_at', 'DESC')
-            ->findAll(10);
-    }
-
-    public function getRegimeHistory(int $userId): array
-    {
-        return $this->souscriptionRegimeModel
-            ->select('souscription_regime.*, regime.nom')
-            ->join('regime_prix', 'regime_prix.id = souscription_regime.regime_prix_id')
-            ->join('regime', 'regime.id = regime_prix.regime_id')
-            ->where('souscription_regime.utilisateur_id', $userId)
-            ->orderBy('souscription_regime.date_debut', 'DESC')
-            ->findAll();
-    }
-
-    public function getAllRegimes(): array
-    {
-        return $this->regimeModel->orderBy('created_at', 'DESC')->findAll();
-    }
-
-    public function getAllCodes(): array
-    {
-        return $this->codeBonusModel->orderBy('created_at', 'DESC')->findAll();
-    }
-
-    public function getAllActivites(): array
-    {
-        return $this->activiteSportiveModel->orderBy('created_at', 'DESC')->findAll();
-    }
-
-    public function getAllUtilisateurs(): array
-    {
-        return $this->utilisateurModel->orderBy('created_at', 'DESC')->findAll();
-    }
-
-    public function getAllAbonnements(): array
-    {
-        return $this->abonnementModel->orderBy('created_at', 'DESC')->findAll();
-    }
-
-    public function createAbonnement(array $data): void
-    {
-        $this->abonnementModel->insert($data);
-    }
-
-    public function updateAbonnement(int $id, array $data): void
-    {
-        $this->abonnementModel->update($id, $data);
-    }
-
-    public function deleteAbonnement(int $id): void
-    {
-        $this->abonnementModel->delete($id);
-    }
-
-    public function getStatsData(): array
-    {
-        $analysis = new \App\Services\DataAnalysisService();
-        return [
-            'chart_objectifs'   => $analysis->getObjectifDistribution(),
-            'chart_top_regimes' => $analysis->getTopRegimes(),
-            'global_stats'      => $analysis->getGlobalStats(),
-            'inscriptions_trend'=> $analysis->getInscriptionsTrend(),
-        ];
     }
 
     private function getImcCategoryCounts(): array
