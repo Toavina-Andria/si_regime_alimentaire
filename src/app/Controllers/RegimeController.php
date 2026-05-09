@@ -3,10 +3,12 @@
 namespace App\Controllers;
 
 use App\Models\Regime;
+use App\Services\RegimeService;
 
 class RegimeController extends BaseController
 {
     private $regimeModel;
+    private $regimeService;
 
     public function __construct()
     {
@@ -21,15 +23,16 @@ class RegimeController extends BaseController
         // }
 
         $this->regimeModel = new Regime();
+        $this->regimeService = new RegimeService();
     }
 
     // Liste des régimes
     public function index()
     {
         $regimes = $this->regimeModel->orderBy('created_at', 'DESC')->paginate(10);
-        return view('regime/admin_list', [
+        return view('dashboard/regimes', [
             'regimes' => $regimes,
-            'pager'   => $this->regimeModel->pager
+            'pager' => $this->regimeModel->pager,
         ]);
     }
 
@@ -39,25 +42,32 @@ class RegimeController extends BaseController
         return view('regime/admin_create');
     }
 
+
+    // Détail régime (JSON pour AJAX)
+    public function show($id)
+    {
+        $regime = $this->regimeModel->find($id);
+
+        if (!$regime) {
+            return $this->response->setStatusCode(404)->setJSON([
+                'message' => 'Régime introuvable.'
+            ]);
+        }
+
+        $accept = $this->request->getHeaderLine('Accept');
+        if ($this->request->isAJAX() || str_contains($accept, 'application/json')) {
+            return $this->response->setJSON($regime);
+        }
+
+        return view('regime/detail', ['regime' => $regime]);
+    }
+
     // Enregistrement
     public function store()
     {
-        $rules = [
-            'nom'        => 'required|min_length[3]',
-            'pct_viande' => 'required|numeric|between[0,100]',
-            'pct_volaille' => 'required|numeric|between[0,100]',
-            'pct_poisson' => 'required|numeric|between[0,100]',
-            'variation_poids_kg' => 'required|numeric',
-            'duree_jours' => 'required|integer|greater_than[0]'
-        ];
-
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-
         $data = [
-            'nom'        => $this->request->getPost('nom'),
-            'description'=> $this->request->getPost('description'),
+            'nom' => $this->request->getPost('nom'),
+            'description' => $this->request->getPost('description'),
             'pct_viande' => $this->request->getPost('pct_viande'),
             'pct_volaille' => $this->request->getPost('pct_volaille'),
             'pct_poisson' => $this->request->getPost('pct_poisson'),
@@ -65,11 +75,15 @@ class RegimeController extends BaseController
             'duree_jours' => $this->request->getPost('duree_jours'),
         ];
 
-        if ($this->regimeModel->insert($data)) {
+        try {
+            RegimeService::createRegime($data);
             return redirect()->to('/regime/admin')->with('message', 'Régime créé avec succès.');
-        } else {
+        } catch (\Exception $e) {
+            log_message('error', 'store error: ' . $e->getMessage());
             return redirect()->back()->withInput()->with('error', 'Erreur lors de la création.');
         }
+
+
     }
 
     // Formulaire d'édition
@@ -85,22 +99,9 @@ class RegimeController extends BaseController
     // Mise à jour
     public function update($id)
     {
-        $rules = [
-            'nom'        => 'required|min_length[3]',
-            'pct_viande' => 'required|numeric|between[0,100]',
-            'pct_volaille' => 'required|numeric|between[0,100]',
-            'pct_poisson' => 'required|numeric|between[0,100]',
-            'variation_poids_kg' => 'required|numeric',
-            'duree_jours' => 'required|integer|greater_than[0]'
-        ];
-
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-
         $data = [
-            'nom'        => $this->request->getPost('nom'),
-            'description'=> $this->request->getPost('description'),
+            'nom' => $this->request->getPost('nom'),
+            'description' => $this->request->getPost('description'),
             'pct_viande' => $this->request->getPost('pct_viande'),
             'pct_volaille' => $this->request->getPost('pct_volaille'),
             'pct_poisson' => $this->request->getPost('pct_poisson'),
@@ -108,20 +109,25 @@ class RegimeController extends BaseController
             'duree_jours' => $this->request->getPost('duree_jours'),
         ];
 
-        if ($this->regimeModel->update($id, $data)) {
-            return redirect()->to('/regime/admin')->with('message', 'Régime mis à jour.');
+        $result = RegimeService::updateRegime($id, $data);
+
+        if ($result['success']) {
+            return redirect()->to('/regime/admin')->with('message', $result['message']);
         } else {
-            return redirect()->back()->withInput()->with('error', 'Erreur lors de la mise à jour.');
+            $errors = $result['errors'] ?? [];
+            return redirect()->back()->withInput()->with('errors', $errors)->with('error', $result['message']);
         }
     }
 
     // Suppression
     public function delete($id)
     {
-        if ($this->regimeModel->delete($id)) {
-            return redirect()->to('/regime/admin')->with('message', 'Régime supprimé.');
+        $result = RegimeService::deleteRegime($id);
+
+        if ($result['success']) {
+            return redirect()->to('/regime/admin')->with('message', $result['message']);
         } else {
-            return redirect()->back()->with('error', 'Impossible de supprimer ce régime (peut-être lié à des souscriptions).');
+            return redirect()->back()->with('error', $result['message']);
         }
     }
 }
