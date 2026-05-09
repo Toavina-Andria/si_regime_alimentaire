@@ -200,7 +200,27 @@ class DashboardService
 
         return array_slice($activity, 0, 5);
     }
-
+    // get user abonnement actif
+    public static function getUserGoldSubscription($userId)
+    {
+        $abonnementModel = new UtilisateurAbonnement();
+        $abo =$abonnementModel
+        ->select('a.* , utilisateur_abonnement.date_debut, utilisateur_abonnement.date_fin')
+        ->join('abonnement a', 'a.id = utilisateur_abonnement.abonnement_id')
+        ->where('utilisateur_id', $userId)
+        ->where('a.statut', 'gold')
+        ->where('utilisateur_abonnement.date_fin >=', date('Y-m-d H:i:s'))
+        ->first();
+        
+        return [
+            'statut' => $abo['statut'] ?? null,
+            'nom' => $abo['nom'] ?? null,
+            'taux_reduction' => $abo['taux_reduction'] ?? null,
+            'date_debut' => $abo['date_debut'] ?? null,
+            'date_fin' => $abo['date_fin'] ?? null,
+        ];
+        
+    }
     public function getUserById(int $userId): ?array
     {
         return $this->utilisateurModel->find($userId);

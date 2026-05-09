@@ -199,7 +199,7 @@
               <div class="ud-profile-info">
                 <div class="ud-profile-row">
                   <span class="ud-profile-label">Plan</span>
-                  <span class="ud-profile-value"><?= esc($subscription['abonnement_nom']) ?></span>
+                  <span class="ud-profile-value"><?= esc($subscription['nom']) ?></span>
                 </div>
                 <?php if ($subscription['taux_reduction'] > 0): ?>
                   <div class="ud-profile-row">
