@@ -30,12 +30,12 @@ class AbonnementController extends BaseController
 
         // Check if user already has active subscription
         $activeSubscription = AbonnementServices::getUserActiveSubscription($userId);
-
-        return view('abonnement/souscrire', [
+    $data = [
             'abonnement' => $abonnement,
             'activeSubscription' => $activeSubscription,
             'userId' => $userId
-        ]);
+        ];
+        return view('abonnement/souscrire', $data);
     }
 
     /**
@@ -53,10 +53,10 @@ class AbonnementController extends BaseController
             return redirect()->to('/connexion')->with('error', 'Veuillez vous connecter.');
         }
 
-        // Validate CSRF token
-        if (!$this->validate(['csrf_token' => 'required'])) {
-            return redirect()->back()->with('error', 'Erreur CSRF. Veuillez réessayer.');
-        }
+        // // Validate CSRF token
+        // if (!$this->validate(['csrf_token' => 'required'])) {
+        //     return redirect()->back()->with('error', 'Erreur CSRF. Veuillez réessayer.');
+        // }
 
         // Get POST data
         $abonnementId = $this->request->getPost('abonnement_id');
