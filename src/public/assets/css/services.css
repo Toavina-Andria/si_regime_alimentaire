@@ -20,6 +20,38 @@
     margin-bottom: 0.5rem;
 }
 
+.services-content {
+    padding: 0;
+}
+
+.services-hero-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.services-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    background: white;
+    border: 1.5px solid var(--color-primary, #2D6A4F);
+    color: var(--color-primary, #2D6A4F);
+    text-decoration: none;
+    transition: all 200ms ease;
+    cursor: pointer;
+}
+
+.services-btn:hover {
+    background: rgba(45,106,79,0.08);
+}
+
 .services-hero p {
     font-size: 1.1rem;
     color: #4a5568;
