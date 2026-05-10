@@ -13,8 +13,18 @@ class DashboardController extends BaseController
         $this->dashboardService = new DashboardService();
     }
 
+    private function requireAdmin()
+    {
+        if (!session()->get('logged_in') || !session()->get('est_admin')) {
+            return redirect()->to('/connexion')->with('error', 'Accès réservé aux administrateurs.');
+        }
+        return null;
+    }
+
     public function index()
     {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
         $data = [
             'imc'                => null,
             'categorie_imc'      => null,
@@ -34,9 +44,7 @@ class DashboardController extends BaseController
 
     public function regimes()
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
+        if ($redirect = $this->requireAdmin()) return $redirect;
 
         $data['regimes'] = $this->dashboardService->getAllRegimes();
         $data['active'] = 'regimes';
@@ -46,9 +54,7 @@ class DashboardController extends BaseController
 
     public function codes()
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
+        if ($redirect = $this->requireAdmin()) return $redirect;
 
         $data['codes'] = $this->dashboardService->getAllCodes();
 
@@ -57,9 +63,7 @@ class DashboardController extends BaseController
 
     public function activites()
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
+        if ($redirect = $this->requireAdmin()) return $redirect;
 
         $data['activites'] = $this->dashboardService->getAllActivites();
 
@@ -68,9 +72,7 @@ class DashboardController extends BaseController
 
     public function utilisateurs()
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
+        if ($redirect = $this->requireAdmin()) return $redirect;
 
         $data['utilisateurs'] = $this->dashboardService->getAllUtilisateurs();
 
@@ -100,9 +102,7 @@ class DashboardController extends BaseController
 
     public function abonnements()
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
+        if ($redirect = $this->requireAdmin()) return $redirect;
 
         $data['abonnements'] = $this->dashboardService->getAllAbonnements();
 

@@ -6,12 +6,12 @@
             <path d="M11 20c3 1 6 2 8 4 2-2 5-3 8-4" stroke="#52B788" stroke-width="1.5" stroke-linecap="round" />
         </svg>
         <div class="sidebar-logo-text">
-            <a href="<?= base_url('regimes') ?>">NutriPlan <small>Admin Panel</small></a>
+            <a href="<?= base_url('regimes') ?>">NutriPlan <small>Back Office</small></a>
         </div>
     </div>
 <?php helper('navigation'); ?>
     <nav class="sidebar-nav">
-    <?php if (session()->get('user_id') == 1): ?>
+    <?php if (session()->get('est_admin')): ?>
         <div class="sidebar-section">
             <div class="sidebar-section-title">Tableau de bord</div>
             <a href="<?= base_url('admin/dashboard') ?>" class="sidebar-link <?= navActive('admin/dashboard') ?>">
