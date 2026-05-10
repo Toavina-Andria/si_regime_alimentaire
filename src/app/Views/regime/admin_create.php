@@ -146,36 +146,44 @@
                 <div class="form-group">
                     <label>Nom du régime</label>
                     <input type="text" name="nom" value="<?= old('nom') ?>" placeholder="ex: Régime Méditerranéen" required>
+                    <?php if (session()->getFlashdata('errors') && isset(session()->getFlashdata('errors')['nom'])): ?><small class="field-error"><?= session()->getFlashdata('errors')['nom'] ?></small><?php endif; ?>
+                    <?php if ($validation = \Config\Services::validation()) : ?><?= $validation->showError('nom', '') ?><?php endif; ?>
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
                     <textarea name="description" placeholder="Décrivez les principes, bénéfices..."><?= old('description') ?></textarea>
+                    <?php if ($validation = \Config\Services::validation()) : ?><?= $validation->showError('description', '') ?><?php endif; ?>
                 </div>
 
                 <div class="form-group">
                     <label>🥩 % Viande</label>
                     <input type="number" name="pct_viande" step="0.01" value="<?= old('pct_viande') ?>" required>
+                    <?php if ($validation = \Config\Services::validation()) : ?><?= $validation->showError('pct_viande', '') ?><?php endif; ?>
                 </div>
 
                 <div class="form-group">
                     <label>🐔 % Volaille</label>
                     <input type="number" name="pct_volaille" step="0.01" value="<?= old('pct_volaille') ?>" required>
+                    <?php if ($validation = \Config\Services::validation()) : ?><?= $validation->showError('pct_volaille', '') ?><?php endif; ?>
                 </div>
 
                 <div class="form-group">
                     <label>🐟 % Poisson</label>
                     <input type="number" name="pct_poisson" step="0.01" value="<?= old('pct_poisson') ?>" required>
+                    <?php if ($validation = \Config\Services::validation()) : ?><?= $validation->showError('pct_poisson', '') ?><?php endif; ?>
                 </div>
 
                 <div class="form-group">
                     <label>⚖️ Variation de poids (kg)</label>
                     <input type="number" name="variation_poids_kg" step="0.1" placeholder="positif = prise / négatif = perte" value="<?= old('variation_poids_kg') ?>" required>
+                    <?php if ($validation = \Config\Services::validation()) : ?><?= $validation->showError('variation_poids_kg', '') ?><?php endif; ?>
                 </div>
 
                 <div class="form-group">
                     <label>📅 Durée recommandée (jours)</label>
                     <input type="number" name="duree_jours" min="1" value="<?= old('duree_jours') ?>" required>
+                    <?php if ($validation = \Config\Services::validation()) : ?><?= $validation->showError('duree_jours', '') ?><?php endif; ?>
                 </div>
 
                 <div class="form-actions">
