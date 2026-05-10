@@ -43,6 +43,16 @@
     </header>
 
     <main class="page-content">
+      <?php if (session()->getFlashdata('message')): ?>
+        <div class="alert alert-success"><?= session()->getFlashdata('message') ?></div>
+      <?php endif; ?>
+      <?php if (session()->getFlashdata('error')): ?>
+        <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
+      <?php endif; ?>
+      <?php if ($errors = session()->getFlashdata('errors')): ?>
+        <div class="alert alert-danger"><?= implode('<br>', $errors) ?></div>
+      <?php endif; ?>
+
       <div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
         <div>
           <h1 class="page-title">Activités sportives</h1>
