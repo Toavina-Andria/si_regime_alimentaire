@@ -350,6 +350,66 @@ class DashboardService
     }
 
     // ============================================================
+    // Méthodes CRUD pour l'admin (DashboardController)
+    // ============================================================
+    public function getAllRegimes(): array
+    {
+        return (new Regime())->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function getAllCodes(): array
+    {
+        return (new CodeBonus())->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function getAllActivites(): array
+    {
+        return (new ActiviteSportive())->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function getAllUtilisateurs(): array
+    {
+        return (new Utilisateur())->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function getAllAbonnements(): array
+    {
+        return (new Abonnement())->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function createAbonnement(array $data)
+    {
+        return (new Abonnement())->insert($data);
+    }
+
+    public function updateAbonnement(int $id, array $data)
+    {
+        return (new Abonnement())->update($id, $data);
+    }
+
+    public function deleteAbonnement(int $id)
+    {
+        return (new Abonnement())->delete($id);
+    }
+
+    public function getStatsData(): array
+    {
+        $analysisService = new DataAnalysisService();
+
+        return [
+            'total_users'       => $this->getTotalUsers(),
+            'total_regimes'     => $this->getActiveRegimes(),
+            'total_codes'       => $this->getValidCodesCount(),
+            'total_gold_revenue' => $this->getGoldRevenue(),
+            'inscriptions'      => $this->getInscriptionsParMois(),
+            'imc_distribution'  => $this->getRepartitionIMC(),
+            'recent_regimes'    => $this->getRecentRegimes(),
+            'user_trend'        => $this->getUserTrend(),
+            'analysis_data'     => $analysisService->getGlobalStats(),
+        ];
+    }
+
+    // ============================================================
     // Utilitaires privés
     // ============================================================
     private function getStreakDays(int $userId): int
