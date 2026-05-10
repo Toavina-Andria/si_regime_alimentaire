@@ -6,7 +6,7 @@ require_once APPPATH . 'ThirdParty/fpdf186/fpdf.php';
 
 class BilanPDF extends \FPDF
 {
-    protected function Header()
+    public function Header()
     {
         $this->SetFillColor(45, 106, 79);
         $this->Rect(0, 0, 210, 35, 'F');
