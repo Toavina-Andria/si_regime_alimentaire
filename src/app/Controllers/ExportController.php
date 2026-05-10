@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Services\ExportPDF;
+use App\Services\AbonnementServices;
 use App\Models\Utilisateur;
 
 class ExportController extends BaseController
@@ -26,16 +27,7 @@ class ExportController extends BaseController
         }
 
         // Abonnement actuel
-        $db = \Config\Database::connect();
-        $abonnement = $db->table('utilisateur_abonnement ua')
-            ->select('a.nom, a.statut')
-            ->join('abonnement a', 'a.id = ua.abonnement_id')
-            ->where('ua.utilisateur_id', $userId)
-            ->where('ua.statut', 'actif')
-            ->orderBy('ua.created_at', 'DESC')
-            ->limit(1)
-            ->get()
-            ->getRowArray();
+        $abonnement = AbonnementServices::getUserActiveAbonnementWithDetails($userId);
 
         $stats = [
             'imc'        => $imc,
