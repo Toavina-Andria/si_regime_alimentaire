@@ -58,6 +58,11 @@ $routes->get('regime/admin/edit/(:num)', 'RegimeController::edit/$1');
 $routes->post('regime/admin/update/(:num)', 'RegimeController::update/$1');
 $routes->get('regime/admin/delete/(:num)', 'RegimeController::delete/$1');
 
+// Routes pour les codes bonus
+$routes->get('code', 'CodeController::index');
+$routes->get('wallet/code', 'CodeController::index');
+$routes->post('code/verify', 'CodeController::verifier');
+
 $routes->get('services', 'ServicesController::index');
 $routes->get('analysis', 'DataAnalysisController::index');
 
