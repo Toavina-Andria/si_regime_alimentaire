@@ -33,6 +33,9 @@ class RegimeService
         try {
             log_message('info', 'createRegime called: ' . implode(', ', $data));
             $regimeModel = new Regime();
+            if (self::validateptcTotal($data['pct_viande'], $data['pct_volaille'], $data['pct_poisson']) === false) {
+                throw new \Exception('Le total des pourcentages de viande, volaille et poisson ne peut pas dépasser 100%.');
+            }
 
             if (!$regimeModel->validate($data)) {
                 throw new \Exception('Erreur de validation: ' . implode(', ', $regimeModel->errors()));
@@ -55,47 +58,34 @@ class RegimeService
     public static function updateRegime($regimeId, $data)
     {
         try {
-            log_message('info', 'updateRegime called: ' . json_encode(['regimeId' => $regimeId, 'data' => $data]));
             $regimeModel = new Regime();
-            // show logs
-            log_message('debug', 'updateRegime called with regimeId: ' . $regimeId . ' and data: ' . json_encode($data));
+            if (self::validateptcTotal($data['pct_viande'], $data['pct_volaille'], $data['pct_poisson']) === false) {
+                throw new \Exception('Le total des pourcentages de viande, volaille et poisson ne peut pas dépasser 100%.');
+            }
             // Check if regime exists
             $regime = $regimeModel->find($regimeId);
             if (!$regime) {
-                return [
-                    'success' => false,
-                    'message' => 'Régime introuvable'
-                ];
+                throw new \Exception("Régime non trouvé.");
             }
 
             if (!$regimeModel->validate($data)) {
-                return [
-                    'success' => false,
-                    'message' => 'Erreur de validation',
-                    'errors' => $regimeModel->errors()
-                ];
+                throw new \Exception('Erreur de validation: ' . implode(', ', $regimeModel->errors()));
             }
 
             if ($regimeModel->update($regimeId, $data)) {
-                return [
-                    'success' => true,
-                    'message' => 'Régime mis à jour avec succès'
-                ];
+                throw new \Exception('Régime mis à jour avec succès');
             } else {
-                return [
-                    'success' => false,
-                    'message' => 'Erreur lors de la mise à jour du régime'
-                ];
+                throw new \Exception('Erreur lors de la mise à jour du régime: ');
             }
         } catch (\Throwable $th) {
-            DebugLogger::error('updateRegime exception', ['message' => $th->getMessage(), 'trace' => $th->getTraceAsString()]);
-            return [
-                'success' => false,
-                'message' => $th->getMessage()
-            ];
+            throw new \Exception('Erreur lors de la mise à jour du régime: ' . $th->getMessage());
         }
     }
-
+    public static function validateptcTotal($pctViande, $pctVolaille, $pctPoisson)
+    {
+        $total = $pctViande + $pctVolaille + $pctPoisson;
+        return $total <= 100;
+    }
     // Delete regime
     public static function deleteRegime($regimeId)
     {
@@ -103,23 +93,15 @@ class RegimeService
             $regimeModel = new Regime();
 
             if ($regimeModel->delete($regimeId)) {
-                return [
-                    'success' => true,
-                    'message' => 'Régime supprimé avec succès'
-                ];
+                throw new \Exception('Régime supprimé avec succès');
             } else {
-                return [
-                    'success' => false,
-                    'message' => 'Impossible de supprimer ce régime'
-                ];
+                throw new \Exception('Erreur lors de la suppression du régime: ');
             }
         } catch (\Throwable $th) {
-            return [
-                'success' => false,
-                'message' => $th->getMessage()
-            ];
+            throw new \Exception('Erreur lors de la suppression du régime: ' . $th->getMessage());
         }
     }
+
     // Souscription à un régime
     public static function souscrireRegime($userId, $regimePrixId)
     {
@@ -141,7 +123,6 @@ class RegimeService
                 $prixPayable *= (1 - $tauxRemise / 100);
             }
             if (!self::validateUserPoints($userId, $prixPayable)) {
-                DebugLogger::error('Insufficient points for souscription', ['userId' => $userId, 'prix' => $prixPayable]);
                 throw new \Exception("Solde insuffisant pour souscrire à ce régime.");
             }
             // set the registration date and end date
@@ -154,17 +135,14 @@ class RegimeService
                 'remise_appliquee' => $tauxRemise
             ];
             $souscriptionModel->insert($data);
-            DebugLogger::info('souscription saved', ['utilisateur_id' => $userId, 'regime_prix_id' => $regimePrixId, 'prix_paye' => $prixPayable]);
             // deduct points from user portefeuille
             UtilisateurService::payWithPoints($userId, $prixPayable);
             // save transaction historique
             UtilisateurService::saveTransactionHistorique($userId, $prixPayable, null, 'debit', "Souscription au régime : " . $regimePrixId);
 
-            DebugLogger::info('souscrireRegime completed', ['userId' => $userId, 'prix_paye' => $prixPayable]);
             return ['success' => true, 'message' => "Souscription réussie"];
         } catch (\Throwable $th) {
-            DebugLogger::error('souscrireRegime exception', ['message' => $th->getMessage(), 'trace' => $th->getTraceAsString()]);
-            return ['success' => false, 'message' => $th->getMessage()];
+            throw new \Exception('Erreur lors de la souscription au régime: ' . $th->getMessage());
         }
     }
     // validate user solde points
