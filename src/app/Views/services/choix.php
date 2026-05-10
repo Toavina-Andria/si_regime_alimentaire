@@ -68,7 +68,7 @@
                 </a>
 
                 <!-- 6. Porte‑monnaie (code argent) -->
-                <a href="<?= site_url('wallet') ?>" class="service-card">
+                <a href="<?= site_url('wallet/code') ?>" class="service-card">
                     <div class="service-icon">💰</div>
                     <div class="service-title">Porte‑monnaie</div>
                     <div class="service-desc">Ajoutez des crédits avec un code bonus, consultez vos points.</div>
