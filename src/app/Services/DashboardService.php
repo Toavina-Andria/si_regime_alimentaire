@@ -367,6 +367,11 @@ class DashboardService
         return (new ActiviteSportive())->orderBy('created_at', 'DESC')->findAll();
     }
 
+    public function createActivite(array $data)
+    {
+        return (new ActiviteSportive())->insert($data);
+    }
+
     public function getAllUtilisateurs(): array
     {
         return (new Utilisateur())->orderBy('created_at', 'DESC')->findAll();

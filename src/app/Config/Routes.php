@@ -37,6 +37,7 @@ $routes->group('admin', static function ($routes) {
     $routes->get('abonnement/delete/(:num)', 'DashboardController::deleteAbonnement/$1');
     $routes->get('codes', 'DashboardController::codes');
     $routes->get('activites', 'DashboardController::activites');
+    $routes->post('activites', 'DashboardController::storeActivite');
     $routes->get('utilisateurs', 'DashboardController::utilisateurs');
     $routes->get('parametres', 'DashboardController::parametres');
 });

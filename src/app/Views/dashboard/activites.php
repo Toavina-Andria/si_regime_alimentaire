@@ -112,6 +112,7 @@
       <button class="modal-close">&times;</button>
     </div>
     <form action="<?= base_url('admin/activites') ?>" method="POST">
+      <?= csrf_field() ?>
       <div class="modal-body">
         <div class="form-group">
           <label class="form-label">Nom de l'activité</label>
