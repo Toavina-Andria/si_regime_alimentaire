@@ -7,9 +7,6 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->get('register', 'Auth::index');
-
-// Pages publiques / authentification
-$routes->get('/', 'Auth::index');
 $routes->post('auth/register', 'Auth::register');
 $routes->get('auth/profil', 'Auth::profil');
 $routes->post('auth/updateProfil', 'Auth::updateProfil');
