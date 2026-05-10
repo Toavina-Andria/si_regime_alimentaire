@@ -131,6 +131,22 @@ class Auth extends BaseController
         return $redirect;
     }
 
+    // Connexion rapide par clic sur carte utilisateur
+    public function quickLogin($id)
+    {
+        $userModel = new Utilisateur();
+        $user = $userModel->find($id);
+        if (!$user) {
+            return redirect()->to('/connexion')->with('error', 'Utilisateur introuvable.');
+        }
+        $this->setSession($user);
+        if (!empty($user['est_admin'])) {
+            session()->set('est_admin', true);
+            return redirect()->to('/admin/dashboard');
+        }
+        return redirect()->to('/dashboard');
+    }
+
     // Déconnexion
     public function logout()
     {

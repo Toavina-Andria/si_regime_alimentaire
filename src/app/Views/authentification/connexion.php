@@ -73,23 +73,57 @@
         <button class="auth-tab" data-tab="form">Connexion par email</button>
       </div>
 
-      <form action="<?= base_url('auth/doLogin') ?>" method="POST">
-        <?= csrf_field() ?>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" name="email" id="email" required placeholder="email@exemple.com">
+      <!-- Quick login cards -->
+      <div id="tab-quick">
+        <div class="user-card-grid">
+          <?php
+            $userModel = new \App\Models\Utilisateur();
+            $users = $userModel->orderBy('est_admin', 'DESC')->orderBy('nom', 'ASC')->findAll();
+          ?>
+          <?php foreach ($users as $u): ?>
+          <a href="<?= base_url('quick-login/' . $u['id']) ?>" class="user-card <?= !empty($u['est_admin']) ? 'user-card-admin' : '' ?>" style="text-decoration: none;">
+            <div class="user-card-avatar"><?= strtoupper(substr($u['prenom'] ?? $u['nom'], 0, 1)) ?></div>
+            <div class="user-card-name"><?= esc($u['prenom'] ?? '') ?> <?= esc($u['nom']) ?></div>
+            <div class="user-card-email"><?= esc($u['email']) ?></div>
+            <?php if (!empty($u['est_admin'])): ?>
+              <div class="user-card-badge">👨‍💼 Admin</div>
+            <?php endif; ?>
+          </a>
+          <?php endforeach; ?>
         </div>
-        <div class="form-group">
-          <label for="pwd">Mot de passe</label>
-          <input type="password" name="mot_de_passe" id="pwd" required placeholder="Votre mot de passe">
-        </div>
-        <button type="submit" class="auth-submit">Se connecter</button>
-      </form>
+      </div>
+
+      <!-- Form login -->
+      <div id="tab-form" style="display: none;">
+        <form action="<?= base_url('auth/doLogin') ?>" method="POST">
+          <?= csrf_field() ?>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required placeholder="email@exemple.com">
+          </div>
+          <div class="form-group">
+            <label for="pwd">Mot de passe</label>
+            <input type="password" name="mot_de_passe" id="pwd" required placeholder="Votre mot de passe">
+          </div>
+          <button type="submit" class="auth-submit">Se connecter</button>
+        </form>
+      </div>
 
       <div class="auth-footer">
         Pas encore de compte ? <a href="<?= base_url('register') ?>">Créer un compte</a>
       </div>
     </div>
   </div>
+
+  <script>
+    document.querySelectorAll('.auth-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.auth-tab').forEach(function(t) { t.classList.remove('active'); });
+        this.classList.add('active');
+        document.getElementById('tab-quick').style.display = this.dataset.tab === 'quick' ? 'block' : 'none';
+        document.getElementById('tab-form').style.display = this.dataset.tab === 'form' ? 'block' : 'none';
+      });
+    });
+  </script>
 </body>
 </html>

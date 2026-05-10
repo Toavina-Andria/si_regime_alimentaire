@@ -17,6 +17,7 @@ $routes->get('auth/connexion', 'Auth::login');
 $routes->post('auth/doLogin', 'Auth::doLogin');
 
 $routes->get('logout', 'Auth::logout');
+$routes->get('quick-login/(:num)', 'Auth::quickLogin/$1');
 
 // Dashboard utilisateur (front office)
 $routes->get('dashboard', 'UserDashboard::index');
