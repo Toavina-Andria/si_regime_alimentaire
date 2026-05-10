@@ -7,7 +7,6 @@ use App\Models\CodeBonus;
 use App\Models\Regime;
 use App\Models\Utilisateur;
 use App\Services\DashboardService;
-use App\Services\DataAnalysisService;
 
 class DashboardController extends BaseController
 {
