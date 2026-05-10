@@ -64,14 +64,7 @@ helper('navigation');
                 </a>
             </div>
 
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">Configuration</div>
-                <a href="<?= base_url('admin/parametres') ?>"
-                    class="sidebar-link <?= navActive('admin/parametres') ?>">
-                    <span class="icon">⚙️</span>
-                    Paramètres
-                </a>
-            </div>
+
         <?php endif; ?>
 
         <!-- USER SECTION - Only visible for regular users -->

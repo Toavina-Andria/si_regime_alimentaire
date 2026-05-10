@@ -46,7 +46,6 @@ $routes->group('admin', static function ($routes) {
     $routes->get('utilisateurs', 'DashboardController::utilisateurs');
     $routes->post('utilisateurs/update/(:num)', 'DashboardController::updateUtilisateur/$1');
     $routes->get('utilisateurs/delete/(:num)', 'DashboardController::deleteUtilisateur/$1');
-    $routes->get('parametres', 'DashboardController::parametres');
 });
 
 // Export PDF

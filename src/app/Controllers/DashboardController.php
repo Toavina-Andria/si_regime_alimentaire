@@ -255,12 +255,4 @@ class DashboardController extends BaseController
         return redirect()->to('/admin/abonnements')->with('success', 'Abonnement supprimé.');
     }
 
-    public function parametres()
-    {
-        if ($redirect = $this->requireAdmin()) return $redirect;
-
-        $data['active'] = 'parametres';
-
-        return view('dashboard/parametres', $data);
-    }
 }
