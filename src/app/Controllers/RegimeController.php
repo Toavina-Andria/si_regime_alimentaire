@@ -98,23 +98,18 @@ class RegimeController extends BaseController
         ];
 
 
-        // Create and handle result (returns array with success/errors)
         try {
-
             RegimeService::createRegime($data);
 
-            $accept = $this->request->getHeaderLine('Accept');
-            if ($this->request->isAJAX() || str_contains($accept, 'application/json')) {
+            if ($this->request->isAJAX()) {
                 return $this->response->setJSON(['success' => true, 'message' => 'Régime créé avec succès.']);
             }
-
-
             return redirect()->to('/regime/admin')->with('message', 'Régime créé avec succès.');
         } catch (\Throwable $th) {
-            // send to json if ajax
             if ($this->request->isAJAX()) {
-                return $this->response->setJSON(['success' => false, 'message' => 'Erreur lors de la création du régime: ' . $th->getMessage()]);
+                return $this->response->setJSON(['success' => false, 'message' => $th->getMessage()]);
             }
+            return redirect()->back()->withInput()->with('error', $th->getMessage());
         }
 
     }
