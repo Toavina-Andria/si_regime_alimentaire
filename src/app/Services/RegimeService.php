@@ -50,31 +50,20 @@ class RegimeService
         // JOIN activite_sportive a ON (ra.activite_id = a.id)
         // LEFT JOIN regime r ON (ra.regime_id = r.id);
     }
-    // Create regime with validation
     public static function createRegime($data)
     {
-        try {
-            log_message('info', 'createRegime called: ' . implode(', ', $data));
-            $regimeModel = new Regime();
-            if (self::validateptcTotal($data['pct_viande'], $data['pct_volaille'], $data['pct_poisson']) === false) {
-                throw new \Exception('Le total des pourcentages de viande, volaille et poisson ne peut pas dépasser 100%.');
-            }
-
-            if (!$regimeModel->validate($data)) {
-                throw new \Exception('Erreur de validation: ' . implode(', ', $regimeModel->errors()));
-            }
-
-            if ($regimeModel->insert($data)) {
-                log_message('info', 'createRegime success: ID ' . $regimeModel->getInsertID());
-            } else {
-                throw new \Exception('Erreur lors de la création du régime: ');
-            }
-        } catch (\Throwable $th) {
-            log_message('error', 'createRegime exception: ' . $th->getMessage());
-            throw new \Exception('Erreur lors de la création du régime: ' . $th->getMessage());
+        log_message('info', 'createRegime called: ' . implode(', ', $data));
+        $regimeModel = new Regime();
+        if (!self::validateptcTotal($data['pct_viande'], $data['pct_volaille'], $data['pct_poisson'])) {
+            throw new \Exception('Le total des pourcentages de viande, volaille et poisson ne peut pas dépasser 100%.');
         }
-
-
+        if (!$regimeModel->validate($data)) {
+            throw new \Exception('Erreur de validation: ' . implode(', ', $regimeModel->errors()));
+        }
+        if (!$regimeModel->insert($data)) {
+            throw new \Exception('Erreur lors de la création du régime.');
+        }
+        log_message('info', 'createRegime success: ID ' . $regimeModel->getInsertID());
     }
 
     // Update regime with validation
