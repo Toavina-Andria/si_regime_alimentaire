@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Regime;
 use App\Services\RegimeService;
+use App\Services\RegimePrixService;
 
 class RegimeController extends BaseController
 {
@@ -17,68 +18,104 @@ class RegimeController extends BaseController
             exit('Accès non autorisé. Veuillez vous connecter.');
         }
 
-        // Optionnel : restreindre aux admins (exemple : email spécifique)
-        // if (session()->get('user_email') !== 'admin@exemple.com') {
-        //     exit('Accès réservé aux administrateurs.');
-        // }
-
         $this->regimeModel = new Regime();
         $this->regimeService = new RegimeService();
     }
 
-    // Liste des régimes
+    // ------------------------------------------------------------
+    // FRONT OFFICE (liste des régimes pour les utilisateurs)
+    // ------------------------------------------------------------
     public function index()
     {
-        $regimes = $this->regimeModel->orderBy('created_at', 'DESC')->paginate(10);
-        return view('dashboard/regimes', [
-            'regimes' => $regimes,
-            'pager' => $this->regimeModel->pager,
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/connexion');
+        }
+
+        $regimes = $this->regimeModel->orderBy('created_at', 'DESC')->findAll();
+
+        // Ajout du prix minimum pour chaque régime
+        foreach ($regimes as &$r) {
+            $minPrix = RegimePrixService::getMinPrix($r['id']);
+            $r['prix_depart'] = $minPrix ? $minPrix['prix_base'] : null;
+            $r['duree_min']   = $minPrix ? $minPrix['duree_jours'] : null;
+        }
+
+        return view('regime/detail', ['regimes' => $regimes]);
+    }
+
+    // ------------------------------------------------------------
+    // Détail d'un régime (front)
+    // ------------------------------------------------------------
+    public function show($id)
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/connexion');
+        }
+
+        $regime = $this->regimeModel->find($id);
+        if (!$regime) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $prixOptions = RegimePrixService::getPrixByRegime($id);
+
+        $db = \Config\Database::connect();
+        $activites = $db->table('regime_activite ra')
+            ->select('a.nom, a.description, a.intensite, a.calories_heure, ra.frequence_semaine')
+            ->join('activite_sportive a', 'a.id = ra.activite_id')
+            ->where('ra.regime_id', $id)
+            ->orderBy('a.intensite', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        return view('regime/detail', [
+            'regime'      => $regime,
+            'prixOptions' => $prixOptions,
+            'activites'   => $activites,
         ]);
     }
 
-    // Formulaire de création
+    // ------------------------------------------------------------
+    // ADMINISTRATION - Liste des régimes avec pagination
+    // ------------------------------------------------------------
+    public function adminIndex()
+    {
+        $regimes = $this->regimeModel->orderBy('created_at', 'DESC')->paginate(10);
+        foreach ($regimes as &$r) {
+            $minPrix = RegimePrixService::getMinPrix($r['id']);
+            $r['prix_min'] = $minPrix ? $minPrix['prix_base'] : null;
+        }
+
+        return view('regime/admin_list', [
+            'regimes' => $regimes,
+            'pager'   => $this->regimeModel->pager
+        ]);
+    }
+
+    // ------------------------------------------------------------
+    // Formulaire de création (admin)
+    // ------------------------------------------------------------
     public function create()
     {
         return view('regime/admin_create');
     }
 
-
-    // Détail régime (JSON pour AJAX)
-    public function show($id)
-    {
-        $regime = $this->regimeModel->find($id);
-
-        if (!$regime) {
-            return $this->response->setStatusCode(404)->setJSON([
-                'message' => 'Régime introuvable.'
-            ]);
-        }
-
-        $accept = $this->request->getHeaderLine('Accept');
-        if ($this->request->isAJAX() || str_contains($accept, 'application/json')) {
-            return $this->response->setJSON($regime);
-        }
-
-        return view('regime/detail', ['regime' => $regime]);
-    }
-
-    // Enregistrement
+    // ------------------------------------------------------------
+    // Enregistrement d'un nouveau régime (admin)
+    // ------------------------------------------------------------
     public function store()
     {
         $data = [
-            'nom' => $this->request->getPost('nom'),
-            'description' => $this->request->getPost('description'),
-            'pct_viande' => $this->request->getPost('pct_viande'),
-            'pct_volaille' => $this->request->getPost('pct_volaille'),
-            'pct_poisson' => $this->request->getPost('pct_poisson'),
-            'variation_poids_kg' => $this->request->getPost('variation_poids_kg'),
-            'duree_jours' => $this->request->getPost('duree_jours'),
+            'nom'               => $this->request->getPost('nom'),
+            'description'       => $this->request->getPost('description'),
+            'pct_viande'        => $this->request->getPost('pct_viande'),
+            'pct_volaille'      => $this->request->getPost('pct_volaille'),
+            'pct_poisson'       => $this->request->getPost('pct_poisson'),
+            'variation_poids_kg'=> $this->request->getPost('variation_poids_kg'),
+            'duree_jours'       => $this->request->getPost('duree_jours'),
         ];
 
-
-        // Create and handle result (returns array with success/errors)
         try {
-
             RegimeService::createRegime($data);
 
             $accept = $this->request->getHeaderLine('Accept');
@@ -86,18 +123,18 @@ class RegimeController extends BaseController
                 return $this->response->setJSON(['success' => true, 'message' => 'Régime créé avec succès.']);
             }
 
-
             return redirect()->to('/regime/admin')->with('message', 'Régime créé avec succès.');
         } catch (\Throwable $th) {
-            // send to json if ajax
             if ($this->request->isAJAX()) {
-                return $this->response->setJSON(['success' => false, 'message' => 'Erreur lors de la création du régime: ' . $th->getMessage()]);
+                return $this->response->setJSON(['success' => false, 'message' => 'Erreur : ' . $th->getMessage()]);
             }
+            return redirect()->back()->withInput()->with('error', 'Erreur : ' . $th->getMessage());
         }
-
     }
 
-    // Formulaire d'édition
+    // ------------------------------------------------------------
+    // Formulaire d'édition (admin)
+    // ------------------------------------------------------------
     public function edit($id)
     {
         $regime = $this->regimeModel->find($id);
@@ -107,17 +144,19 @@ class RegimeController extends BaseController
         return view('regime/admin_edit', ['regime' => $regime]);
     }
 
-    // Mise à jour
+    // ------------------------------------------------------------
+    // Mise à jour d'un régime (admin)
+    // ------------------------------------------------------------
     public function update($id)
     {
         $data = [
-            'nom' => $this->request->getPost('nom'),
-            'description' => $this->request->getPost('description'),
-            'pct_viande' => $this->request->getPost('pct_viande'),
-            'pct_volaille' => $this->request->getPost('pct_volaille'),
-            'pct_poisson' => $this->request->getPost('pct_poisson'),
-            'variation_poids_kg' => $this->request->getPost('variation_poids_kg'),
-            'duree_jours' => $this->request->getPost('duree_jours'),
+            'nom'               => $this->request->getPost('nom'),
+            'description'       => $this->request->getPost('description'),
+            'pct_viande'        => $this->request->getPost('pct_viande'),
+            'pct_volaille'      => $this->request->getPost('pct_volaille'),
+            'pct_poisson'       => $this->request->getPost('pct_poisson'),
+            'variation_poids_kg'=> $this->request->getPost('variation_poids_kg'),
+            'duree_jours'       => $this->request->getPost('duree_jours'),
         ];
 
         $result = RegimeService::updateRegime($id, $data);
@@ -130,7 +169,9 @@ class RegimeController extends BaseController
         }
     }
 
-    // Suppression
+    // ------------------------------------------------------------
+    // Suppression d'un régime (admin)
+    // ------------------------------------------------------------
     public function delete($id)
     {
         $result = RegimeService::deleteRegime($id);
