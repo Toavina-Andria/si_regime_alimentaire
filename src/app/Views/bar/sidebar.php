@@ -7,7 +7,7 @@
             <path d="M11 20c3 1 6 2 8 4 2-2 5-3 8-4" stroke="#52B788" stroke-width="1.5" stroke-linecap="round" />
         </svg>
         <div class="sidebar-logo-text">
-            <a href="<?= base_url('regimes') ?>">NutriPlan
+            <a href="<?= session()->get('est_admin') ? base_url('admin/dashboard') : base_url('regimes') ?>">NutriPlan
                 <small><?= session()->get('est_admin') ? 'Admin' : 'User' ?> Panel</small>
             </a>
         </div>
@@ -74,7 +74,8 @@ helper('navigation');
             </div>
         <?php endif; ?>
 
-        <!-- USER SECTION - Visible for all users -->
+        <!-- USER SECTION - Only visible for regular users -->
+        <?php if (!session()->get('est_admin')): ?>
         <div class="sidebar-section-label" style="margin-top: 20px; padding: 0 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.5px;">👤 Mon Espace</div>
         
         <div class="sidebar-section">
@@ -123,6 +124,7 @@ helper('navigation');
                 Codes bonus
             </a>
         </div>
+        <?php endif; ?>
     </nav>
 
     <div class="sidebar-footer">
