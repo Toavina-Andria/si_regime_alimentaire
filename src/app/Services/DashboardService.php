@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\CodeBonus;
+use App\Models\HistoriquePoids;
 use App\Models\Regime;
 use App\Models\RegimePrix;
 use App\Models\SouscriptionRegime;
@@ -23,6 +24,7 @@ class DashboardService
     private CodeBonus $codeBonusModel;
     private TransactionPortefeuille $transactionPortefeuilleModel;
     private UtilisateurAbonnement $utilisateurAbonnementModel;
+    private HistoriquePoids $historiquePoidsModel;
     private string $dateFormat = 'Y-m-d H:i:s';
 
     public function __construct()
@@ -34,6 +36,7 @@ class DashboardService
         $this->codeBonusModel = new CodeBonus();
         $this->transactionPortefeuilleModel = new TransactionPortefeuille();
         $this->utilisateurAbonnementModel = new UtilisateurAbonnement();
+        $this->historiquePoidsModel = new HistoriquePoids();
     }
 
     public function getTotalUsers(): int
@@ -381,6 +384,92 @@ class DashboardService
         }
 
         return $result;
+    }
+
+    public function getCurrentRegime(int $userId): ?array
+    {
+        $sub = $this->souscriptionRegimeModel
+            ->select('souscription_regime.*, regime.nom, regime.description, regime.pct_viande, regime.pct_volaille, regime.pct_poisson, regime.variation_poids_kg, regime.duree_jours, regime_prix.prix_base')
+            ->join('regime_prix', 'regime_prix.id = souscription_regime.regime_prix_id')
+            ->join('regime', 'regime.id = regime_prix.regime_id')
+            ->where('souscription_regime.utilisateur_id', $userId)
+            ->where('souscription_regime.statut', 'actif')
+            ->where('souscription_regime.date_debut <=', date('Y-m-d'))
+            ->where('souscription_regime.date_fin >=', date('Y-m-d'))
+            ->first();
+
+        return $sub ?: null;
+    }
+
+    public function getStreakDays(int $userId): int
+    {
+        $current = $this->getCurrentRegime($userId);
+        if (!$current) {
+            return 0;
+        }
+        $start = new \DateTime($current['date_debut']);
+        $now = new \DateTime();
+        return (int) $start->diff($now)->days;
+    }
+
+    public function getTotalDays(int $userId): int
+    {
+        $subs = $this->souscriptionRegimeModel
+            ->select('date_debut, date_fin')
+            ->where('utilisateur_id', $userId)
+            ->findAll();
+
+        $total = 0;
+        foreach ($subs as $sub) {
+            $start = new \DateTime($sub['date_debut']);
+            $end = new \DateTime($sub['date_fin']);
+            $total += $start->diff($end)->days;
+        }
+        return $total;
+    }
+
+    public function getWeightHistory(int $userId): array
+    {
+        $records = $this->historiquePoidsModel
+            ->where('utilisateur_id', $userId)
+            ->orderBy('mesure_le', 'ASC')
+            ->findAll();
+
+        $labels = [];
+        $values = [];
+        foreach ($records as $r) {
+            $labels[] = date('d/m/Y', strtotime($r['mesure_le']));
+            $values[] = (float) $r['poids_kg'];
+        }
+
+        return [
+            'labels' => $labels,
+            'values' => $values,
+        ];
+    }
+
+    public function getWalletTransactions(int $userId): array
+    {
+        $wallet = $this->getWallet($userId);
+        if (!$wallet) {
+            return [];
+        }
+
+        return $this->transactionPortefeuilleModel
+            ->where('portefeuille_id', $wallet['id'])
+            ->orderBy('created_at', 'DESC')
+            ->findAll(10);
+    }
+
+    public function getRegimeHistory(int $userId): array
+    {
+        return $this->souscriptionRegimeModel
+            ->select('souscription_regime.*, regime.nom')
+            ->join('regime_prix', 'regime_prix.id = souscription_regime.regime_prix_id')
+            ->join('regime', 'regime.id = regime_prix.regime_id')
+            ->where('souscription_regime.utilisateur_id', $userId)
+            ->orderBy('souscription_regime.date_debut', 'DESC')
+            ->findAll();
     }
 
     private function getImcCategoryCounts(): array
