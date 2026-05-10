@@ -12,15 +12,15 @@
     .auth-container { max-width: 900px; }
     .auth-form { max-width: 100%; }
     .user-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin: 24px 0; }
-    .user-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s; text-align: center; }
-    .user-card:hover { background: rgba(255,255,255,0.12); border-color: rgba(82,183,136,0.5); transform: translateY(-2px); }
-    .user-card-admin { background: rgba(212,168,83,0.15); border-color: rgba(212,168,83,0.3); }
-    .user-card-admin:hover { background: rgba(212,168,83,0.25); border-color: rgba(212,168,83,0.6); }
+    .user-card { background: #fff; border: 1px solid var(--color-border, #E2E4DC); border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .user-card:hover { border-color: var(--color-primary-light, #52B788); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .user-card-admin { background: #FFFDF5; border-color: #D4A853; }
+    .user-card-admin:hover { border-color: #B8860B; }
     .user-card-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #2D6A4F, #52B788); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; color: white; margin: 0 auto 10px; }
     .user-card-admin .user-card-avatar { background: linear-gradient(135deg, #B8860B, #D4A853); }
-    .user-card-name { font-size: 15px; font-weight: 600; color: #fff; }
-    .user-card-email { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
-    .user-card-badge { display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(212,168,83,0.2); color: #D4A853; }
+    .user-card-name { font-size: 15px; font-weight: 600; color: var(--color-text-primary, #1A1A1A); }
+    .user-card-email { font-size: 12px; color: var(--color-text-secondary, #6B7280); margin-top: 2px; }
+    .user-card-badge { display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(212,168,83,0.2); color: #B8860B; }
     .auth-tabs { display: flex; gap: 4px; background: rgba(255,255,255,0.06); border-radius: 12px; padding: 4px; margin-bottom: 8px; }
     .auth-tab { flex: 1; padding: 10px 16px; border: none; border-radius: 10px; background: transparent; color: rgba(255,255,255,0.5); font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
     .auth-tab.active { background: rgba(255,255,255,0.1); color: #fff; }
