@@ -1,218 +1,148 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NutriPlan — Tableau de bord</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
+    <meta charset="UTF-8">
+    <title>NutriPlan — Tableau de bord</title>
+    <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
 </head>
-
 <body>
-  <div class="dashboard-layout">
-
-    <?= $this->include('bar/sidebar') ?>
-
-    <!-- Main Content -->
+<div class="dashboard-layout">
+    <?= view('bar/sidebar') ?>
     <div class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1 class="page-title"><?= isset($user) ? 'Mon espace' : 'Tableau de bord Admin' ?></h1>
+            </div>
+            <div class="topbar-right">
+                <a href="<?= site_url('services') ?>" class="btn-outline">Services</a>
+                <a href="<?= site_url('logout') ?>" class="btn-outline">Déconnexion</a>
+            </div>
+        </header>
 
-      <!-- Topbar -->
-      <header class="topbar">
-        <div class="topbar-left">
-          <button class="hamburger" aria-label="Menu">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
-          </button>
-          <div class="breadcrumb">
-            <a href="<?= base_url('admin/dashboard') ?>">Accueil</a>
-            <span>/</span>
-            <span class="current">Tableau de bord</span>
-          </div>
-        </div>
-        <div class="topbar-right">
-          <div class="topbar-search">
-            <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Rechercher..." aria-label="Rechercher">
-          </div>
-          <button class="notification-btn" aria-label="Notifications">
-            🔔
-            <span class="notification-dot"></span>
-          </button>
-        </div>
-      </header>
-
-      <!-- Page Content -->
-      <main class="page-content">
-        <div class="page-header">
-          <h1 class="page-title">Tableau de bord</h1>
-          <p class="page-subtitle">Vue d'ensemble de votre application NutriPlan</p>
-        </div>
-        <!-- KPI Cards -->
-        <div class="kpi-grid">
-          <div class="kpi-card">
-            <div class="kpi-card-header">
-              <div class="kpi-icon green">👥</div>
-              <span class="kpi-trend up"><?= $kpi_users_trend ?>% ↑</span>
-            </div>
-            <div class="kpi-value" data-target="<?= $kpi_users ?>" data-prefix="">0</div>
-            <div class="kpi-label">Utilisateurs inscrits</div>
-          </div>
-
-          <div class="kpi-card">
-            <div class="kpi-card-header">
-              <div class="kpi-icon dark-green">🥗</div>
-            </div>
-            <div class="kpi-value" data-target="<?= $kpi_regimes ?>">0</div>
-            <div class="kpi-label">Régimes actifs</div>
-          </div>
-
-          <div class="kpi-card">
-            <div class="kpi-card-header">
-              <div class="kpi-icon gold">🎟️</div>
-              <span class="kpi-trend up">+5% ↑</span>
-            </div>
-            <div class="kpi-value" data-target="<?= $kpi_codes ?>">0</div>
-            <div class="kpi-label">Codes validés (mois)</div>
-          </div>
-
-          <div class="kpi-card">
-            <div class="kpi-card-header">
-              <div class="kpi-icon gold">⭐</div>
-            </div>
-            <div class="kpi-value" data-target="<?= $kpi_gold ?>" data-prefix="">0</div>
-            <div class="kpi-label">Revenus option Gold (€)</div>
-          </div>
-        </div>
-        <!-- Charts -->
-        <div class="charts-grid">
-          <div class="chart-card">
-            <div class="chart-card-header">
-              <div>
-                <div class="chart-card-title">Évolution des inscriptions</div>
-                <div class="chart-card-subtitle">12 derniers mois</div>
-              </div>
-            </div>
-            <div class="chart-container bar">
-              <canvas id="chartInscriptions" data-labels='<?= json_encode($chart_inscriptions['labels']) ?>'
-                data-values='<?= json_encode($chart_inscriptions['values']) ?>'>
-              </canvas>
-            </div>
-          </div>
-
-          <div class="chart-card">
-            <div class="chart-card-header">
-              <div>
-                <div class="chart-card-title">Répartition IMC</div>
-                <div class="chart-card-subtitle">Profils utilisateurs</div>
-              </div>
-            </div>
-            <div class="chart-container donut">
-              <canvas id="chartIMC" data-labels='<?= json_encode($chart_imc['labels']) ?>'
-                data-values='<?= json_encode($chart_imc['values']) ?>'
-                data-colors='<?= json_encode($chart_imc['colors']) ?>'>
-              </canvas>
-            </div>
-            <div class="chart-legend">
-              <?php foreach ($chart_imc['labels'] as $i => $label): ?>
-                <?php $v = $chart_imc['values'][$i]; ?>
-                <?php $total = array_sum($chart_imc['values']); ?>
-                <?php $pct = $total > 0 ? round(($v / $total) * 100, 1) : 0; ?>
-                <div class="chart-legend-item">
-                  <span class="chart-legend-dot" style="background:<?= $chart_imc['colors'][$i] ?>"></span>
-                  <?= $label ?>
-                  <span class="chart-legend-value"><?= $pct ?>%</span>
-                </div>
-              <?php endforeach; ?>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bottom Grid -->
-        <div class="bottom-grid">
-          <div class="table-card">
-            <div class="table-card-header">
-              <div class="table-card-title">Derniers régimes créés</div>
-              <a href="<?= base_url('admin/regimes') ?>" class="table-card-link">Voir tout →</a>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Nom du régime</th>
-                  <th>% Viande</th>
-                  <th>% Poisson</th>
-                  <th>% Volaille</th>
-                  <th>Durée</th>
-                  <th>Prix</th>
-                  <th>Date</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php if (empty($recent_regimes)): ?>
-                  <tr>
-                    <td colspan="8" style="text-align:center; color:var(--color-text-muted); padding:32px;">
-                      Aucun régime pour le moment
-                    </td>
-                  </tr>
-                <?php else: ?>
-                  <?php foreach ($recent_regimes as $r): ?>
-                    <tr>
-                      <td><strong><?= esc($r['nom']) ?></strong></td>
-                      <td><span class="badge badge-viande"><?= $r['pct_viande'] ?>%</span></td>
-                      <td><span class="badge badge-poisson"><?= $r['pct_poisson'] ?>%</span></td>
-                      <td><span class="badge badge-volaille"><?= $r['pct_volaille'] ?>%</span></td>
-                      <td><?= $r['duree_display'] ?></td>
-                      <td><?= $r['prix'] ?>€</td>
-                      <td><?= date('d/m/Y', strtotime($r['created_at'])) ?></td>
-                      <td>
-                        <div class="action-btns">
-                          <button class="action-btn" title="Modifier">✏️</button>
-                          <button class="action-btn delete" title="Supprimer">🗑️</button>
-                        </div>
-                      </td>
-                    </tr>
-                  <?php endforeach; ?>
-                <?php endif; ?>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="activity-card">
-            <div class="activity-card-title">Activité récente</div>
-            <div class="activity-timeline">
-              <?php if (empty($recent_activity)): ?>
-                <div class="empty-state" style="padding:24px 0;">
-                  <div class="empty-state-text">Aucune activité récente</div>
-                </div>
-              <?php else: ?>
-                <?php foreach ($recent_activity as $a): ?>
-                  <div class="activity-item">
-                    <span class="activity-dot <?= $a['type'] ?>"></span>
-                    <div class="activity-content">
-                      <div class="activity-text"><?= esc($a['text']) ?></div>
-                      <div class="activity-time"><?= $a['time'] ?></div>
+        <main class="page-content">
+            <!-- Partie utilisateur (si $user existe) -->
+            <?php if (isset($user) && $user): ?>
+            <div class="user-greeting">
+                <h2>Bonjour, <?= esc($user['prenom']) ?> 🎉</h2>
+                <p><?= esc($user['email']) ?> · Membre depuis <?= date('F Y', strtotime($user['created_at'])) ?></p>
+                <div class="user-stats">
+                    <div class="stat-badge">🎯 Objectif : 
+                        <?php if ($objective === 'reduire_poids'): ?>Perdre du poids
+                        <?php elseif ($objective === 'augmenter_poids'): ?>Prendre du poids
+                        <?php elseif ($objective === 'imc_ideal'): ?>Atteindre IMC idéal
+                        <?php else: ?>Non défini
+                        <?php endif; ?>
                     </div>
-                  </div>
-                <?php endforeach; ?>
-              <?php endif; ?>
+                    <div class="stat-badge">⚖️ IMC : <?= $imc ?? '—' ?> (<?= $categorie_imc ?? 'Non calculé' ?>)</div>
+                    <div class="stat-badge">🔥 Streak : <?= $streak_days ?? 0 ?> jours</div>
+                    <div class="stat-badge">📅 Total : <?= $total_days ?? 0 ?> jours</div>
+                </div>
             </div>
-          </div>
-        </div>
-      </main>
+
+            <!-- Suggestions de régimes -->
+            <div class="suggestions-section">
+                <h2>🍽️ Régimes suggérés pour vous</h2>
+                <?php if (empty($suggestions)): ?>
+                    <p>Aucun régime pour le moment.</p>
+                <?php else: ?>
+                    <div class="suggestions-grid">
+                        <?php foreach ($suggestions as $s): $r = $s['regime']; ?>
+                        <div class="suggestion-card">
+                            <h3><?= esc($r['nom']) ?></h3>
+                            <p><?= esc($r['description'] ?? '') ?></p>
+                            <div class="suggestion-diet">
+                                <span>🥩 Viande <?= $r['pct_viande'] ?>%</span>
+                                <span>🐟 Poisson <?= $r['pct_poisson'] ?>%</span>
+                                <span>🍗 Volaille <?= $r['pct_volaille'] ?>%</span>
+                            </div>
+                            <?php if (!empty($s['prixOptions'])): ?>
+                                <div><?php foreach ($s['prixOptions'] as $p): ?><span class="price-tag"><?= $p['duree_jours'] ?>j : <?= number_format($p['prix_base'],2) ?>€</span><?php endforeach; ?></div>
+                            <?php endif; ?>
+                            <a href="<?= site_url('regime/' . $r['id']) ?>" class="btn-outline">Voir détail</a>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Profil et portefeuille -->
+            <div class="bottom-grid">
+                <div class="table-card"><h3>👤 Mon profil</h3>
+                    <table class="data-table">
+                        <tr><td>Nom</td><td><?= esc($user['nom']) ?> <?= esc($user['prenom']) ?></td></tr>
+                        <tr><td>Email</td><td><?= esc($user['email']) ?></td></tr>
+                        <tr><td>Taille</td><td><?= $user['taille_cm'] ?? '—' ?> cm</td></tr>
+                        <tr><td>Poids</td><td><?= $user['poids_kg'] ?? '—' ?> kg</td></tr>
+                    </table>
+                </div>
+                <div class="activity-card">
+                    <h3>💰 Portefeuille</h3>
+                    <div class="stat-number"><?= number_format($wallet['solde_points'] ?? 0, 2) ?> points</div>
+                    <hr>
+                    <h3>⭐ Abonnement</h3>
+                    <?php if ($subscription): ?>
+                        <p><?= esc($subscription['nom']) ?> (<?= ucfirst($subscription['statut']) ?>) depuis <?= date('d/m/Y', strtotime($subscription['date_debut'])) ?></p>
+                    <?php else: ?>
+                        <p>Aucun abonnement actif</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <!-- Partie admin (si $user n'existe pas, on affiche les KPI globaux) -->
+            <?php if (!isset($user) && isset($kpi_users)): ?>
+            <div class="kpi-grid">
+                <div class="kpi-card"><div class="kpi-value"><?= $kpi_users ?></div><div class="kpi-label">Utilisateurs</div></div>
+                <div class="kpi-card"><div class="kpi-value"><?= $kpi_regimes ?></div><div class="kpi-label">Régimes</div></div>
+                <div class="kpi-card"><div class="kpi-value"><?= $kpi_codes ?></div><div class="kpi-label">Codes (mois)</div></div>
+                <div class="kpi-card"><div class="kpi-value"><?= number_format($kpi_gold, 2) ?>€</div><div class="kpi-label">Revenus Gold</div></div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <canvas id="chartInscriptions" data-labels='<?= json_encode($chart_inscriptions['labels']) ?>' data-values='<?= json_encode($chart_inscriptions['values']) ?>'></canvas>
+                </div>
+                <div class="chart-card">
+                    <canvas id="chartIMC" data-labels='<?= json_encode($chart_imc['labels']) ?>' data-values='<?= json_encode($chart_imc['values']) ?>' data-colors='<?= json_encode($chart_imc['colors']) ?>'></canvas>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <h3>Derniers régimes créés</h3>
+                <table class="data-table">
+                    <thead><tr><th>Nom</th><th>% Viande</th><th>% Poisson</th><th>% Volaille</th><th>Durée</th><th>Prix</th><th>Date</th></tr></thead>
+                    <tbody>
+                        <?php foreach ($recent_regimes as $r): ?>
+                        <tr>
+                            <td><?= esc($r['nom']) ?></td>
+                            <td><?= $r['pct_viande'] ?>%</td>
+                            <td><?= $r['pct_poisson'] ?>%</td>
+                            <td><?= $r['pct_volaille'] ?>%</td>
+                            <td><?= $r['duree_display'] ?></td>
+                            <td><?= $r['prix'] ?>€</td>
+                            <td><?= date('d/m/Y', strtotime($r['created_at'])) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php endif; ?>
+        </main>
     </div>
-  </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="<?= base_url('assets/js/dashboard.js') ?>"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<?php if (!isset($user)): ?>
+<script>
+    new Chart(document.getElementById('chartInscriptions'), {
+        type: 'line',
+        data: { labels: JSON.parse(document.getElementById('chartInscriptions').dataset.labels), datasets: [{ label: 'Inscriptions', data: JSON.parse(document.getElementById('chartInscriptions').dataset.values), borderColor: '#2D6A4F' }] }
+    });
+    new Chart(document.getElementById('chartIMC'), {
+        type: 'doughnut',
+        data: { labels: JSON.parse(document.getElementById('chartIMC').dataset.labels), datasets: [{ data: JSON.parse(document.getElementById('chartIMC').dataset.values), backgroundColor: JSON.parse(document.getElementById('chartIMC').dataset.colors) }] }
+    });
+</script>
+<?php endif; ?>
 </body>
-
 </html>
