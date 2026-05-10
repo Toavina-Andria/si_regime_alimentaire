@@ -113,7 +113,7 @@
                 </div>
 
                 <div class="sub-back">
-                    <a href="<?= base_url('abonnement') ?>" class="btn btn-secondary">← Retour aux abonnements</a>
+                    <a href="<?= base_url('abonnements') ?>" class="btn btn-secondary">← Retour aux abonnements</a>
                 </div>
             </div>
         </main>
