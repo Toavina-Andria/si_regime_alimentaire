@@ -39,8 +39,7 @@ class AuthService
 
         if ($user) {
             $storedPassword = (string) ($user['mot_de_passe'] ?? '');
-            $passwordIsValid = $storedPassword === $password || password_verify($password, $storedPassword);
-            if ($passwordIsValid) {
+            if (password_verify($password, $storedPassword)) {
                 return $user;
             }
         }

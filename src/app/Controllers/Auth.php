@@ -68,7 +68,18 @@ class Auth extends BaseController
     {
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('mot_de_passe');
-        return AuthService::attemptLogin($email, $password);
+
+        $user = AuthService::attemptLogin($email, $password);
+        if ($user) {
+            $this->setSession($user);
+            if (!empty($user['est_admin'])) {
+                session()->set('est_admin', true);
+                return redirect()->to('/admin/dashboard');
+            }
+            return redirect()->to('/dashboard');
+        }
+
+        return redirect()->back()->withInput()->with('error', 'Email ou mot de passe incorrect.');
     }
 
     // Affiche le formulaire de complétion du profil
