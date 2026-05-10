@@ -8,7 +8,7 @@
         </svg>
         <div class="sidebar-logo-text">
             <a href="<?= base_url('regimes') ?>">NutriPlan
-                <small><?= session()->get('user_id') == 1 ? 'Admin' : 'User' ?> Panel</small>
+                <small><?= session()->get('est_admin') ? 'Admin' : 'User' ?> Panel</small>
             </a>
         </div>
     </div>
@@ -17,8 +17,8 @@ helper('navigation');
 
 ?>
     <nav class="sidebar-nav">
-        <!-- ADMIN SECTION - Only visible for admin (id = 1) -->
-        <?php if (session()->get('user_id') == 1): ?>
+        <!-- ADMIN SECTION - Only visible for admin -->
+        <?php if (session()->get('est_admin')): ?>
             <div class="sidebar-section-label" style="margin-top: 20px; padding: 0 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.5px;">👨‍💼 Administration</div>
             
             <div class="sidebar-section">
@@ -28,10 +28,10 @@ helper('navigation');
                     <span class="icon">📊</span>
                     Tableau de bord
                 </a>
-                <a href="<?= base_url('admin/analytics') ?>"
-                    class="sidebar-link <?= navActive('admin/analytics') ?>">
+                <a href="<?= base_url('admin/stats') ?>"
+                    class="sidebar-link <?= navActive('admin/stats') ?>">
                     <span class="icon">📈</span>
-                    Analytics
+                    Statistiques
                 </a>
             </div>
 
@@ -47,15 +47,29 @@ helper('navigation');
                     <span class="icon">🏃</span>
                     Activités sportives
                 </a>
+                <a href="<?= base_url('admin/abonnements') ?>"
+                    class="sidebar-link <?= navActive('admin/abonnements') ?>">
+                    <span class="icon">🎯</span>
+                    Abonnements
+                </a>
+                <a href="<?= base_url('admin/codes') ?>"
+                    class="sidebar-link <?= navActive('admin/codes') ?>">
+                    <span class="icon">💰</span>
+                    Codes bonus
+                </a>
                 <a href="<?= base_url('admin/utilisateurs') ?>"
                     class="sidebar-link <?= navActive('admin/utilisateurs') ?>">
                     <span class="icon">👥</span>
                     Utilisateurs
                 </a>
-                <a href="<?= base_url('admin/codes') ?>"
-                    class="sidebar-link <?= navActive('admin/codes') ?>">
-                    <span class="icon">💰</span>
-                    Portefeuille & Codes
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Configuration</div>
+                <a href="<?= base_url('admin/parametres') ?>"
+                    class="sidebar-link <?= navActive('admin/parametres') ?>">
+                    <span class="icon">⚙️</span>
+                    Paramètres
                 </a>
             </div>
         <?php endif; ?>
@@ -107,18 +121,6 @@ helper('navigation');
                 class="sidebar-link <?= navActive('code') ?>">
                 <span class="icon">🎟️</span>
                 Codes bonus
-            </a>
-        </div>
-
-        <div class="sidebar-section">
-            <div class="sidebar-section-title">Configuration</div>
-            <a href="#" class="sidebar-link">
-                <span class="icon">⚙️</span>
-                Paramètres
-            </a>
-            <a href="#" class="sidebar-link">
-                <span class="icon">📋</span>
-                Logs & Historique
             </a>
         </div>
     </nav>
