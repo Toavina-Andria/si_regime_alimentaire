@@ -137,13 +137,11 @@ class RegimeController extends BaseController
             'duree_jours' => $this->request->getPost('duree_jours'),
         ];
 
-        $result = RegimeService::updateRegime($id, $data);
-
-        if ($result['success']) {
-            return redirect()->to('/regime/admin')->with('message', $result['message']);
-        } else {
-            $errors = $result['errors'] ?? [];
-            return redirect()->back()->withInput()->with('errors', $errors)->with('error', $result['message']);
+        try {
+            RegimeService::updateRegime($id, $data);
+            return redirect()->to('/regime/admin')->with('message', 'Régime mis à jour avec succès.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->withInput()->with('error', $th->getMessage());
         }
     }
 
@@ -171,12 +169,11 @@ class RegimeController extends BaseController
     // Suppression
     public function delete($id)
     {
-        $result = RegimeService::deleteRegime($id);
-
-        if ($result['success']) {
-            return redirect()->to('/regime/admin')->with('message', $result['message']);
-        } else {
-            return redirect()->back()->with('error', $result['message']);
+        try {
+            RegimeService::deleteRegime($id);
+            return redirect()->to('/regime/admin')->with('message', 'Régime supprimé avec succès.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
         }
     }
 }
