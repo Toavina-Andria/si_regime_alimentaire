@@ -12,7 +12,7 @@ class Utilisateur extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['nom', 'prenom', 'email', 'mot_de_passe', 'date_naissance', 'genre', 'adresse', 'taille_cm', 'poids_kg', 'objectif'];
+    protected $allowedFields = ['nom', 'prenom', 'email', 'mot_de_passe', 'date_naissance', 'genre', 'adresse', 'taille_cm', 'poids_kg', 'objectif', 'est_admin'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -127,5 +127,15 @@ class Utilisateur extends Model
         if ($imc < 30)
             return 'Surpoids';
         return 'Obésité';
+    }
+
+    public function getByObjectif(string $objectif): array
+    {
+        return $this->where('objectif', $objectif)->findAll();
+    }
+
+    public function getRecent(int $limit = 10): array
+    {
+        return $this->orderBy('created_at', 'DESC')->limit($limit)->findAll();
     }
 }
