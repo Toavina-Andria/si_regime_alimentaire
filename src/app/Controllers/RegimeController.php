@@ -48,36 +48,46 @@ class RegimeController extends BaseController
     // ------------------------------------------------------------
     public function show($id)
     {
-      $regime = RegimeService::getRegimeById($id);
-        $regimeprix = RegimeService::getRegimePrixByRegimeId($id);
-        $activites = RegimeService::getActiviteByRegimeId($id);
-        $data = [
-            'regime' => $regime,
-            'prix' => $regimeprix,
-            'activites' => $activites,
-            'message' => 'initial'
-        ];
-        try {
-            $data = [
-                'regime' => $regime,
-                'prix' => $regimeprix,
-                'activites' => $activites,
-                'message' => 'ok'
-            ];
-            return view('regime/detail', $data);
-        } catch (\Throwable $th) {
-            if ($th->getMessage() !== 'Trying to access array offset on null' )
-            {
-                $data['message'] = $th->getMessage();
-            }
-
-            return view('regime/detail',$data);
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/connexion');
         }
+
+        $regime = $this->regimeModel->find($id);
+        if (!$regime) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $prixOptions = RegimePrixService::getPrixByRegime($id);
+
+        $db = \Config\Database::connect();
+        $activites = $db->table('regime_activite ra')
+            ->select('a.nom, a.description, a.intensite, a.calories_heure, ra.frequence_semaine')
+            ->join('activite_sportive a', 'a.id = ra.activite_id')
+            ->where('ra.regime_id', $id)
+            ->orderBy('a.intensite', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        return view('regime/detail', [
+            'regime'      => $regime,
+            'prixOptions' => $prixOptions,
+            'activites'   => $activites,
+        ]);
     }
 
     // ------------------------------------------------------------
-    // Formulaire de création (admin)
+    // ADMINISTRATION - Liste des régimes avec pagination
     // ------------------------------------------------------------
+    public function adminIndex()
+    {
+        $regimes = $this->regimeModel->orderBy('created_at', 'DESC')->paginate(10);
+        return view('dashboard/regimes', [
+            'regimes' => $regimes,
+            'pager' => $this->regimeModel->pager,
+        ]);
+    }
+
+    // Formulaire de création
     public function create()
     {
         return view('regime/admin_create');

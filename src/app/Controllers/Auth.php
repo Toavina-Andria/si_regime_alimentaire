@@ -57,23 +57,30 @@ class Auth extends BaseController
         ]);
     }
 
+
+
     // Affiche la page de connexion
     public function login()
     {
         return view('authentification/connexion');
     }
 
-    // Traite la connexion
-    public function doLogin()
-    {
-        $email = $this->request->getPost('email');
-        $password = $this->request->getPost('mot_de_passe');
-        $user = AuthService::attemptLogin($email, $password);
-        $this->setSession($user);
-        return empty($user['date_naissance']) || empty($user['genre']) || empty($user['objectif'])
-                    ? redirect()->to('/auth/profil')
-                    : redirect()->to('/dashboard');
+ public function doLogin()
+{
+    $email = $this->request->getPost('email');
+    $password = $this->request->getPost('mot_de_passe');
+    $user = AuthService::attemptLogin($email, $password);
+    
+    // Vérifier si l'utilisateur existe
+    if (!$user) {
+        return redirect()->back()->with('error', 'Email ou mot de passe incorrect');
     }
+    
+    $this->setSession($user);
+    return empty($user['date_naissance']) || empty($user['genre']) || empty($user['objectif'])
+                ? redirect()->to('/auth/profil')
+                : redirect()->to('/dashboard');
+}
 
     // Affiche le formulaire de complétion du profil
     public function profil()
