@@ -51,11 +51,8 @@ class DashboardController extends BaseController
     {
         if ($redirect = $this->requireAdmin()) return $redirect;
 
-        $analysisService = new DataAnalysisService();
         $data = $this->dashboardService->getStatsData();
-
         $data['active'] = 'stats';
-        $data['cross_tables'] = $analysisService->getCrossTables();
 
         return view('dashboard/stats', $data);
     }
