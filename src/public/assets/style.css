@@ -155,10 +155,10 @@ body {
 }
 
 .auth-error p {
-  margin-bottom: 2px;
-  color: var(--color-danger);
-  text-align: left;
+  margin: 0;
+  font-size: 0.85rem;
 }
+.field-error { display: block; color: #e53e3e; font-size: 0.78rem; margin-top: 4px; font-weight: 500; }
 
 .form-row {
   display: grid;
