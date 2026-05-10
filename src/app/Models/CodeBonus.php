@@ -12,7 +12,7 @@ class CodeBonus extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['code', 'valeur_points', 'est_valide', 'expires_at'];
+    protected $allowedFields    = ['code', 'valeur_points', 'est_valide', 'expires_at', 'created_by'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -20,6 +20,7 @@ class CodeBonus extends Model
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
+    protected $updatedField  = '';
 
     // Relationships
     public function transactions()
