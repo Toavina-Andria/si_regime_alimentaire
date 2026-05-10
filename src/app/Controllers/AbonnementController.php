@@ -10,8 +10,8 @@ class AbonnementController extends BaseController
     public function index($abonnementId = null)
     {
         $userId = session()->get('user_id') ?? session()->get('id');
-        if ($redirect = self::checkLoggedIn()) return $redirect;
-        if ($redirect = self::redirectAdmin()) return $redirect;
+        self::checkLoggedIn();
+        self::redirectAdmin();
 
         $abonnement = AbonnementServices::getAbonnement($abonnementId);
         if (!$abonnement) {
@@ -26,29 +26,19 @@ class AbonnementController extends BaseController
         ];
         return view('abonnement/souscrire', $data);
     }
+    // test utilisteur est connecté
     private function checkLoggedIn()
     {
         if (!session()->get('user_id')) {
             return redirect()->to('/connexion')->with('error', 'Veuillez vous connecter pour accéder à cette page.');
         }
-        return null;
-    }
-    private function redirectAdmin()
-    {
-        $userId = session()->get('user_id');
-        if (!$userId) return null;
-        $user = model('App\Models\Utilisateur')->find($userId);
-        if ($user && !empty($user['est_admin'])) {
-            session()->set('est_admin', true);
-            return redirect()->to('/admin/dashboard');
-        }
-        return null;
     }
     public function souscrireRegime()
     {
+        // Check if user is logged in
         $userId = session()->get('user_id') ?? session()->get('id');
-        if ($redirect = self::checkLoggedIn()) return $redirect;
-        if ($redirect = self::redirectAdmin()) return $redirect;
+        self::checkLoggedIn();
+
 
         // Get POST data
         $abonnementId = $this->request->getPost('abonnement_id');
@@ -71,9 +61,9 @@ class AbonnementController extends BaseController
 
     public function liste()
     {
+        // Check if user is logged in
         $userId = session()->get('user_id') ?? session()->get('id');
-        if ($redirect = self::checkLoggedIn()) return $redirect;
-        if ($redirect = self::redirectAdmin()) return $redirect;
+        self::checkLoggedIn();
 
         $abonnements = AbonnementServices::getAllAbonnements();
         $activeSubscription = AbonnementServices::getUserActiveSubscription($userId);
