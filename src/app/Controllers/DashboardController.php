@@ -2,11 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\Abonnement;
-use App\Models\ActiviteSportive;
-use App\Models\CodeBonus;
-use App\Models\Regime;
-use App\Models\Utilisateur;
 use App\Services\DashboardService;
 
 class DashboardController extends BaseController
@@ -43,8 +38,7 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         }
 
-        $regimeModel = new Regime();
-        $data['regimes'] = $regimeModel->orderBy('created_at', 'DESC')->findAll();
+        $data['regimes'] = $this->dashboardService->getAllRegimes();
         $data['active'] = 'regimes';
 
         return view('dashboard/regimes', $data);
@@ -56,8 +50,7 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         }
 
-        $codeBonusModel = new CodeBonus();
-        $data['codes'] = $codeBonusModel->orderBy('created_at', 'DESC')->findAll();
+        $data['codes'] = $this->dashboardService->getAllCodes();
 
         return view('dashboard/codes', $data);
     }
@@ -68,8 +61,7 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         }
 
-        $activiteModel = new ActiviteSportive();
-        $data['activites'] = $activiteModel->orderBy('created_at', 'DESC')->findAll();
+        $data['activites'] = $this->dashboardService->getAllActivites();
 
         return view('dashboard/activites', $data);
     }
@@ -80,8 +72,7 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         }
 
-        $utilisateurModel = new Utilisateur();
-        $data['utilisateurs'] = $utilisateurModel->orderBy('created_at', 'DESC')->findAll();
+        $data['utilisateurs'] = $this->dashboardService->getAllUtilisateurs();
 
         return view('dashboard/utilisateurs', $data);
     }
@@ -92,13 +83,17 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         }
 
-        $data['active'] = 'admin-stats';
-        $data['chart_inscriptions'] = $this->dashboardService->getMonthlyInscriptions();
-        $data['chart_imc'] = $this->dashboardService->getIMCDistribution();
-        $data['chart_objectifs'] = (new \App\Services\DataAnalysisService())->getObjectifDistribution();
-        $data['chart_top_regimes'] = (new \App\Services\DataAnalysisService())->getTopRegimes();
-        $data['global_stats'] = (new \App\Services\DataAnalysisService())->getGlobalStats();
-        $data['inscriptions_trend'] = (new \App\Services\DataAnalysisService())->getInscriptionsTrend();
+        $statsData = $this->dashboardService->getStatsData();
+
+        $data = [
+            'active'             => 'admin-stats',
+            'chart_inscriptions' => $this->dashboardService->getMonthlyInscriptions(),
+            'chart_imc'          => $this->dashboardService->getIMCDistribution(),
+            'chart_objectifs'    => $statsData['chart_objectifs'],
+            'chart_top_regimes'  => $statsData['chart_top_regimes'],
+            'global_stats'       => $statsData['global_stats'],
+            'inscriptions_trend' => $statsData['inscriptions_trend'],
+        ];
 
         return view('dashboard/stats', $data);
     }
@@ -109,8 +104,7 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         }
 
-        $abonnementModel = new Abonnement();
-        $data['abonnements'] = $abonnementModel->orderBy('created_at', 'DESC')->findAll();
+        $data['abonnements'] = $this->dashboardService->getAllAbonnements();
 
         return view('dashboard/abonnements', $data);
     }
@@ -121,8 +115,7 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         }
 
-        $abonnementModel = new Abonnement();
-        $abonnementModel->insert([
+        $this->dashboardService->createAbonnement([
             'nom'            => $this->request->getPost('nom'),
             'statut'         => $this->request->getPost('statut'),
             'taux_reduction' => $this->request->getPost('taux_reduction'),
@@ -139,8 +132,7 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         }
 
-        $abonnementModel = new Abonnement();
-        $abonnementModel->update($id, [
+        $this->dashboardService->updateAbonnement($id, [
             'nom'            => $this->request->getPost('nom'),
             'statut'         => $this->request->getPost('statut'),
             'taux_reduction' => $this->request->getPost('taux_reduction'),
@@ -157,8 +149,7 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         }
 
-        $abonnementModel = new Abonnement();
-        $abonnementModel->delete($id);
+        $this->dashboardService->deleteAbonnement($id);
 
         return redirect()->to('/admin/abonnements')->with('success', 'Abonnement supprimé.');
     }
@@ -171,5 +162,4 @@ class DashboardController extends BaseController
 
         return view('dashboard/parametres');
     }
-
 }

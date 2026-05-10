@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Abonnement;
+use App\Models\ActiviteSportive;
 use App\Models\CodeBonus;
 use App\Models\HistoriquePoids;
 use App\Models\Regime;
@@ -25,6 +27,8 @@ class DashboardService
     private TransactionPortefeuille $transactionPortefeuilleModel;
     private UtilisateurAbonnement $utilisateurAbonnementModel;
     private HistoriquePoids $historiquePoidsModel;
+    private Abonnement $abonnementModel;
+    private ActiviteSportive $activiteSportiveModel;
     private string $dateFormat = 'Y-m-d H:i:s';
 
     public function __construct()
@@ -37,6 +41,8 @@ class DashboardService
         $this->transactionPortefeuilleModel = new TransactionPortefeuille();
         $this->utilisateurAbonnementModel = new UtilisateurAbonnement();
         $this->historiquePoidsModel = new HistoriquePoids();
+        $this->abonnementModel = new Abonnement();
+        $this->activiteSportiveModel = new ActiviteSportive();
     }
 
     public function getTotalUsers(): int
@@ -470,6 +476,57 @@ class DashboardService
             ->where('souscription_regime.utilisateur_id', $userId)
             ->orderBy('souscription_regime.date_debut', 'DESC')
             ->findAll();
+    }
+
+    public function getAllRegimes(): array
+    {
+        return $this->regimeModel->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function getAllCodes(): array
+    {
+        return $this->codeBonusModel->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function getAllActivites(): array
+    {
+        return $this->activiteSportiveModel->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function getAllUtilisateurs(): array
+    {
+        return $this->utilisateurModel->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function getAllAbonnements(): array
+    {
+        return $this->abonnementModel->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function createAbonnement(array $data): void
+    {
+        $this->abonnementModel->insert($data);
+    }
+
+    public function updateAbonnement(int $id, array $data): void
+    {
+        $this->abonnementModel->update($id, $data);
+    }
+
+    public function deleteAbonnement(int $id): void
+    {
+        $this->abonnementModel->delete($id);
+    }
+
+    public function getStatsData(): array
+    {
+        $analysis = new \App\Services\DataAnalysisService();
+        return [
+            'chart_objectifs'   => $analysis->getObjectifDistribution(),
+            'chart_top_regimes' => $analysis->getTopRegimes(),
+            'global_stats'      => $analysis->getGlobalStats(),
+            'inscriptions_trend'=> $analysis->getInscriptionsTrend(),
+        ];
     }
 
     private function getImcCategoryCounts(): array
