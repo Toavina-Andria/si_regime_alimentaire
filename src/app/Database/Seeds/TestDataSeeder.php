@@ -99,6 +99,7 @@ class TestDataSeeder extends Seeder
                 'taille_cm' => $taille,
                 'poids_kg' => $poids,
                 'objectif' => $objectifs[array_rand($objectifs)],
+                'est_admin' => $i === 1 ? 1 : 0,
                 'created_at' => date('Y-m-d H:i:s', strtotime("-".rand(1,365)." days"))
             ];
         }
