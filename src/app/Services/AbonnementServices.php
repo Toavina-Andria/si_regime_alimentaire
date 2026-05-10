@@ -8,7 +8,7 @@ use App\Services\UtilisateurService;
 
 class AbonnementServices
 {
-    private static $dateFormat = 'Y-m-d H:i:s';
+    private static $dateFormat = 'Y-m-d';
 
     /**
      * Buy/subscribe to an abonnement (membership)
