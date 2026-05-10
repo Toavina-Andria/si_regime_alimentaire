@@ -72,9 +72,9 @@ class AbonnementController extends BaseController
 
     public function liste()
     {
-        // Check if user is logged in
         $userId = session()->get('user_id') ?? session()->get('id');
-        self::checkLoggedIn();
+        if ($redirect = self::checkLoggedIn()) return $redirect;
+        if ($redirect = self::redirectAdmin()) return $redirect;
 
         $abonnements = AbonnementServices::getAllAbonnements();
         $activeSubscription = AbonnementServices::getUserActiveSubscription($userId);
