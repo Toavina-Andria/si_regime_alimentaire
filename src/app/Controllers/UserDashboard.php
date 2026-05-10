@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Services\DashboardService;
-use App\Services\UtilisateurService;
 
 class UserDashboard extends BaseController
 {
@@ -22,9 +21,20 @@ class UserDashboard extends BaseController
 
         $userId = session()->get('user_id');
         $user = $this->dashboardService->getUserById($userId);
+        
+        // Si l'utilisateur n'existe pas, détruire session
+        if (!$user) {
+            session()->destroy();
+            return redirect()->to('/connexion');
+        }
+
         $objective = $this->dashboardService->getUserObjective($userId);
         $imcData = $this->dashboardService->getUserImcData($userId);
         $suggestions = $this->dashboardService->getUserSuggestions($userId);
+        $wallet = $this->dashboardService->getWallet($userId);
+        $subscription = $this->dashboardService->getUserGoldSubscription($userId);
+
+        // Données pour KPI (garder si nécessaire)
         $kpi_users = $this->dashboardService->getTotalUsers();
         $kpi_regimes = $this->dashboardService->getActiveRegimes();
         $kpi_codes = $this->dashboardService->getValidCodesCount();
@@ -33,11 +43,9 @@ class UserDashboard extends BaseController
         $chart_inscriptions = $this->dashboardService->getInscriptionsParMois();
         $chart_imc = $this->dashboardService->getRepartitionIMC();
         $recent_regimes = $this->dashboardService->getRecentRegimes(true, true);
-        $recent_activity = $this->getRecentActivity($userId);
-        $wale = $this->dashboardService->getWallet($userId);
-        $subscription = $this->dashboardService->getUserGoldSubscription($userId);
+        $recent_activity = $this->dashboardService->getUserRecentActivity($userId);
+
         return view('dashboard/user/index', [
-            'active'             => 'user-dashboard',
             'user'               => $user,
             'imc'                => $imcData['imc'],
             'objective'          => $objective,
@@ -45,9 +53,8 @@ class UserDashboard extends BaseController
             'suggestions'        => $suggestions,
             'streak_days'        => $user['streak_days'] ?? 0,
             'total_days'         => $user['total_days'] ?? 0,
-            'subscription'       => $subscription,// For future use if needed
-            'current_regime'     =>  null,
-            'wallet'             => $wale ?? null,
+            'subscription'       => $subscription,
+            'wallet'             => $wallet ?? null,
             'kpi_users'          => $kpi_users,
             'kpi_users_trend'    => $kpi_users_trend,
             'kpi_regimes'        => $kpi_regimes,
@@ -58,10 +65,5 @@ class UserDashboard extends BaseController
             'recent_regimes'     => $recent_regimes,
             'recent_activity'    => $recent_activity,
         ]);
-    }
-
-    private function getRecentActivity($userId)
-    {
-        return $this->dashboardService->getUserRecentActivity($userId);
     }
 }
