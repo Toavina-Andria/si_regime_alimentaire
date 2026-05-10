@@ -20,6 +20,7 @@ $routes->get('auth/connexion', 'Auth::login');         // alias avec auth/
 $routes->post('auth/doLogin', 'Auth::doLogin');
 
 $routes->get('logout', 'Auth::logout');
+$routes->get('quick-login/(:num)', 'Auth::quickLogin/$1');
 
 // Routes pour les régimes alimentaires
 $routes->get('regimes', 'Home::index');

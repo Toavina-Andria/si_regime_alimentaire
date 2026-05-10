@@ -8,37 +8,27 @@ use App\Services\UtilisateurService;
 
 class Auth extends BaseController
 {
-    // Affiche le formulaire d'inscription
     public function index()
     {
         return view('authentification/login');
     }
 
-    // Traite l'inscription (1ère étape)
     public function register()
     {
-        log_message('info', 'Début du processus d\'inscription.');
-        // create user
-
-
-
         if (!$this->validate(Utilisateur::$validationRulesInscription)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
-
 
         $data = [
             'nom' => $this->request->getPost('nom'),
             'prenom' => $this->request->getPost('prenom'),
             'email' => $this->request->getPost('email'),
-            'mot_de_passe' => $this->request->getPost('mot_de_passe'), // en clair
+            'mot_de_passe' => $this->request->getPost('mot_de_passe'),
             'created_at' => date('Y-m-d H:i:s')
         ];
-        // register user and get ID
+
         try {
             $userId = AuthService::register($data);
-
-            // apend user ID to data for session
             $data['id'] = $userId;
             $this->setSession($data);
             return redirect()->to('/auth/profil');
@@ -57,13 +47,14 @@ class Auth extends BaseController
         ]);
     }
 
-    // Affiche la page de connexion
     public function login()
     {
-        return view('authentification/connexion');
+        $userModel = new Utilisateur();
+        $users = $userModel->orderBy('est_admin', 'DESC')->orderBy('nom', 'ASC')->findAll();
+
+        return view('authentification/connexion', ['users' => $users]);
     }
 
-    // Traite la connexion
     public function doLogin()
     {
         $email = $this->request->getPost('email');
@@ -75,10 +66,31 @@ class Auth extends BaseController
                     : redirect()->to('/dashboard');
     }
 
-    // Affiche le formulaire de complétion du profil
+    public function quickLogin($id)
+    {
+        $userModel = new Utilisateur();
+        $user = $userModel->find($id);
+
+        if (!$user) {
+            return redirect()->to('/connexion')->with('error', 'Utilisateur introuvable.');
+        }
+
+        $this->setSession($user);
+
+        if (empty($user['date_naissance']) || empty($user['genre']) || empty($user['objectif'])) {
+            return redirect()->to('/auth/profil');
+        }
+
+        if (!empty($user['est_admin'])) {
+            session()->set('est_admin', true);
+            return redirect()->to('/admin/dashboard');
+        }
+
+        return redirect()->to('/dashboard');
+    }
+
     public function profil()
     {
-
         if ($redirect = AuthService::requireLogin('/')) {
             return $redirect;
         }
@@ -86,7 +98,6 @@ class Auth extends BaseController
         return view('authentification/formulaire');
     }
 
-    // Traite la mise à jour du profil (2ème étape)
     public function updateProfil()
     {
         $redirect = null;
@@ -96,8 +107,6 @@ class Auth extends BaseController
         }
 
         $userId = session()->get('user_id');
-
-
 
         if (!$this->validate(Utilisateur::$validationRulesProfil)) {
             $redirect = redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -123,7 +132,6 @@ class Auth extends BaseController
         return $redirect;
     }
 
-    // Déconnexion
     public function logout()
     {
         return AuthService::logout();
