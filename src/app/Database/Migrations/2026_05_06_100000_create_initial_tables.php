@@ -508,7 +508,6 @@ class CreateInitialTables extends Migration
         $this->forge->addKey('utilisateur_id', false, false, 'idx_hp_utilisateur');
         $this->forge->addForeignKey('utilisateur_id', 'utilisateur', 'id', 'CASCADE', 'CASCADE', 'fk_hp_utilisateur');
         $this->forge->createTable('historique_poids');
-
     }
 
     public function down()
