@@ -10,6 +10,7 @@ use App\Models\UtilisateurAbonnement;
 use App\Models\SouscriptionRegime;
 use App\Services\DebugLogger;
 
+
 class RegimeService
 {
     private static $dateFormat = 'Y-m-d H:i:s';
@@ -20,6 +21,8 @@ class RegimeService
         $regimeModel = new Regime();
         return $regimeModel->find($regimeId);
     }
+
+
 
     // Get regime prix by regime ID
     public static function getRegimePrixByRegimeId($regimeId)
