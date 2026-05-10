@@ -8,6 +8,9 @@ use App\Models\SouscriptionRegime;
 use App\Models\CodeBonus;
 use App\Models\Portefeuille;
 use App\Models\RegimePrix;
+use App\Models\Abonnement;
+use App\Models\ActiviteSportive;
+use App\Services\DataAnalysisService;
 
 class DashboardService
 {
