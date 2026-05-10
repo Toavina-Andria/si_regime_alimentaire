@@ -52,6 +52,7 @@
                             <td><?= number_format($p['prix_base'], 2) ?> €</td>
                             <td>
                                 <form method="POST" action="<?= base_url('regime/souscrire') ?>">
+                                    <?= csrf_field() ?>
                                     <input type="hidden" name="regime_prix_id" value="<?= $p['id'] ?>">
                                     <button type="submit" class="btn-primary btn-sm">Souscrire</button>
                                 </form>
