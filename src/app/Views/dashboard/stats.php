@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mes statistiques – NutriPlan</title>
+    <title>Statistiques – NutriPlan</title>
     <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
@@ -12,19 +12,91 @@
     <div class="main-content">
         <header class="topbar">
             <div class="topbar-left">
-                <h1 class="page-title">📊 Mes statistiques</h1>
+                <h1 class="page-title">📊 Statistiques</h1>
             </div>
             <div class="topbar-right">
-                <a href="<?= base_url('dashboard') ?>" class="btn-outline">← Retour au tableau de bord</a>
+                <a href="<?= base_url('admin/dashboard') ?>" class="btn-outline">← Retour</a>
             </div>
         </header>
 
         <main class="page-content">
+            <!-- VUE ADMIN : KPIs globaux -->
+            <?php if (isset($total_users)): ?>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-value"><?= $total_users ?></div>
+                    <div class="kpi-label">Utilisateurs</div>
+                    <?php if (isset($user_trend)): ?>
+                        <div class="kpi-trend"><?= $user_trend > 0 ? '+' : '' ?><?= $user_trend ?>% (30j)</div>
+                    <?php endif; ?>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value"><?= $total_regimes ?></div>
+                    <div class="kpi-label">Régimes</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value"><?= $total_codes ?></div>
+                    <div class="kpi-label">Codes valides</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value"><?= number_format($total_gold_revenue, 2) ?>€</div>
+                    <div class="kpi-label">Revenus Gold</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div class="chart-card-title">📈 Inscriptions</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chartInscriptions"
+                            data-labels='<?= json_encode($inscriptions['labels'] ?? []) ?>'
+                            data-values='<?= json_encode($inscriptions['values'] ?? []) ?>'>
+                        </canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div class="chart-card-title">🍽️ Répartition IMC</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chartIMC"
+                            data-labels='<?= json_encode($imc_distribution['labels'] ?? []) ?>'
+                            data-values='<?= json_encode($imc_distribution['values'] ?? []) ?>'
+                            data-colors='<?= json_encode($imc_distribution['colors'] ?? []) ?>'>
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+
+            <?php if (!empty($recent_regimes)): ?>
+            <div class="table-card">
+                <h3>Derniers régimes</h3>
+                <table class="data-table">
+                    <thead><tr><th>Nom</th><th>% Viande</th><th>% Poisson</th><th>% Volaille</th><th>Durée</th><th>Prix</th></tr></thead>
+                    <tbody>
+                        <?php foreach ($recent_regimes as $r): ?>
+                        <tr>
+                            <td><?= esc($r['nom']) ?></td>
+                            <td><?= $r['pct_viande'] ?>%</td>
+                            <td><?= $r['pct_poisson'] ?>%</td>
+                            <td><?= $r['pct_volaille'] ?>%</td>
+                            <td><?= $r['duree_display'] ?? $r['duree_jours'] . ' jours' ?></td>
+                            <td><?= $r['prix'] ?? '—' ?>€</td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php endif; ?>
+            <?php endif; ?>
+
+            <!-- VUE UTILISATEUR : stats personnelles -->
+            <?php if (isset($imc)): ?>
             <div class="page-header">
                 <p class="page-subtitle">Suivez votre progression</p>
             </div>
-
-            <!-- Cartes KPI stats -->
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <div class="kpi-value"><?= $imc ?? '—' ?></div>
@@ -34,10 +106,10 @@
                     <?php endif; ?>
                 </div>
                 <div class="kpi-card">
-                    <div class="kpi-value"><?= $nb_regimes ?></div>
+                    <div class="kpi-value"><?= $nb_regimes ?? 0 ?></div>
                     <div class="kpi-label">Régimes souscrits</div>
                 </div>
-                <?php if ($regime_actif): ?>
+                <?php if (isset($regime_actif) && $regime_actif): ?>
                 <div class="kpi-card">
                     <div class="kpi-value">Actif</div>
                     <div class="kpi-label">Régime en cours</div>
@@ -46,21 +118,19 @@
                 <?php endif; ?>
             </div>
 
-            <!-- Graphique évolution du poids -->
             <div class="chart-card" style="margin-bottom: 30px;">
                 <div class="chart-card-header">
                     <div class="chart-card-title">📈 Évolution de votre poids</div>
                     <div class="chart-card-subtitle">kg</div>
                 </div>
                 <div class="chart-container bar">
-                    <canvas id="weightChart" 
-                        data-labels='<?= $poids_labels ?>' 
-                        data-values='<?= $poids_values ?>'>
+                    <canvas id="weightChart"
+                        data-labels='<?= $poids_labels ?? '[]' ?>'
+                        data-values='<?= $poids_values ?? '[]' ?>'>
                     </canvas>
                 </div>
             </div>
 
-            <!-- Progression vers l'objectif -->
             <div class="chart-card">
                 <div class="chart-card-header">
                     <div class="chart-card-title">🎯 Progression vers votre objectif</div>
@@ -69,8 +139,8 @@
                 <?php if (!empty($objectif_data)): ?>
                     <div style="padding: 20px;">
                         <div style="margin-bottom: 15px;">
-                            <strong>Actuel :</strong> <?= $objectif_data['actuel'] ?> 
-                            &nbsp;|&nbsp; 
+                            <strong>Actuel :</strong> <?= $objectif_data['actuel'] ?>
+                            &nbsp;|&nbsp;
                             <strong>Cible :</strong> <?= $objectif_data['cible'] ?>
                         </div>
                         <div class="progress-bar">
@@ -83,12 +153,29 @@
                     <p>Complétez votre profil pour voir votre progression.</p>
                 <?php endif; ?>
             </div>
+            <?php endif; ?>
         </main>
     </div>
 </div>
 
 <script>
-    // Graphique du poids
+<?php if (isset($total_users)): ?>
+    new Chart(document.getElementById('chartInscriptions'), {
+        type: 'line',
+        data: {
+            labels: JSON.parse(document.getElementById('chartInscriptions').dataset.labels),
+            datasets: [{ label: 'Inscriptions', data: JSON.parse(document.getElementById('chartInscriptions').dataset.values), borderColor: '#2D6A4F', fill: true, backgroundColor: 'rgba(45,106,79,0.1)', tension: 0.3 }]
+        }
+    });
+    new Chart(document.getElementById('chartIMC'), {
+        type: 'doughnut',
+        data: {
+            labels: JSON.parse(document.getElementById('chartIMC').dataset.labels),
+            datasets: [{ data: JSON.parse(document.getElementById('chartIMC').dataset.values), backgroundColor: JSON.parse(document.getElementById('chartIMC').dataset.colors) }]
+        }
+    });
+<?php endif; ?>
+<?php if (isset($imc)): ?>
     const ctx = document.getElementById('weightChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
@@ -110,6 +197,7 @@
             }
         }
     });
+<?php endif; ?>
 </script>
 
 <style>
