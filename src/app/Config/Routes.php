@@ -51,6 +51,7 @@ $routes->group('admin', static function ($routes) {
     $routes->get('codes', 'DashboardController::codes');
     $routes->get('activites', 'DashboardController::activites');
     $routes->get('utilisateurs', 'DashboardController::utilisateurs');
+    $routes->get('parametres', 'DashboardController::parametres');
 });
 
 // Route pour l'export PDF du bilan personnel
