@@ -41,10 +41,16 @@ $routes->get('logout', 'Auth::logout');
 // Back Office (admin)
 $routes->group('admin', static function ($routes) {
     $routes->get('dashboard', 'DashboardController::index');
+    $routes->get('stats', 'DashboardController::stats');
     $routes->get('regimes', 'DashboardController::regimes');
+    $routes->get('abonnements', 'DashboardController::abonnements');
+    $routes->post('abonnement/store', 'DashboardController::storeAbonnement');
+    $routes->post('abonnement/update/(:num)', 'DashboardController::updateAbonnement/$1');
+    $routes->get('abonnement/delete/(:num)', 'DashboardController::deleteAbonnement/$1');
     $routes->get('codes', 'DashboardController::codes');
     $routes->get('activites', 'DashboardController::activites');
     $routes->get('utilisateurs', 'DashboardController::utilisateurs');
+    $routes->get('parametres', 'DashboardController::parametres');
 });
 
 // Route pour l'export PDF du bilan personnel
