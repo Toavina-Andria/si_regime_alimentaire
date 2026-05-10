@@ -103,6 +103,11 @@ class CreateInitialTables extends Migration
                 'type' => 'ENUM',
                 'constraint' => ['augmenter_poids', 'reduire_poids', 'imc_ideal'],
             ],
+            'est_admin' => [
+                'type' => 'TINYINT',
+                'default' => 0,
+                'comment' => '1 si administrateur',
+            ],
             'created_at' => [
                 'type' => 'TIMESTAMP',
                 'default' => new \CodeIgniter\Database\RawSql('CURRENT_TIMESTAMP'),
