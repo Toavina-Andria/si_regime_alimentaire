@@ -70,3 +70,6 @@ $routes->get('analysis', 'DataAnalysisController::index');
 $routes->get('abonnement/(:num)', 'AbonnementController::index/$1');
 $routes->post('abonnement/souscrire', 'AbonnementController::souscrireRegime');
 $routes->get('abonnements', 'AbonnementController::liste');
+
+// Souscription à un régime
+$routes->post('regime/souscrire', 'RegimeController::souscrire');

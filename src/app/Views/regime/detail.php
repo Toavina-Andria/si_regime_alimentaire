@@ -36,7 +36,7 @@
             </div>
 
             <!-- Prix disponibles selon durée -->
-            <?php if (!empty($prixOptions)): ?>
+            <?php if (!empty($prix)): ?>
             <div class="chart-card" style="margin-bottom: 20px;">
                 <div class="chart-card-header">
                     <div class="chart-card-title">💰 Tarifs selon la durée</div>
@@ -46,16 +46,15 @@
                         <tr><th>Durée</th><th>Prix</th><th></th></tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($prixOptions as $p): ?>
+                        <?php foreach ($prix as $p): ?>
                         <tr>
                             <td><?= $p['duree_jours'] ?> jours</td>
                             <td><?= number_format($p['prix_base'], 2) ?> €</td>
                             <td>
-                                <button class="btn-primary btn-subscribe" 
-                                        data-id="<?= $regime['id'] ?>" 
-                                        data-duree="<?= $p['duree_jours'] ?>">
-                                    Souscrire
-                                </button>
+                                <form method="POST" action="<?= base_url('regime/souscrire') ?>">
+                                    <input type="hidden" name="regime_prix_id" value="<?= $p['id'] ?>">
+                                    <button type="submit" class="btn-primary btn-sm">Souscrire</button>
+                                </form>
                             </td>
                         </tr>
                         <?php endforeach; ?>

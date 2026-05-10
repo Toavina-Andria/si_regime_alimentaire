@@ -88,7 +88,7 @@
                             <?php endif; ?>
                             <div class="suggestion-actions">
                                 <a href="<?= site_url('regime/' . $r['id']) ?>" class="btn-outline">Voir détail</a>
-                                <button class="btn-primary btn-subscribe" data-id="<?= $r['id'] ?>">Souscrire</button>
+                                <a href="<?= site_url('regime/' . $r['id']) ?>" class="btn-primary btn-sm">Souscrire</a>
                             </div>
                         </div>
                         <?php endforeach; ?>
