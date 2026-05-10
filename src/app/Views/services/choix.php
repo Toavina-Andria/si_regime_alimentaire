@@ -15,8 +15,7 @@
 <body>
     <div class="dashboard-layout services-page">
         <?= $this->include('bar/sidebar') ?>
-        <!-- Topbar simplifié -->
-        <div class="main-content" style="padding: 0;">
+        <div class="main-content">
             <div class="services-hero">
                 <h1>🍽️ Choisissez votre service</h1>
                 <p>NutriPlan met à votre disposition tous les outils pour réussir votre transformation.</p>
