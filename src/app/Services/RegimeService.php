@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+use App\Models\ActiviteSportive;
 use App\Models\Regime;
 use App\Models\RegimePrix;
 use App\Models\RegimeActivite;
@@ -26,7 +27,29 @@ class RegimeService
         $regimePrixModel = new RegimePrix();
         return $regimePrixModel->where('regime_id', $regimeId)->findAll();
     }
+    // get activite by regime id
+    public static function getActiviteByRegimeId($idRegime)
+    {
+        // get activite link ids
+        try {
 
+            $regimeActiviteModel = new RegimeActivite();
+            $results = $regimeActiviteModel
+                ->select('a.*, regime_activite.frequence_semaine')
+                ->join('activite_sportive a', 'a.id = regime_activite.activite_id')
+                ->where('regime_activite.regime_id', $idRegime)
+                ->orderBy('a.nom', 'ASC')
+                ->findAll();
+
+            return $results ?: [];
+        } catch (\Throwable $th) {
+            throw new \Exception('error: ' . $th->getMessage());
+        }
+        // find all acivit with iderror: Unknown column 'ra.frequence_semaine' in 'fierror: Unknown column 'ra.frequence_semaine' in 'field list' eld list' 
+        // SELECT a.* ,ra.frequence_semaine FROM regime_activite ra
+        // JOIN activite_sportive a ON (ra.activite_id = a.id)
+        // LEFT JOIN regime r ON (ra.regime_id = r.id);
+    }
     // Create regime with validation
     public static function createRegime($data)
     {
