@@ -5,38 +5,22 @@
     <title>Tableau de bord – NutriPlan</title>
     <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
     <style>
-        .user-greeting { background: white; border-radius: 24px; padding: 1rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .user-greeting h2 { font-size: 1.3rem; }
-        .user-greeting p { font-size: 0.82rem; }
-        .user-stats { display: flex; gap: 0.5rem; margin-top: 0.6rem; flex-wrap: wrap; }
-        .stat-badge { background: #e9f4ef; padding: 0.3rem 0.75rem; border-radius: 40px; font-size: 0.78rem; }
-        .suggestions-section { margin-bottom: 1rem; }
-        .suggestions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; max-height: 380px; overflow-y: auto; padding-right: 0.5rem; }
-        .suggestions-grid::-webkit-scrollbar { width: 5px; }
+        .user-greeting { background: white; border-radius: 32px; padding: 1.5rem 2rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .user-stats { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+        .stat-badge { background: #e9f4ef; padding: 0.5rem 1rem; border-radius: 40px; font-size: 0.85rem; }
+        .suggestions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; max-height: 480px; overflow-y: auto; padding-right: 0.5rem; }
+        .suggestions-grid::-webkit-scrollbar { width: 6px; }
         .suggestions-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 3px; }
-        .suggestion-card { background: white; border-radius: 16px; padding: 1rem 1.25rem; border: 1px solid var(--color-border); }
-        .suggestion-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
-        .suggestion-header h3 { font-size: 0.95rem; font-weight: 600; }
-        .suggestion-card .badge { font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 40px; }
+        .suggestion-card { background: white; border-radius: 16px; padding: 1.25rem 1.5rem; border: 1px solid var(--color-border); }
+        .suggestion-header h3 { font-size: 1.1rem; font-weight: 600; }
+        .suggestion-card .badge { font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 40px; }
         .badge.gain { background: #2D6A4F; color: white; }
         .badge.loss { background: #C1392B; color: white; }
         .badge.stable { background: #D4A853; color: white; }
-        .suggestion-desc { font-size: 0.8rem; color: var(--color-text-secondary); margin-bottom: 0.4rem; }
-        .suggestion-diet { display: flex; gap: 0.6rem; font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 0.4rem; }
-        .suggestion-prices { margin-bottom: 0.4rem; }
-        .price-tag { background: #f0f0f0; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.7rem; margin-right: 0.3rem; }
-        .suggestion-activities { font-size: 0.78rem; color: var(--color-text-secondary); margin-bottom: 0.4rem; }
-        .suggestion-activities ul { margin: 0.2rem 0 0 1rem; }
-        .suggestion-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-        .suggestion-actions .btn-outline, .suggestion-actions .btn-primary { font-size: 0.78rem; padding: 0.35rem 0.85rem; }
-        .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .table-card, .activity-card { background: white; border-radius: 16px; padding: 1rem 1.25rem; border: 1px solid var(--color-border); }
-        .table-card-title, .activity-card-title { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-text-muted); margin-bottom: 0.5rem; }
-        .data-table { width: 100%; font-size: 0.85rem; }
-        .data-table td { padding: 0.3rem 0; }
-        .data-table td:last-child { text-align: right; font-weight: 600; }
-        .activity-card .stat-number { font-size: 1.3rem !important; }
-        .activity-card p { font-size: 0.85rem; }
+        .suggestion-desc { font-size: 0.9rem; color: var(--color-text-secondary); }
+        .suggestion-diet { font-size: 0.85rem; color: var(--color-text-muted); }
+        .price-tag { background: #f0f0f0; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; margin-right: 0.5rem; }
+        .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
         @media (max-width: 768px) { .bottom-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
