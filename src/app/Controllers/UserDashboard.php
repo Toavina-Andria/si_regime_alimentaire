@@ -28,12 +28,6 @@ class UserDashboard extends BaseController
             return redirect()->to('/connexion');
         }
 
-        // Rediriger les admins vers leur dashboard
-        if (!empty($user['est_admin'])) {
-            session()->set('est_admin', true);
-            return redirect()->to('/admin/dashboard');
-        }
-
         $objective = $this->dashboardService->getUserObjective($userId);
         $imcData = $this->dashboardService->getUserImcData($userId);
         $suggestions = $this->dashboardService->getUserSuggestions($userId);
