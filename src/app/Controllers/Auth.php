@@ -49,6 +49,7 @@ class Auth extends BaseController
 
     public function setSession($data)
     {
+        session()->regenerate();
         session()->set([
             'user_id' => $data['id'],
             'user_email' => $data['email'],
