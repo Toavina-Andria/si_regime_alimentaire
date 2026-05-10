@@ -11,7 +11,10 @@
   <style>
     .auth-container { max-width: 900px; }
     .auth-form { max-width: 100%; }
-    .user-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin: 24px 0; }
+    .user-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; max-height: 420px; overflow-y: auto; padding-right: 8px; }
+    .user-card-grid::-webkit-scrollbar { width: 6px; }
+    .user-card-grid::-webkit-scrollbar-track { background: transparent; }
+    .user-card-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 3px; }
     .user-card { background: #fff; border: 1px solid var(--color-border, #E2E4DC); border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .user-card:hover { border-color: var(--color-primary-light, #52B788); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
     .user-card-admin { background: #FFFDF5; border-color: #D4A853; }
