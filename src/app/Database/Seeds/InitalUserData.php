@@ -19,7 +19,8 @@ class InitalUserData extends Seeder
                 'adresse' => 'Ampasamadinika',
                 'taille_cm' => '170',
                 'poids_kg' => '65',
-                'objectif' => 'imc_ideal'
+                'objectif' => 'imc_ideal',
+                'est_admin' => 1
             ],
             [
                 'nom' => 'Elen',
