@@ -7,6 +7,7 @@ use App\Models\CodeBonus;
 use App\Models\Regime;
 use App\Models\Utilisateur;
 use App\Services\DashboardService;
+use App\Services\DataAnalysisService;
 
 class DashboardController extends BaseController
 {
@@ -17,8 +18,18 @@ class DashboardController extends BaseController
         $this->dashboardService = new DashboardService();
     }
 
+    private function requireAdmin()
+    {
+        if (!session()->get('logged_in') || !session()->get('est_admin')) {
+            return redirect()->to('/dashboard');
+        }
+        return null;
+    }
+
     public function index()
     {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
         $data = [
             'imc'                => null,
             'categorie_imc'      => null,
@@ -36,14 +47,24 @@ class DashboardController extends BaseController
         return view('dashboard/index', $data);
     }
 
+    public function stats()
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $analysisService = new DataAnalysisService();
+        $data = $this->dashboardService->getStatsData();
+
+        $data['active'] = 'stats';
+        $data['cross_tables'] = $analysisService->getCrossTables();
+
+        return view('dashboard/stats', $data);
+    }
+
     public function regimes()
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
+        if ($redirect = $this->requireAdmin()) return $redirect;
 
-        $regimeModel = new Regime();
-        $data['regimes'] = $regimeModel->orderBy('created_at', 'DESC')->findAll();
+        $data['regimes'] = $this->dashboardService->getAllRegimes();
         $data['active'] = 'regimes';
 
         return view('dashboard/regimes', $data);
@@ -51,37 +72,89 @@ class DashboardController extends BaseController
 
     public function codes()
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
+        if ($redirect = $this->requireAdmin()) return $redirect;
 
-        $codeBonusModel = new CodeBonus();
-        $data['codes'] = $codeBonusModel->orderBy('created_at', 'DESC')->findAll();
+        $data['codes'] = $this->dashboardService->getAllCodes();
 
         return view('dashboard/codes', $data);
     }
 
     public function activites()
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
+        if ($redirect = $this->requireAdmin()) return $redirect;
 
-        $activiteModel = new ActiviteSportive();
-        $data['activites'] = $activiteModel->orderBy('created_at', 'DESC')->findAll();
+        $data['activites'] = $this->dashboardService->getAllActivites();
 
         return view('dashboard/activites', $data);
     }
 
     public function utilisateurs()
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/');
-        }
+        if ($redirect = $this->requireAdmin()) return $redirect;
 
-        $utilisateurModel = new Utilisateur();
-        $data['utilisateurs'] = $utilisateurModel->orderBy('created_at', 'DESC')->findAll();
+        $data['utilisateurs'] = $this->dashboardService->getAllUtilisateurs();
 
         return view('dashboard/utilisateurs', $data);
+    }
+
+    public function abonnements()
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data['abonnements'] = $this->dashboardService->getAllAbonnements();
+
+        return view('dashboard/abonnements', $data);
+    }
+
+    public function storeAbonnement()
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data = [
+            'nom'             => $this->request->getPost('nom'),
+            'statut'          => $this->request->getPost('statut'),
+            'taux_reduction'  => $this->request->getPost('taux_reduction'),
+            'prix'            => $this->request->getPost('prix'),
+            'description'     => $this->request->getPost('description'),
+        ];
+
+        $this->dashboardService->createAbonnement($data);
+
+        return redirect()->to('/admin/abonnements')->with('success', 'Abonnement créé avec succès.');
+    }
+
+    public function updateAbonnement($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data = [
+            'nom'             => $this->request->getPost('nom'),
+            'statut'          => $this->request->getPost('statut'),
+            'taux_reduction'  => $this->request->getPost('taux_reduction'),
+            'prix'            => $this->request->getPost('prix'),
+            'description'     => $this->request->getPost('description'),
+        ];
+
+        $this->dashboardService->updateAbonnement($id, $data);
+
+        return redirect()->to('/admin/abonnements')->with('success', 'Abonnement mis à jour.');
+    }
+
+    public function deleteAbonnement($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $this->dashboardService->deleteAbonnement($id);
+
+        return redirect()->to('/admin/abonnements')->with('success', 'Abonnement supprimé.');
+    }
+
+    public function parametres()
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data['active'] = 'parametres';
+
+        return view('dashboard/parametres', $data);
     }
 }
