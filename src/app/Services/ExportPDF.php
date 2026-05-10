@@ -24,7 +24,7 @@ class BilanPDF extends \FPDF
         $this->Ln(4);
     }
 
-    protected function Footer()
+    public function Footer()
     {
         $this->SetY(-15);
         $this->SetFont('Helvetica', 'I', 7);
