@@ -97,9 +97,7 @@ class Auth extends BaseController
     // Traite la mise à jour du profil (2ème étape)
     public function updateProfil()
     {
-        $redirect = null;
-
-        if (AuthService::requireLogin()) {
+        if ($redirect = AuthService::requireLogin()) {
             return $redirect;
         }
 

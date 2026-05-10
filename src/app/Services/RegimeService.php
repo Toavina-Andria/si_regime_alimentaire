@@ -147,14 +147,17 @@ class RegimeService
         $soldePoints = $portefeuilleModel['solde_points'];
         return $soldePoints >= $prix;
     }
-    // est abonne a un abonnement
+    // est abonne a un abonnement, retourne l'abonnement ou null
     public static function isAbonne($userId)
     {
         $abonnentuserModel = new UtilisateurAbonnement();
-        $abonnement = $abonnentuserModel->where('utilisateur_id', $userId)
-            ->where('date_fin >=', date(self::$dateFormat))
+        $abonnement = $abonnentuserModel
+            ->select('ua.*, a.taux_reduction')
+            ->join('abonnement a', 'a.id = ua.abonnement_id')
+            ->where('ua.utilisateur_id', $userId)
+            ->where('ua.date_fin >=', date(self::$dateFormat))
             ->first();
-        return $abonnement != null;
+        return $abonnement;
     }
     // s'abonner a un abonnement
     public static function applySubscription($userId, $abonnementId)

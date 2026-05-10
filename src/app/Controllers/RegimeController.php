@@ -40,38 +40,24 @@ class RegimeController extends BaseController
         $regime = RegimeService::getRegimeById($id);
         $regimeprix = RegimeService::getRegimePrixByRegimeId($id);
         $activites = RegimeService::getActiviteByRegimeId($id);
-        $data = [
+        if (!$regime) {
+            if ($this->request->isAJAX() || str_contains($this->request->getHeaderLine('Accept'), 'application/json')) {
+                return $this->response->setStatusCode(404)->setJSON(['message' => 'Régime introuvable.']);
+            }
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $accept = $this->request->getHeaderLine('Accept');
+        if ($this->request->isAJAX() || str_contains($accept, 'application/json')) {
+            return $this->response->setJSON($regime);
+        }
+
+        return view('regime/detail', [
             'regime' => $regime,
             'prix' => $regimeprix,
             'activites' => $activites,
-            'message' => 'initial'
-        ];
-        try {
-            if (!$regime) {
-                return $this->response->setStatusCode(404)->setJSON([
-                    'message' => 'Régime introuvable.'
-                ]);
-            }
-
-            $accept = $this->request->getHeaderLine('Accept');
-            if ($this->request->isAJAX() || str_contains($accept, 'application/json')) {
-                return $this->response->setJSON($regime);
-            }
-            $data = [
-                'regime' => $regime,
-                'prix' => $regimeprix,
-                'activites' => $activites,
-                'message' => 'ok'
-            ];
-            return view('regime/detail', $data);
-        } catch (\Throwable $th) {
-            if ($th->getMessage() !== 'Trying to access array offset on null' )
-            {
-                $data['message'] = $th->getMessage();
-            }
-
-            return view('regime/detail',$data);
-        }
+            'message' => 'ok'
+        ]);
     }
 
     // Enregistrement

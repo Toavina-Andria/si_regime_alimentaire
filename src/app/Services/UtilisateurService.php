@@ -106,7 +106,7 @@ class UtilisateurService
     }
 
     // pay with points
-    public static function payWithPoints(int $id_user, int $points)
+    public static function payWithPoints(int $id_user, $points)
     {
         $porteFeuille = self::validatePortefeuille($id_user);
         if ($porteFeuille['solde_points'] < $points) {
@@ -120,7 +120,7 @@ class UtilisateurService
     }
 
     // add points to portefeuille
-    public static function addPointsToPortefeuille(int $id_user, int $points)
+    public static function addPointsToPortefeuille(int $id_user, $points)
     {
         $porteFeuille = self::validatePortefeuille($id_user);
         $portefeuilleModel = new Portefeuille();
@@ -130,7 +130,7 @@ class UtilisateurService
     }
 
     // save transaction historique
-    public static function saveTransactionHistorique(int $id_user, int $points, ?int $code_bonus_id, string $type, string $description)
+    public static function saveTransactionHistorique(int $id_user, $points, ?int $code_bonus_id, string $type, string $description)
     {
         $porteFeuille = self::validatePortefeuille($id_user);
         $transactionModel = new TransactionPortefeuille();
