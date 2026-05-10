@@ -74,6 +74,7 @@
             border-left: 5px solid #e53e3e;
             color: #c53030;
         }
+        .field-error { display: block; color: #e53e3e; font-size: 0.78rem; margin-top: 4px; font-weight: 500; }
 
         .form-actions {
             display: flex;
