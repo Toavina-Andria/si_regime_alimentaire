@@ -13,16 +13,6 @@ class RegimeController extends BaseController
 
     public function __construct()
     {
-        // Vérifier que l'utilisateur est connecté
-        if (!session()->get('logged_in')) {
-            exit('Accès non autorisé. Veuillez vous connecter.');
-        }
-
-        // Optionnel : restreindre aux admins (exemple : email spécifique)
-        // if (session()->get('user_email') !== 'admin@exemple.com') {
-        //     exit('Accès réservé aux administrateurs.');
-        // }
-
         $this->regimeModel = new Regime();
         $this->regimeService = new RegimeService();
     }

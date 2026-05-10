@@ -48,6 +48,7 @@
       <?php endif; ?>
 
       <form action="<?= base_url('auth/register') ?>" method="POST">
+        <?= csrf_field() ?>
         <div class="form-row">
           <div class="form-group">
             <label for="nom">Nom</label>
