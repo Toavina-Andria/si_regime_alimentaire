@@ -43,12 +43,8 @@
         <p>Rejoignez NutriPlan et commencez votre transformation</p>
       </div>
 
-      <?php if (session()->getFlashdata('errors')): ?>
-        <div class="auth-error">
-          <?php foreach (session()->getFlashdata('errors') as $error): ?>
-            <p>✗ <?= $error ?></p>
-          <?php endforeach; ?>
-        </div>
+      <?php if (session()->getFlashdata('error')): ?>
+        <div class="auth-error">✗ <?= session()->getFlashdata('error') ?></div>
       <?php endif; ?>
 
       <form action="<?= base_url('auth/register') ?>" method="POST">
