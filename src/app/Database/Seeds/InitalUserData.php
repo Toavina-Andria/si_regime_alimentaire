@@ -37,5 +37,15 @@ class InitalUserData extends Seeder
 
         ];
         $this->db->table('utilisateur')->insertBatch($data);
+
+        $this->db->table('parametres')->insertBatch([
+            ['clef' => 'nom_plateforme', 'valeur' => 'NutriPlan', 'description' => 'Nom de la plateforme'],
+            ['clef' => 'email_contact', 'valeur' => 'contact@nutriplan.fr', 'description' => 'Email de contact'],
+            ['clef' => 'devise', 'valeur' => '€', 'description' => 'Unité monétaire'],
+            ['clef' => 'remise_gold', 'valeur' => '15', 'description' => 'Remise abonnement Gold en %'],
+            ['clef' => 'maintenance', 'valeur' => '0', 'description' => 'Mode maintenance (0/1)'],
+            ['clef' => 'email_expediteur', 'valeur' => 'noreply@nutriplan.fr', 'description' => "Email d'expédition"],
+            ['clef' => 'notification_admin', 'valeur' => '1', 'description' => 'Notifications admin'],
+        ]);
     }
 }

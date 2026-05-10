@@ -38,9 +38,16 @@ $routes->group('admin', static function ($routes) {
     $routes->get('codes', 'DashboardController::codes');
     $routes->get('activites', 'DashboardController::activites');
     $routes->post('activites', 'DashboardController::storeActivite');
+    $routes->post('activites/update/(:num)', 'DashboardController::updateActivite/$1');
     $routes->get('activites/delete/(:num)', 'DashboardController::deleteActivite/$1');
+    $routes->post('codes', 'DashboardController::storeCode');
+    $routes->post('codes/update/(:num)', 'DashboardController::updateCode/$1');
+    $routes->get('codes/delete/(:num)', 'DashboardController::deleteCode/$1');
     $routes->get('utilisateurs', 'DashboardController::utilisateurs');
+    $routes->post('utilisateurs/update/(:num)', 'DashboardController::updateUtilisateur/$1');
+    $routes->get('utilisateurs/delete/(:num)', 'DashboardController::deleteUtilisateur/$1');
     $routes->get('parametres', 'DashboardController::parametres');
+    $routes->post('parametres', 'DashboardController::updateParametres');
 });
 
 // Export PDF

@@ -362,14 +362,39 @@ class DashboardService
         return (new CodeBonus())->orderBy('created_at', 'DESC')->findAll();
     }
 
+    public function createCode(array $data)
+    {
+        return (new CodeBonus())->insert($data);
+    }
+
+    public function updateCode(int $id, array $data)
+    {
+        return (new CodeBonus())->update($id, $data);
+    }
+
+    public function deleteCode(int $id)
+    {
+        return (new CodeBonus())->delete($id);
+    }
+
     public function getAllActivites(): array
     {
         return (new ActiviteSportive())->orderBy('created_at', 'DESC')->findAll();
     }
 
+    public function getActiviteById(int $id): ?array
+    {
+        return (new ActiviteSportive())->find($id);
+    }
+
     public function createActivite(array $data)
     {
         return (new ActiviteSportive())->insert($data);
+    }
+
+    public function updateActivite(int $id, array $data)
+    {
+        return (new ActiviteSportive())->update($id, $data);
     }
 
     public function deleteActivite(int $id)
@@ -380,6 +405,26 @@ class DashboardService
     public function getAllUtilisateurs(): array
     {
         return (new Utilisateur())->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function updateUtilisateur(int $id, array $data)
+    {
+        return (new Utilisateur())->update($id, $data);
+    }
+
+    public function deleteUtilisateur(int $id)
+    {
+        return (new Utilisateur())->delete($id);
+    }
+
+    public function getAllParametres(): array
+    {
+        return (new Parametre())->orderBy('clef', 'ASC')->findAll();
+    }
+
+    public function updateParametre(int $id, array $data)
+    {
+        return (new Parametre())->update($id, $data);
     }
 
     public function getAllAbonnements(): array

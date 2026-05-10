@@ -121,6 +121,59 @@ class DashboardController extends BaseController
         return redirect()->to('/admin/activites')->with('message', 'Activité supprimée avec succès.');
     }
 
+    public function updateActivite($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data = [
+            'nom'            => $this->request->getPost('nom'),
+            'description'    => $this->request->getPost('description'),
+            'intensite'      => $this->request->getPost('intensite'),
+            'calories_heure' => $this->request->getPost('calories_heure'),
+        ];
+
+        $this->dashboardService->updateActivite($id, $data);
+        return redirect()->to('/admin/activites')->with('message', 'Activité mise à jour avec succès.');
+    }
+
+    public function storeCode()
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data = [
+            'code'          => $this->request->getPost('code'),
+            'valeur_points' => $this->request->getPost('valeur_points'),
+            'est_valide'    => 1,
+            'expires_at'    => $this->request->getPost('expires_at') ?: null,
+        ];
+
+        $this->dashboardService->createCode($data);
+        return redirect()->to('/admin/codes')->with('message', 'Code bonus créé avec succès.');
+    }
+
+    public function updateCode($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data = [
+            'code'          => $this->request->getPost('code'),
+            'valeur_points' => $this->request->getPost('valeur_points'),
+            'est_valide'    => $this->request->getPost('est_valide') ? 1 : 0,
+            'expires_at'    => $this->request->getPost('expires_at') ?: null,
+        ];
+
+        $this->dashboardService->updateCode($id, $data);
+        return redirect()->to('/admin/codes')->with('message', 'Code bonus mis à jour.');
+    }
+
+    public function deleteCode($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $this->dashboardService->deleteCode($id);
+        return redirect()->to('/admin/codes')->with('message', 'Code bonus supprimé.');
+    }
+
     public function utilisateurs()
     {
         if ($redirect = $this->requireAdmin()) return $redirect;
@@ -128,6 +181,26 @@ class DashboardController extends BaseController
         $data['utilisateurs'] = $this->dashboardService->getAllUtilisateurs();
 
         return view('dashboard/utilisateurs', $data);
+    }
+
+    public function updateUtilisateur($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data = [
+            'est_admin' => $this->request->getPost('est_admin') ? 1 : 0,
+        ];
+
+        $this->dashboardService->updateUtilisateur($id, $data);
+        return redirect()->to('/admin/utilisateurs')->with('message', 'Utilisateur mis à jour.');
+    }
+
+    public function deleteUtilisateur($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $this->dashboardService->deleteUtilisateur($id);
+        return redirect()->to('/admin/utilisateurs')->with('message', 'Utilisateur supprimé.');
     }
 
     public function abonnements()
@@ -186,8 +259,24 @@ class DashboardController extends BaseController
     {
         if ($redirect = $this->requireAdmin()) return $redirect;
 
+        $data['parametres'] = $this->dashboardService->getAllParametres();
         $data['active'] = 'parametres';
 
         return view('dashboard/parametres', $data);
+    }
+
+    public function updateParametres()
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $parametres = $this->request->getPost('parametres');
+        if (is_array($parametres)) {
+            $paramModel = new \App\Models\Parametre();
+            foreach ($parametres as $clef => $valeur) {
+                $paramModel->setValeur($clef, $valeur);
+            }
+        }
+
+        return redirect()->to('/admin/parametres')->with('message', 'Paramètres mis à jour.');
     }
 }

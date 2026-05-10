@@ -100,7 +100,7 @@
               <td><?= date('d/m/Y', strtotime($a['created_at'])) ?></td>
               <td>
                 <div class="action-btns">
-                  <button class="action-btn" title="Modifier">✏️</button>
+                  <button class="action-btn js-edit-activite" data-id="<?= $a['id'] ?>" data-nom="<?= esc($a['nom']) ?>" data-description="<?= esc($a['description'] ?? '') ?>" data-intensite="<?= $a['intensite'] ?>" data-calories="<?= $a['calories_heure'] ?>" title="Modifier">✏️</button>
                   <a href="<?= base_url('admin/activites/delete/' . $a['id']) ?>" class="action-btn delete" title="Supprimer" onclick="return confirm('Supprimer cette activité ?')">🗑️</a>
                 </div>
               </td>
@@ -121,7 +121,7 @@
       <div class="modal-title">Nouvelle activité sportive</div>
       <button class="modal-close">&times;</button>
     </div>
-    <form action="<?= base_url('admin/activites') ?>" method="POST">
+    <form id="activiteForm" method="POST">
       <?= csrf_field() ?>
       <div class="modal-body">
         <div class="form-group">
@@ -149,7 +149,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-ghost modal-close">Annuler</button>
-        <button type="submit" class="btn btn-primary">Ajouter l'activité</button>
+        <button type="submit" class="btn btn-primary" id="activiteSubmitBtn">Ajouter l'activité</button>
       </div>
     </form>
   </div>
@@ -157,5 +157,33 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="<?= base_url('assets/js/dashboard.js') ?>"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var modal = document.getElementById('modalActivite');
+  var form = document.getElementById('activiteForm');
+  var modalTitle = modal.querySelector('.modal-title');
+  var submitBtn = document.getElementById('activiteSubmitBtn');
+
+  document.querySelector('[data-modal="modalActivite"]').addEventListener('click', function () {
+    form.action = '<?= base_url('admin/activites') ?>';
+    form.reset();
+    modalTitle.textContent = 'Nouvelle activité sportive';
+    submitBtn.textContent = 'Ajouter l\'activité';
+  });
+
+  document.querySelectorAll('.js-edit-activite').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      form.action = '<?= base_url('admin/activites/update') ?>/' + btn.dataset.id;
+      form.elements.nom.value = btn.dataset.nom;
+      form.elements.description.value = btn.dataset.description;
+      form.elements.intensite.value = btn.dataset.intensite;
+      form.elements.calories_heure.value = btn.dataset.calories;
+      modalTitle.textContent = 'Modifier l\'activité';
+      submitBtn.textContent = 'Mettre à jour';
+      openModal(modal);
+    });
+  });
+});
+</script>
 </body>
 </html>
