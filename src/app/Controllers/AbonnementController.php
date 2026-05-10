@@ -31,15 +31,18 @@ class AbonnementController extends BaseController
         if (!session()->get('user_id')) {
             return redirect()->to('/connexion')->with('error', 'Veuillez vous connecter pour accéder à cette page.');
         }
+        return null;
     }
     private function redirectAdmin()
     {
         $userId = session()->get('user_id');
+        if (!$userId) return null;
         $user = model('App\Models\Utilisateur')->find($userId);
         if ($user && !empty($user['est_admin'])) {
             session()->set('est_admin', true);
             return redirect()->to('/admin/dashboard');
         }
+        return null;
     }
     public function souscrireRegime()
     {
