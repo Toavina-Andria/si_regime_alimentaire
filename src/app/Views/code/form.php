@@ -31,7 +31,7 @@
                 <p class="subtitle">Entrez un code pour créditer des points sur votre portefeuille</p>
 
                 <div class="code-card">
-                    <form action="/code/verify" method="post">
+                    <form action="<?= base_url('code/verify') ?>" method="post">
                         <label for="code">Code bonus</label>
                         <input type="text" id="code" name="code" placeholder="Ex: WELCOME10" required>
                         <button type="submit" class="btn btn-primary">Valider le code</button>

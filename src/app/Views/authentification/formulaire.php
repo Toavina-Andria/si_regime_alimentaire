@@ -43,19 +43,14 @@
         <p>Complétez vos informations pour commencer votre programme</p>
       </div>
 
-      <?php if (session()->getFlashdata('errors')): ?>
-        <div class="auth-error">
-          <?php foreach (session()->getFlashdata('errors') as $error): ?>
-            <p>✗ <?= $error ?></p>
-          <?php endforeach; ?>
-        </div>
-      <?php endif; ?>
+      <?php $validation = \Config\Services::validation(); ?>
 
       <form action="<?= base_url('auth/updateProfil') ?>" method="POST">
         <div class="form-row">
           <div class="form-group">
             <label>Date de naissance</label>
-            <input type="date" name="date_naissance" required>
+            <input type="date" name="date_naissance" value="<?= old('date_naissance') ?>" required>
+            <?= $validation ? $validation->showError('date_naissance', '') : '' ?>
           </div>
           <div class="form-group">
             <label>Genre</label>
@@ -64,30 +59,34 @@
               <option value="homme">Homme</option>
               <option value="femme">Femme</option>
             </select>
+            <?= $validation ? $validation->showError('genre', '') : '' ?>
           </div>
         </div>
         <div class="form-group">
           <label>Adresse (optionnelle)</label>
-          <input type="text" name="adresse" placeholder="Votre adresse complète">
+          <input type="text" name="adresse" value="<?= old('adresse') ?>" placeholder="Votre adresse complète">
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>Taille (cm)</label>
-            <input type="number" name="taille_cm" step="0.01" placeholder="Ex: 175" required>
+            <input type="number" name="taille_cm" step="0.01" value="<?= old('taille_cm') ?>" placeholder="Ex: 175" required>
+            <?= $validation ? $validation->showError('taille_cm', '') : '' ?>
           </div>
           <div class="form-group">
             <label>Poids (kg)</label>
-            <input type="number" name="poids_kg" step="0.01" placeholder="Ex: 70.5" required>
+            <input type="number" name="poids_kg" step="0.01" value="<?= old('poids_kg') ?>" placeholder="Ex: 70.5" required>
+            <?= $validation ? $validation->showError('poids_kg', '') : '' ?>
           </div>
         </div>
         <div class="form-group">
           <label>Objectif</label>
           <select name="objectif" required>
             <option value="">Sélectionnez</option>
-            <option value="augmenter_poids">💪 Prendre du poids</option>
-            <option value="reduire_poids">🎯 Perdre du poids</option>
-            <option value="imc_ideal">⚖️ Atteindre mon IMC idéal</option>
+            <option value="augmenter_poids" <?= old('objectif') === 'augmenter_poids' ? 'selected' : '' ?>>💪 Prendre du poids</option>
+            <option value="reduire_poids" <?= old('objectif') === 'reduire_poids' ? 'selected' : '' ?>>🎯 Perdre du poids</option>
+            <option value="imc_ideal" <?= old('objectif') === 'imc_ideal' ? 'selected' : '' ?>>⚖️ Atteindre mon IMC idéal</option>
           </select>
+          <?= $validation ? $validation->showError('objectif', '') : '' ?>
         </div>
         <button type="submit" class="auth-submit">Enregistrer mon profil</button>
       </form>

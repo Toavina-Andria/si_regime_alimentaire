@@ -8,13 +8,6 @@ use App\Models\SouscriptionRegime;
 
 class StatsController extends BaseController
 {
-    private $db;
-
-    public function __construct()
-    {
-        $this->db = \Config\Database::connect();
-    }
-
     public function index()
     {
         if (!session()->get('logged_in')) {

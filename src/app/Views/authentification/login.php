@@ -43,32 +43,32 @@
         <p>Rejoignez NutriPlan et commencez votre transformation</p>
       </div>
 
-      <?php if (session()->getFlashdata('errors')): ?>
-        <div class="auth-error">
-          <?php foreach (session()->getFlashdata('errors') as $error): ?>
-            <p>✗ <?= $error ?></p>
-          <?php endforeach; ?>
-        </div>
+      <?php if (session()->getFlashdata('error')): ?>
+        <div class="auth-error">✗ <?= session()->getFlashdata('error') ?></div>
       <?php endif; ?>
 
       <form action="<?= base_url('auth/register') ?>" method="POST">
         <div class="form-row">
           <div class="form-group">
             <label for="nom">Nom</label>
-            <input type="text" name="nom" id="nom" required placeholder="Votre nom">
+            <input type="text" name="nom" id="nom" value="<?= old('nom') ?>" required placeholder="Votre nom">
+            <?php if ($v = \Config\Services::validation()): ?><?= $v->showError('nom', '') ?><?php endif; ?>
           </div>
           <div class="form-group">
             <label for="prenom">Prénom</label>
-            <input type="text" name="prenom" id="prenom" required placeholder="Votre prénom">
+            <input type="text" name="prenom" id="prenom" value="<?= old('prenom') ?>" required placeholder="Votre prénom">
+            <?php if ($v = \Config\Services::validation()): ?><?= $v->showError('prenom', '') ?><?php endif; ?>
           </div>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" required placeholder="email@exemple.com">
+          <input type="email" id="email" name="email" value="<?= old('email') ?>" required placeholder="email@exemple.com">
+          <?php if ($v = \Config\Services::validation()): ?><?= $v->showError('email', '') ?><?php endif; ?>
         </div>
         <div class="form-group">
           <label for="pwd">Mot de passe</label>
           <input type="password" id="pwd" name="mot_de_passe" required placeholder="6 caractères minimum">
+          <?php if ($v = \Config\Services::validation()): ?><?= $v->showError('mot_de_passe', '') ?><?php endif; ?>
         </div>
         <button type="submit" class="auth-submit">Créer mon compte</button>
       </form>

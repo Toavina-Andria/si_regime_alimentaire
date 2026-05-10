@@ -98,23 +98,18 @@ class RegimeController extends BaseController
         ];
 
 
-        // Create and handle result (returns array with success/errors)
         try {
-
             RegimeService::createRegime($data);
 
-            $accept = $this->request->getHeaderLine('Accept');
-            if ($this->request->isAJAX() || str_contains($accept, 'application/json')) {
+            if ($this->request->isAJAX()) {
                 return $this->response->setJSON(['success' => true, 'message' => 'Régime créé avec succès.']);
             }
-
-
             return redirect()->to('/regime/admin')->with('message', 'Régime créé avec succès.');
         } catch (\Throwable $th) {
-            // send to json if ajax
             if ($this->request->isAJAX()) {
-                return $this->response->setJSON(['success' => false, 'message' => 'Erreur lors de la création du régime: ' . $th->getMessage()]);
+                return $this->response->setJSON(['success' => false, 'message' => $th->getMessage()]);
             }
+            return redirect()->back()->withInput()->with('error', $th->getMessage());
         }
 
     }
@@ -142,13 +137,11 @@ class RegimeController extends BaseController
             'duree_jours' => $this->request->getPost('duree_jours'),
         ];
 
-        $result = RegimeService::updateRegime($id, $data);
-
-        if ($result['success']) {
-            return redirect()->to('/regime/admin')->with('message', $result['message']);
-        } else {
-            $errors = $result['errors'] ?? [];
-            return redirect()->back()->withInput()->with('errors', $errors)->with('error', $result['message']);
+        try {
+            RegimeService::updateRegime($id, $data);
+            return redirect()->to('/regime/admin')->with('message', 'Régime mis à jour avec succès.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->withInput()->with('error', $th->getMessage());
         }
     }
 
@@ -176,12 +169,11 @@ class RegimeController extends BaseController
     // Suppression
     public function delete($id)
     {
-        $result = RegimeService::deleteRegime($id);
-
-        if ($result['success']) {
-            return redirect()->to('/regime/admin')->with('message', $result['message']);
-        } else {
-            return redirect()->back()->with('error', $result['message']);
+        try {
+            RegimeService::deleteRegime($id);
+            return redirect()->to('/regime/admin')->with('message', 'Régime supprimé avec succès.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
         }
     }
 }

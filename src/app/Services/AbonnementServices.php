@@ -170,4 +170,24 @@ class AbonnementServices
             ->where('date_fin >=', date(self::$dateFormat))
             ->first();
     }
+
+    /**
+     * Get user's active abonnement with details (nom, statut)
+     * 
+     * @param int $userId User ID
+     * @return array|null
+     */
+    public static function getUserActiveAbonnementWithDetails(int $userId): ?array
+    {
+        $db = \Config\Database::connect();
+        return $db->table('utilisateur_abonnement ua')
+            ->select('a.nom, a.statut')
+            ->join('abonnement a', 'a.id = ua.abonnement_id')
+            ->where('ua.utilisateur_id', $userId)
+            ->where('ua.statut', 'actif')
+            ->orderBy('ua.created_at', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRowArray();
+    }
 }
