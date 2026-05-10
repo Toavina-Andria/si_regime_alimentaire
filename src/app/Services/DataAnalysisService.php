@@ -11,9 +11,6 @@ class DataAnalysisService
         $this->db = \Config\Database::connect();
     }
 
-    /**
-     * Répartition des objectifs des utilisateurs
-     */
     public function getObjectifDistribution()
     {
         $builder = $this->db->table('utilisateur');
@@ -36,9 +33,6 @@ class DataAnalysisService
         return ['labels' => $labels, 'values' => $values];
     }
 
-    /**
-     * Régimes les plus souscrits (top 5)
-     */
     public function getTopRegimes()
     {
         $builder = $this->db->table('souscription_regime sr');
@@ -59,9 +53,6 @@ class DataAnalysisService
         return ['labels' => $labels, 'values' => $values];
     }
 
-    /**
-     * Répartition des utilisateurs par catégorie IMC
-     */
     public function getIMCDistribution()
     {
         $userModel = new \App\Models\Utilisateur();
@@ -86,9 +77,6 @@ class DataAnalysisService
         ];
     }
 
-    /**
-     * Évolution des inscriptions (12 derniers mois)
-     */
     public function getInscriptionsTrend()
     {
         $builder = $this->db->table('utilisateur')
@@ -108,9 +96,6 @@ class DataAnalysisService
         return ['labels' => $labels, 'values' => $values];
     }
 
-    /**
-     * Indicateurs globaux
-     */
     public function getGlobalStats()
     {
         $totalUsers = $this->db->table('utilisateur')->countAllResults();

@@ -17,10 +17,10 @@ helper('navigation');
 
 ?>
     <nav class="sidebar-nav">
-        <!-- ADMIN SECTION - Only visible for admin -->
+
         <?php if (session()->get('est_admin')): ?>
             <div class="sidebar-section-label" style="margin-top: 20px; padding: 0 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.5px;">👨‍💼 Administration</div>
-            
+
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Tableau de bord</div>
                 <a href="<?= base_url('admin/dashboard') ?>"
@@ -64,13 +64,11 @@ helper('navigation');
                 </a>
             </div>
 
-
         <?php endif; ?>
 
-        <!-- USER SECTION - Only visible for regular users -->
         <?php if (!session()->get('est_admin')): ?>
         <div class="sidebar-section-label" style="margin-top: 20px; padding: 0 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.5px;">👤 Mon Espace</div>
-        
+
         <div class="sidebar-section">
             <div class="sidebar-section-title">Vue d'ensemble</div>
             <a href="<?= base_url('dashboard') ?>"

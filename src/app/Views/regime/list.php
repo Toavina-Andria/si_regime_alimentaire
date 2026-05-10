@@ -9,7 +9,7 @@
 <body>
     <div class="dashboard-layout">
         <?= $this->include('bar/sidebar') ?>
-        <!-- Main Content direct (pas de sidebar partielle) -->
+
         <div class="main-content">
             <header class="topbar">
                 <div class="topbar-left">
@@ -43,7 +43,7 @@
                             </div>
                             <?php if ($regime['prix_depart']): ?>
                                 <div class="suggestion-prices">
-                                    À partir de <strong><?= number_format($regime['prix_depart'], 2) ?>€</strong> 
+                                    À partir de <strong><?= number_format($regime['prix_depart'], 2) ?>€</strong>
                                     (<?= $regime['duree_min'] ?> jours)
                                 </div>
                             <?php endif; ?>

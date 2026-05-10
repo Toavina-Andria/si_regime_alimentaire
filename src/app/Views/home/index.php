@@ -330,7 +330,6 @@
 </head>
 <body>
 
-<!-- Nav -->
 <nav class="hp-nav">
   <a href="<?= base_url('/') ?>" class="hp-nav-logo">
     <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
@@ -356,7 +355,6 @@
 
 <div class="hp-body">
 
-  <!-- Hero -->
   <section class="hp-hero">
     <div class="hp-hero-content">
       <h1>Transformez votre alimentation,<br>transformez votre vie</h1>
@@ -372,7 +370,6 @@
     </div>
   </section>
 
-  <!-- Stats -->
   <section class="hp-section">
     <div class="hp-stats">
       <div class="hp-stat-card">
@@ -390,7 +387,6 @@
     </div>
   </section>
 
-  <!-- Régimes -->
   <section class="hp-section" id="regimes">
     <h2 class="hp-section-title">Nos régimes alimentaires</h2>
     <p class="hp-section-sub">Des programmes adaptés à chaque objectif, avec une composition équilibrée</p>
@@ -440,7 +436,6 @@
     </div>
   </section>
 
-  <!-- Activités -->
   <section class="hp-section" id="activites" style="background:var(--color-bg);border-radius:24px;margin:0 32px 64px;">
     <h2 class="hp-section-title">Activités sportives</h2>
     <p class="hp-section-sub">Des exercices adaptés à votre régime pour des résultats optimaux</p>
@@ -470,7 +465,6 @@
     </div>
   </section>
 
-  <!-- Témoignages -->
   <section class="hp-section">
     <h2 class="hp-section-title">Ils nous font confiance</h2>
     <p class="hp-section-sub">Découvrez les résultats de nos utilisateurs</p>
@@ -490,7 +484,6 @@
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="hp-cta">
     <h2>Prêt à transformer votre alimentation ?</h2>
     <p>Rejoignez NutriPlan et commencez votre programme personnalisé dès aujourd'hui.</p>

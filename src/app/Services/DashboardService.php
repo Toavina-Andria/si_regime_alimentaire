@@ -21,9 +21,6 @@ class DashboardService
         $this->db = \Config\Database::connect();
     }
 
-    // ============================================================
-    // Méthodes pour l'utilisateur connecté (Mon espace / UserDashboard)
-    // ============================================================
     public function getUserById(int $userId): ?array
     {
         $userModel = new Utilisateur();
@@ -147,9 +144,6 @@ class DashboardService
         return $result;
     }
 
-    // ============================================================
-    // Méthodes pour les statistiques globales (DashboardController admin)
-    // ============================================================
     public function getTotalUsers(): int
     {
         return (new Utilisateur())->countAllResults();
@@ -250,9 +244,6 @@ class DashboardService
         return $regimes;
     }
 
-    // ============================================================
-    // Méthodes spécifiques pour DashboardController (admin)
-    // ============================================================
     public function getCodesThisMonth(): int
     {
         $codeModel = new CodeBonus();
@@ -266,24 +257,23 @@ class DashboardService
 
     public function getGoldRevenue(): float
     {
-        return $this->getUserGoldRevenue(); // alias
+        return $this->getUserGoldRevenue();
     }
 
     public function getMonthlyInscriptions(): array
     {
-        return $this->getInscriptionsParMois(); // alias
+        return $this->getInscriptionsParMois();
     }
 
     public function getIMCDistribution(): array
     {
-        return $this->getRepartitionIMC(); // alias
+        return $this->getRepartitionIMC();
     }
 
     public function getRecentActivity(): array
     {
         $activity = [];
 
-        // Dernières transactions de codes
         $codes = $this->db->table('transaction_portefeuille tp')
             ->select("CONCAT('Code #', cb.code, ' utilisé') as text, tp.created_at")
             ->join('code_bonus cb', 'cb.id = tp.code_bonus_id')
@@ -299,7 +289,6 @@ class DashboardService
             ];
         }
 
-        // Derniers régimes créés
         $regimes = $this->db->table('regime')
             ->select("CONCAT('Nouveau régime \"', nom, '\" créé') as text, created_at")
             ->orderBy('created_at', 'DESC')
@@ -314,7 +303,6 @@ class DashboardService
             ];
         }
 
-        // Derniers utilisateurs inscrits
         $users = $this->db->table('utilisateur')
             ->select("CONCAT('Nouvel inscrit : ', prenom, ' ', nom) as text, created_at")
             ->orderBy('created_at', 'DESC')
@@ -329,7 +317,6 @@ class DashboardService
             ];
         }
 
-        // Trier par date décroissante
         usort($activity, function($a, $b) {
             return strtotime($b['time']) - strtotime($a['time']);
         });
@@ -349,9 +336,6 @@ class DashboardService
         return 'il y a ' . floor($diff / 86400) . ' j';
     }
 
-    // ============================================================
-    // Méthodes CRUD pour l'admin (DashboardController)
-    // ============================================================
     public function getAllRegimes(): array
     {
         return (new Regime())->orderBy('created_at', 'DESC')->findAll();
@@ -454,9 +438,6 @@ class DashboardService
         ];
     }
 
-    // ============================================================
-    // Utilitaires privés
-    // ============================================================
     private function getStreakDays(int $userId): int
     {
         $actif = (new SouscriptionRegime())

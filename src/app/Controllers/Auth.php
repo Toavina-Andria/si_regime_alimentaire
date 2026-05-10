@@ -8,37 +8,31 @@ use App\Services\UtilisateurService;
 
 class Auth extends BaseController
 {
-    // Affiche le formulaire d'inscription
+
     public function index()
     {
         return view('authentification/login');
     }
 
-    // Traite l'inscription (1ère étape)
     public function register()
     {
         log_message('info', 'Début du processus d\'inscription.');
-        // create user
-
-
 
         if (!$this->validate(Utilisateur::$validationRulesInscription)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-
         $data = [
             'nom' => $this->request->getPost('nom'),
             'prenom' => $this->request->getPost('prenom'),
             'email' => $this->request->getPost('email'),
-            'mot_de_passe' => $this->request->getPost('mot_de_passe'), // en clair
+            'mot_de_passe' => $this->request->getPost('mot_de_passe'),
             'created_at' => date('Y-m-d H:i:s')
         ];
-        // register user and get ID
+
         try {
             $userId = AuthService::register($data);
 
-            // apend user ID to data for session
             $data['id'] = $userId;
             $this->setSession($data);
             return redirect()->to('/auth/profil');
@@ -58,13 +52,11 @@ class Auth extends BaseController
         ]);
     }
 
-    // Affiche la page de connexion
     public function login()
     {
         return view('authentification/connexion');
     }
 
-    // Traite la connexion
     public function doLogin()
     {
         $email = $this->request->getPost('email');
@@ -83,7 +75,6 @@ class Auth extends BaseController
         return redirect()->back()->withInput()->with('error', 'Email ou mot de passe incorrect.');
     }
 
-    // Affiche le formulaire de complétion du profil
     public function profil()
     {
 
@@ -94,7 +85,6 @@ class Auth extends BaseController
         return view('authentification/formulaire');
     }
 
-    // Traite la mise à jour du profil (2ème étape)
     public function updateProfil()
     {
         if ($redirect = AuthService::requireLogin()) {
@@ -102,8 +92,6 @@ class Auth extends BaseController
         }
 
         $userId = session()->get('user_id');
-
-
 
         if (!$this->validate(Utilisateur::$validationRulesProfil)) {
             $redirect = redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -129,7 +117,6 @@ class Auth extends BaseController
         return $redirect;
     }
 
-    // Connexion rapide par clic sur carte utilisateur
     public function quickLogin($id)
     {
         $userModel = new Utilisateur();
@@ -145,7 +132,6 @@ class Auth extends BaseController
         return redirect()->to('/dashboard');
     }
 
-    // Déconnexion
     public function logout()
     {
         return AuthService::logout();

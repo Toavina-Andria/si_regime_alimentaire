@@ -8,7 +8,7 @@ class CreateInitialTables extends Migration
 {
     public function up()
     {
-        // Table : abonnement
+
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -49,7 +49,6 @@ class CreateInitialTables extends Migration
         $this->forge->addUniqueKey('statut', 'uq_abonnement_statut');
         $this->forge->createTable('abonnement');
 
-        // Table : utilisateur
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -117,7 +116,6 @@ class CreateInitialTables extends Migration
         $this->forge->addUniqueKey('email', 'uq_utilisateur_email');
         $this->forge->createTable('utilisateur');
 
-        // Table : utilisateur_abonnement
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -159,7 +157,6 @@ class CreateInitialTables extends Migration
         $this->forge->addForeignKey('abonnement_id', 'abonnement', 'id', 'RESTRICT', 'CASCADE', 'fk_ua_abonnement');
         $this->forge->createTable('utilisateur_abonnement');
 
-        // Table : portefeuille
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -187,7 +184,6 @@ class CreateInitialTables extends Migration
         $this->forge->addForeignKey('utilisateur_id', 'utilisateur', 'id', 'CASCADE', 'CASCADE', 'fk_portefeuille_utilisateur');
         $this->forge->createTable('portefeuille');
 
-        // Table : code_bonus
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -220,7 +216,6 @@ class CreateInitialTables extends Migration
         $this->forge->addUniqueKey('code', 'uq_code_bonus');
         $this->forge->createTable('code_bonus');
 
-        // Table : transaction_portefeuille
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -266,7 +261,6 @@ class CreateInitialTables extends Migration
         $this->forge->addForeignKey('code_bonus_id', 'code_bonus', 'id', 'SET NULL', 'CASCADE', 'fk_tp_code_bonus');
         $this->forge->createTable('transaction_portefeuille');
 
-        // Table : regime
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -321,7 +315,6 @@ class CreateInitialTables extends Migration
         $this->forge->addKey('id', true);
         $this->forge->createTable('regime');
 
-        // Table : regime_prix
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -351,7 +344,6 @@ class CreateInitialTables extends Migration
         $this->forge->addForeignKey('regime_id', 'regime', 'id', 'CASCADE', 'CASCADE', 'fk_rp_regime');
         $this->forge->createTable('regime_prix');
 
-        // Table : activite_sportive
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -391,7 +383,6 @@ class CreateInitialTables extends Migration
         $this->forge->addKey('id', true);
         $this->forge->createTable('activite_sportive');
 
-        // Table : regime_activite
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -424,7 +415,6 @@ class CreateInitialTables extends Migration
         $this->forge->addForeignKey('activite_id', 'activite_sportive', 'id', 'CASCADE', 'CASCADE', 'fk_ra_activite');
         $this->forge->createTable('regime_activite');
 
-        // Table : souscription_regime
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -474,7 +464,6 @@ class CreateInitialTables extends Migration
         $this->forge->addForeignKey('regime_prix_id', 'regime_prix', 'id', 'RESTRICT', 'CASCADE', 'fk_sr_regime_prix');
         $this->forge->createTable('souscription_regime');
 
-        // Table : historique_poids
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',

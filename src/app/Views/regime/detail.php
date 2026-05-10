@@ -20,10 +20,10 @@
         </header>
 
         <main class="page-content">
-            <!-- Informations générales -->
+
             <div class="suggestion-card" style="max-width: 800px; margin-bottom: 20px;">
                 <p><strong>Description :</strong> <?= nl2br(esc($regime['description'] ?? 'Aucune description')) ?></p>
-                <p><strong>Variation de poids :</strong> 
+                <p><strong>Variation de poids :</strong>
                     <?php $var = $regime['variation_poids_kg']; ?>
                     <?= $var > 0 ? '+' : '' ?><?= $var ?> kg
                 </p>
@@ -35,7 +35,6 @@
                 </div>
             </div>
 
-            <!-- Prix disponibles selon durée -->
             <?php if (!empty($prix)): ?>
             <div class="chart-card" style="margin-bottom: 20px;">
                 <div class="chart-card-header">
@@ -64,7 +63,6 @@
             </div>
             <?php endif; ?>
 
-            <!-- Activités sportives associées -->
             <?php if (!empty($activites)): ?>
             <div class="chart-card">
                 <div class="chart-card-header">

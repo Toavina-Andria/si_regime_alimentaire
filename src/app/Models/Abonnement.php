@@ -22,7 +22,6 @@ class Abonnement extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = '';
 
-    // Relationships
     public function utilisateurs()
     {
         return $this->hasMany(UtilisateurAbonnement::class, 'abonnement_id', 'id');

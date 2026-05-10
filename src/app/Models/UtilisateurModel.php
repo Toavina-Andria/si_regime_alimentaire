@@ -22,7 +22,6 @@ class UtilisateurModel extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = null;
 
-    // Règles de validation pour l'inscription
     protected $validationRules = [
         'nom'          => 'required|min_length[2]|max_length[100]',
         'prenom'       => 'required|min_length[2]|max_length[100]',
@@ -36,7 +35,6 @@ class UtilisateurModel extends Model
         ]
     ];
 
-    // Hash du mot de passe avant insertion
     protected function beforeInsert(array $data)
     {
         if (isset($data['data']['mot_de_passe'])) {
@@ -45,7 +43,6 @@ class UtilisateurModel extends Model
         return $data;
     }
 
-    // Hash du mot de passe avant mise à jour si modifié
     protected function beforeUpdate(array $data)
     {
         if (isset($data['data']['mot_de_passe'])) {

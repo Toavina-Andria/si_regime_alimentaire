@@ -9,7 +9,7 @@ class InitialDataSeeder extends Seeder
     public function run()
     {
         $date_format = 'Y-m-d H:i:s';
-        // Insert 15 codebonus
+
         $data = [
             [
                 'code' => 'STARTFIT15',
@@ -73,7 +73,7 @@ class InitialDataSeeder extends Seeder
             ],
         ];
         $this->db->table('code_bonus')->insertBatch($data);
-        // Insert regime
+
         $data = [
             [
                 'nom' => 'Good Chiken',
@@ -113,7 +113,7 @@ class InitialDataSeeder extends Seeder
             ],
         ];
         $this->db->table('regime')->insertBatch($data);
-        // insert regime_prix
+
         $data = [
             [
                 'regime_id' => 1,
@@ -181,7 +181,7 @@ class InitialDataSeeder extends Seeder
         ];
 
         $this->db->table('regime_prix')->insertBatch($data);
-        // Insert abonnements
+
         $data = [
             [
                 'nom' => 'Gratuit',
@@ -200,7 +200,6 @@ class InitialDataSeeder extends Seeder
         ];
         $this->db->table('abonnement')->insertBatch($data);
 
-        // Insert activites sportives
         $activites = [
             [
                 'nom' => 'Marche rapide',

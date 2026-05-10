@@ -15,13 +15,9 @@ class SuggestionService
         $this->db = \Config\Database::connect();
     }
 
-    /**
-     * Retourne une liste de régimes suggérés pour l'IMC idéal.
-     * Chaque élément contient : ['regime' => [], 'prixOptions' => [], 'activites' => []]
-     */
     public function getSuggestions(string $objectif, ?float $imc = null): array
     {
-        // Pour l'IMC idéal, on cherche les régimes équilibrés (variation proche de zéro)
+
         $regimes = (new Regime())
             ->where('variation_poids_kg >=', -0.5)
             ->where('variation_poids_kg <=', 0.5)

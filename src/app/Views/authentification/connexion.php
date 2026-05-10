@@ -73,7 +73,6 @@
         <button class="auth-tab" data-tab="form">Connexion par email</button>
       </div>
 
-      <!-- Quick login cards -->
       <div id="tab-quick">
         <div class="user-card-grid">
           <?php
@@ -93,7 +92,6 @@
         </div>
       </div>
 
-      <!-- Form login -->
       <div id="tab-form" style="display: none;">
         <form action="<?= base_url('auth/doLogin') ?>" method="POST">
           <?= csrf_field() ?>

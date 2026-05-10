@@ -4,7 +4,7 @@ namespace Config;
 
 class Hostnames
 {
-    // List of known two-part TLDs for subdomain extraction
+
     public const TWO_PART_TLDS = [
         'co.uk', 'org.uk', 'gov.uk', 'ac.uk', 'sch.uk', 'ltd.uk', 'plc.uk',
         'com.au', 'net.au', 'org.au', 'edu.au', 'gov.au', 'asn.au', 'id.au',

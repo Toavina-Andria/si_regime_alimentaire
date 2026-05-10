@@ -102,7 +102,6 @@
   </div>
 </div>
 
-<!-- Modal Générer un code -->
 <div class="modal-overlay" id="modalCode">
   <div class="modal">
     <div class="modal-header">

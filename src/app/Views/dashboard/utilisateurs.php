@@ -117,7 +117,6 @@
   </div>
 </div>
 
-<!-- Modal Modifier utilisateur -->
 <div class="modal-overlay" id="modalUser">
   <div class="modal">
     <div class="modal-header">

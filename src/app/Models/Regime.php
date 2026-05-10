@@ -32,7 +32,7 @@ class Regime extends Model
 
     protected $validationMessages = [];
     protected $skipValidation = false;
-    // Relationships
+
     public function prix()
     {
         return $this->hasMany(RegimePrix::class, 'regime_id', 'id');

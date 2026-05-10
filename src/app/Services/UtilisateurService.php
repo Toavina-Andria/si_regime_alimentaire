@@ -7,24 +7,19 @@ use App\Models\Utilisateur;
 
 class UtilisateurService
 {
-    //constructeur
-
 
     public static function redeemCode(string $code_bonus, int $id_user)
     {
         try {
-            // 1. Validate Code
+
             $code = self::validateCode($code_bonus);
 
-            // 2. Validate Portefeuille
             $porteFeuille = self::validatePortefeuille($id_user);
-            // 3. Validate Transaction
+
             self::validateTransaction($code['id'], $porteFeuille['id']);
 
-            // add transaction to transaction historique
             self::saveTransactionHistorique($id_user, $code['valeur_points'], $code['id'], 'credit', "Rachat du code bonus : " . $code_bonus);
 
-            // update porte feuille solde
             self::addPointsToPortefeuille($id_user, $code['valeur_points']);
 
         } catch (\Throwable $th) {
@@ -61,7 +56,6 @@ class UtilisateurService
         $portefeuilleModel = new Portefeuille();
         $porteFeuille = $portefeuilleModel->where('utilisateur_id', $id_user)->first();
 
-        // If not found, attempt to generate and refetch
         if (!$porteFeuille) {
             echo "<br>Portefeuille non trouvé pour l'utilisateur ID: $id_user. Tentative de création...";
             self::generetePortefeuilleForUser($id_user);
@@ -98,14 +92,13 @@ class UtilisateurService
             throw new \Exception("Erreur de création de portefeuille: " . $errors);
         }
     }
-    // get portefeuille by user id
+
     public static function getPortefeuilleByUserId($id_user)
     {
         $portefeuilleModel = new Portefeuille();
         return $portefeuilleModel->where('utilisateur_id', $id_user)->first();
     }
 
-    // pay with points
     public static function payWithPoints(int $id_user, $points)
     {
         $porteFeuille = self::validatePortefeuille($id_user);
@@ -119,7 +112,6 @@ class UtilisateurService
 
     }
 
-    // add points to portefeuille
     public static function addPointsToPortefeuille(int $id_user, $points)
     {
         $porteFeuille = self::validatePortefeuille($id_user);
@@ -129,7 +121,6 @@ class UtilisateurService
         ]);
     }
 
-    // save transaction historique
     public static function saveTransactionHistorique(int $id_user, $points, ?int $code_bonus_id, string $type, string $description)
     {
         $porteFeuille = self::validatePortefeuille($id_user);

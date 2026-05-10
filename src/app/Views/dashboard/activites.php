@@ -114,7 +114,6 @@
   </div>
 </div>
 
-<!-- Modal Nouvelle Activité -->
 <div class="modal-overlay" id="modalActivite">
   <div class="modal">
     <div class="modal-header">

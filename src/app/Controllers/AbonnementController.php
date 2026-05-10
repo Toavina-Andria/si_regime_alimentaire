@@ -50,16 +50,12 @@ class AbonnementController extends BaseController
         if ($redirect = self::checkLoggedIn()) return $redirect;
         if ($redirect = self::redirectAdmin()) return $redirect;
 
-
-        // Get POST data
         $abonnementId = $this->request->getPost('abonnement_id');
 
-        // Validate input
         if (!$abonnementId || !is_numeric($abonnementId)) {
             return redirect()->back()->with('error', 'ID abonnement invalide.');
         }
 
-        // Call service to process subscription
         $result = AbonnementServices::buySubscription($userId, $abonnementId);
 
         if ($result['success']) {
@@ -68,7 +64,6 @@ class AbonnementController extends BaseController
             return redirect()->back()->with('error', $result['message']);
         }
     }
-
 
     public function liste()
     {

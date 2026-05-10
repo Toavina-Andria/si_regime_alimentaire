@@ -36,12 +36,12 @@
             </div>
         </header>
         <main class="page-content">
-            <!-- Bienvenue personnalisée -->
+
             <div class="user-greeting">
                 <h2>Bonjour, <?= esc($user['prenom']) ?> 🎉</h2>
                 <p><?= esc($user['email']) ?> · Membre depuis <?= date('F Y', strtotime($user['created_at'])) ?></p>
                 <div class="user-stats">
-                    <div class="stat-badge">🎯 Objectif : 
+                    <div class="stat-badge">🎯 Objectif :
                         <?php if ($objective === 'reduire_poids'): ?>Perdre du poids
                         <?php elseif ($objective === 'augmenter_poids'): ?>Prendre du poids
                         <?php elseif ($objective === 'imc_ideal'): ?>IMC idéal<?php else: ?>Non défini<?php endif; ?>
@@ -52,7 +52,6 @@
                 </div>
             </div>
 
-            <!-- Suggestions régimes -->
             <div class="suggestions-section">
                 <div class="section-header"><h2 class="section-title">🍽️ Régimes suggérés pour vous</h2></div>
                 <?php if (empty($suggestions)): ?>
@@ -96,7 +95,6 @@
                 <?php endif; ?>
             </div>
 
-            <!-- Profil et portefeuille -->
             <div class="bottom-grid">
                 <div class="table-card">
                     <div class="table-card-header"><div class="table-card-title">👤 Mon profil</div></div>

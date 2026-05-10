@@ -15,7 +15,7 @@ class DataAnalysisController extends BaseController
 
     public function index()
     {
-        // Vérifier que l'utilisateur est connecté
+
         if (!session()->get('logged_in')) {
             return redirect()->to('/connexion');
         }

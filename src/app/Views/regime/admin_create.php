@@ -5,7 +5,7 @@
     <title>Nouveau régime – NutriPlan</title>
     <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
     <style>
-        /* Styles spécifiques au formulaire CRUD */
+
         .form-card {
             background: white;
             border-radius: 32px;

@@ -20,13 +20,13 @@
         </header>
 
         <main class="page-content">
-            <!-- Partie utilisateur (si $user existe) -->
+
             <?php if (isset($user) && $user): ?>
             <div class="user-greeting">
                 <h2>Bonjour, <?= esc($user['prenom']) ?> 🎉</h2>
                 <p><?= esc($user['email']) ?> · Membre depuis <?= date('F Y', strtotime($user['created_at'])) ?></p>
                 <div class="user-stats">
-                    <div class="stat-badge">🎯 Objectif : 
+                    <div class="stat-badge">🎯 Objectif :
                         <?php if ($objective === 'reduire_poids'): ?>Perdre du poids
                         <?php elseif ($objective === 'augmenter_poids'): ?>Prendre du poids
                         <?php elseif ($objective === 'imc_ideal'): ?>Atteindre IMC idéal
@@ -39,7 +39,6 @@
                 </div>
             </div>
 
-            <!-- Suggestions de régimes -->
             <div class="suggestions-section">
                 <h2>🍽️ Régimes suggérés pour vous</h2>
                 <?php if (empty($suggestions)): ?>
@@ -65,7 +64,6 @@
                 <?php endif; ?>
             </div>
 
-            <!-- Profil et portefeuille -->
             <div class="bottom-grid">
                 <div class="table-card"><h3>👤 Mon profil</h3>
                     <table class="data-table">
@@ -89,7 +87,6 @@
             </div>
             <?php endif; ?>
 
-            <!-- Partie admin (si $user n'existe pas, on affiche les KPI globaux) -->
             <?php if (!isset($user) && isset($kpi_users)): ?>
             <div class="kpi-grid">
                 <div class="kpi-card"><div class="kpi-value"><?= $kpi_users ?></div><div class="kpi-label">Utilisateurs</div></div>

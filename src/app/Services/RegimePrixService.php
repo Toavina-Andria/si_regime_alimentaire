@@ -6,12 +6,7 @@ use App\Models\RegimePrix;
 
 class RegimePrixService
 {
-    /**
-     * Retourne toutes les options de prix pour un régime.
-     *
-     * @param int $regimeId
-     * @return array
-     */
+
     public static function getPrixByRegime(int $regimeId): array
     {
         $prixModel = new RegimePrix();
@@ -30,12 +25,6 @@ class RegimePrixService
         return $result;
     }
 
-    /**
-     * Retourne le prix minimum (le moins cher) pour un régime.
-     *
-     * @param int $regimeId
-     * @return array|null
-     */
     public static function getMinPrix(int $regimeId): ?array
     {
         $prixModel = new RegimePrix();

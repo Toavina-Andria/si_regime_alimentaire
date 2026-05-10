@@ -32,7 +32,6 @@ class ActiviteSportive extends Model
         return $this->orderBy('created_at', 'DESC')->findAll($limit);
     }
 
-    // Relationships
     public function regimes()
     {
         return $this->hasMany(RegimeActivite::class, 'activite_id', 'id');

@@ -22,7 +22,6 @@
             <a href="<?= base_url('dashboard') ?>" class="btn-outline">← Retour</a>
         </header>
 
-        <!-- KPI globaux -->
         <div class="stats-cards">
             <div class="stat-card"><div class="stat-number"><?= $global_stats['total_users'] ?></div><div>Utilisateurs</div></div>
             <div class="stat-card"><div class="stat-number"><?= $global_stats['total_regimes'] ?></div><div>Régimes</div></div>
@@ -31,22 +30,22 @@
         </div>
 
         <div class="analysis-grid">
-            <!-- Objectifs -->
+
             <div class="chart-card">
                 <div class="chart-card-title">🎯 Objectifs des utilisateurs</div>
                 <canvas id="objectifChart" data-labels='<?= json_encode($objectif_dist['labels']) ?>' data-values='<?= json_encode($objectif_dist['values']) ?>'></canvas>
             </div>
-            <!-- Top régimes -->
+
             <div class="chart-card">
                 <div class="chart-card-title">🏆 Régimes les plus souscrits</div>
                 <canvas id="topRegimesChart" data-labels='<?= json_encode($top_regimes['labels']) ?>' data-values='<?= json_encode($top_regimes['values']) ?>'></canvas>
             </div>
-            <!-- Répartition IMC -->
+
             <div class="chart-card">
                 <div class="chart-card-title">🩺 Répartition des IMC</div>
                 <canvas id="imcChart" data-labels='<?= json_encode($imc_dist['labels']) ?>' data-values='<?= json_encode($imc_dist['values']) ?>' data-colors='<?= json_encode($imc_dist['colors']) ?>'></canvas>
             </div>
-            <!-- Évolution des inscriptions -->
+
             <div class="chart-card">
                 <div class="chart-card-title">📈 Inscriptions (12 mois)</div>
                 <canvas id="inscriptionsChart" data-labels='<?= json_encode($inscriptions['labels']) ?>' data-values='<?= json_encode($inscriptions['values']) ?>'></canvas>

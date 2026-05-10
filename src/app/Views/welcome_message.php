@@ -7,8 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="/favicon.ico">
 
-    <!-- STYLES -->
-
     <style {csp-style-nonce}>
         * {
             transition: background-color 300ms ease, color 300ms ease;
@@ -200,7 +198,6 @@
 </head>
 <body>
 
-<!-- HEADER: MENU + HEROE SECTION -->
 <header>
 
     <div class="menu">
@@ -232,8 +229,6 @@
     </div>
 
 </header>
-
-<!-- CONTENT -->
 
 <section>
 
@@ -292,8 +287,6 @@
 
 </div>
 
-<!-- FOOTER: DEBUG INFO + COPYRIGHTS -->
-
 <footer>
     <div class="environment">
 
@@ -312,8 +305,6 @@
 
 </footer>
 
-<!-- SCRIPTS -->
-
 <script {csp-script-nonce}>
     document.getElementById("menuToggle").addEventListener('click', toggleMenu);
     function toggleMenu() {
@@ -324,8 +315,6 @@
         }
     }
 </script>
-
-<!-- -->
 
 </body>
 </html>

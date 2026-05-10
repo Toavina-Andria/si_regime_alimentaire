@@ -20,7 +20,7 @@
         </header>
 
         <main class="page-content">
-            <!-- VUE ADMIN : KPIs globaux -->
+
             <?php if (isset($total_users)): ?>
             <div class="kpi-grid">
                 <div class="kpi-card">
@@ -92,7 +92,6 @@
             <?php endif; ?>
             <?php endif; ?>
 
-            <!-- VUE UTILISATEUR : stats personnelles -->
             <?php if (isset($imc)): ?>
             <div class="page-header">
                 <p class="page-subtitle">Suivez votre progression</p>
