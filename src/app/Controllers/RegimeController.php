@@ -152,6 +152,27 @@ class RegimeController extends BaseController
         }
     }
 
+    // Souscrire à un régime
+    public function souscrire()
+    {
+        $userId = session()->get('user_id');
+        if (!$userId) {
+            return redirect()->to('/connexion')->with('error', 'Veuillez vous connecter.');
+        }
+
+        $regimePrixId = $this->request->getPost('regime_prix_id');
+        if (!$regimePrixId || !is_numeric($regimePrixId)) {
+            return redirect()->back()->with('error', 'ID de tarif invalide.');
+        }
+
+        try {
+            $result = RegimeService::souscrireRegime($userId, $regimePrixId);
+            return redirect()->to('/dashboard')->with('success', $result['message']);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+
     // Suppression
     public function delete($id)
     {
