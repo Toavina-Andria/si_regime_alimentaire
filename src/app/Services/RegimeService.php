@@ -12,7 +12,7 @@ use App\Services\DebugLogger;
 
 class RegimeService
 {
-    private static $dateFormat = 'Y-m-d H:i:s';
+    private static $dateFormat = 'Y-m-d';
 
     // Get regime by ID
     public static function getRegimeById($regimeId)
@@ -137,7 +137,7 @@ class RegimeService
             $regimePrixModel = new RegimePrix();
             $regimePrix = $regimePrixModel->find($regimePrixId);
 
-            $prixPayable = $regimePrix['prix'];
+            $prixPayable = $regimePrix['prix_base'];
             $tauxRemise = 0;
             // check if user has abonnement actif
             if ($abonne = self::isAbonne($userId)) {
