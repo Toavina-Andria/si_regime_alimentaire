@@ -9,21 +9,19 @@ $routes->get('/', 'Home::index');
 $routes->get('register', 'Auth::index');
 
 // Pages publiques / authentification
-$routes->get('/', 'Auth::index');                      // inscription
+$routes->get('/', 'Auth::index');
 $routes->post('auth/register', 'Auth::register');
 $routes->get('auth/profil', 'Auth::profil');
 $routes->post('auth/updateProfil', 'Auth::updateProfil');
 
-// Connexion – double accès pour compatibilité
-$routes->get('connexion', 'Auth::login');              // URL simple
-$routes->get('auth/connexion', 'Auth::login');         // alias avec auth/
+// Connexion
+$routes->get('connexion', 'Auth::login');
+$routes->get('auth/connexion', 'Auth::login');
 $routes->post('auth/doLogin', 'Auth::doLogin');
 
 $routes->get('logout', 'Auth::logout');
 $routes->get('quick-login/(:num)', 'Auth::quickLogin/$1');
 
-// Routes pour les régimes alimentaires
-$routes->get('regimes', 'Home::index');
 // Dashboard utilisateur (front office)
 $routes->get('dashboard', 'UserDashboard::index');
 
@@ -31,15 +29,7 @@ $routes->get('dashboard', 'UserDashboard::index');
 $routes->get('regimes', 'RegimeController::index');
 $routes->get('regime/(:num)', 'RegimeController::show/$1');
 
-// Route pour traiter l'envoi du login et rediriger
-$routes->get('auth/profil', 'Auth::profil');
-$routes->post('auth/updateProfil', 'Auth::updateProfil');
-$routes->get('connexion', 'Auth::loginForm');
-$routes->post('auth/doLogin', 'Auth::doLogin');
-$routes->get('logout', 'Auth::logout');
-
-// Routes Admin / Dashboard
-// Back Office (admin)
+// Routes Admin / Dashboard (Back Office)
 $routes->group('admin', static function ($routes) {
     $routes->get('dashboard', 'DashboardController::index');
     $routes->get('stats', 'DashboardController::stats');
@@ -54,13 +44,13 @@ $routes->group('admin', static function ($routes) {
     $routes->get('parametres', 'DashboardController::parametres');
 });
 
-// Route pour l'export PDF du bilan personnel
+// Export PDF
 $routes->get('export/bilan', 'ExportController::bilan');
 
-// Routes pour les statistiques utilisateur
+// Statistiques utilisateur
 $routes->get('stats', 'StatsController::index');
 
-// Gestion des régimes (CRUD) – accessible aux utilisateurs connectés
+// Gestion des régimes (CRUD)
 $routes->get('regime/admin', 'RegimeController::index');
 $routes->get('regime/admin/create', 'RegimeController::create');
 $routes->post('regime/admin/store', 'RegimeController::store');
@@ -68,9 +58,7 @@ $routes->get('regime/admin/edit/(:num)', 'RegimeController::edit/$1');
 $routes->post('regime/admin/update/(:num)', 'RegimeController::update/$1');
 $routes->get('regime/admin/delete/(:num)', 'RegimeController::delete/$1');
 
-// (Conservez vos autres routes)
 $routes->get('services', 'ServicesController::index');
-
 $routes->get('analysis', 'DataAnalysisController::index');
 
 // Routes pour les abonnements
