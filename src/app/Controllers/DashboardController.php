@@ -2,11 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Models\Abonnement;
 use App\Models\ActiviteSportive;
 use App\Models\CodeBonus;
 use App\Models\Regime;
 use App\Models\Utilisateur;
-
 use App\Services\DashboardService;
 
 class DashboardController extends BaseController
@@ -84,6 +84,92 @@ class DashboardController extends BaseController
         $data['utilisateurs'] = $utilisateurModel->orderBy('created_at', 'DESC')->findAll();
 
         return view('dashboard/utilisateurs', $data);
+    }
+
+    public function stats()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/');
+        }
+
+        $data['active'] = 'admin-stats';
+        $data['chart_inscriptions'] = $this->dashboardService->getMonthlyInscriptions();
+        $data['chart_imc'] = $this->dashboardService->getIMCDistribution();
+        $data['chart_objectifs'] = (new \App\Services\DataAnalysisService())->getObjectifDistribution();
+        $data['chart_top_regimes'] = (new \App\Services\DataAnalysisService())->getTopRegimes();
+        $data['global_stats'] = (new \App\Services\DataAnalysisService())->getGlobalStats();
+        $data['inscriptions_trend'] = (new \App\Services\DataAnalysisService())->getInscriptionsTrend();
+
+        return view('dashboard/stats', $data);
+    }
+
+    public function abonnements()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/');
+        }
+
+        $abonnementModel = new Abonnement();
+        $data['abonnements'] = $abonnementModel->orderBy('created_at', 'DESC')->findAll();
+
+        return view('dashboard/abonnements', $data);
+    }
+
+    public function storeAbonnement()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/');
+        }
+
+        $abonnementModel = new Abonnement();
+        $abonnementModel->insert([
+            'nom'            => $this->request->getPost('nom'),
+            'statut'         => $this->request->getPost('statut'),
+            'taux_reduction' => $this->request->getPost('taux_reduction'),
+            'prix'           => $this->request->getPost('prix'),
+            'description'    => $this->request->getPost('description'),
+        ]);
+
+        return redirect()->to('/admin/abonnements')->with('success', 'Abonnement créé avec succès.');
+    }
+
+    public function updateAbonnement($id)
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/');
+        }
+
+        $abonnementModel = new Abonnement();
+        $abonnementModel->update($id, [
+            'nom'            => $this->request->getPost('nom'),
+            'statut'         => $this->request->getPost('statut'),
+            'taux_reduction' => $this->request->getPost('taux_reduction'),
+            'prix'           => $this->request->getPost('prix'),
+            'description'    => $this->request->getPost('description'),
+        ]);
+
+        return redirect()->to('/admin/abonnements')->with('success', 'Abonnement mis à jour.');
+    }
+
+    public function deleteAbonnement($id)
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/');
+        }
+
+        $abonnementModel = new Abonnement();
+        $abonnementModel->delete($id);
+
+        return redirect()->to('/admin/abonnements')->with('success', 'Abonnement supprimé.');
+    }
+
+    public function parametres()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/');
+        }
+
+        return view('dashboard/parametres');
     }
 
 }
