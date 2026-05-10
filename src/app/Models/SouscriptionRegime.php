@@ -22,6 +22,25 @@ class SouscriptionRegime extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = '';
 
+    public function getActiveByUser(int $userId): ?array
+    {
+        return $this->where('utilisateur_id', $userId)
+            ->where('statut', 'actif')
+            ->where('date_debut <=', date('Y-m-d'))
+            ->where('date_fin >=', date('Y-m-d'))
+            ->first();
+    }
+
+    public function getHistoryByUser(int $userId): array
+    {
+        return $this->select('souscription_regime.*, regime.nom')
+            ->join('regime_prix', 'regime_prix.id = souscription_regime.regime_prix_id')
+            ->join('regime', 'regime.id = regime_prix.regime_id')
+            ->where('souscription_regime.utilisateur_id', $userId)
+            ->orderBy('souscription_regime.date_debut', 'DESC')
+            ->findAll();
+    }
+
     // Relationships
     public function utilisateur()
     {

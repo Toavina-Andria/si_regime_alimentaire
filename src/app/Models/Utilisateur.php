@@ -26,6 +26,16 @@ class Utilisateur extends Model
     protected $createdField = 'created_at';
     protected $updatedField = '';  // pas de champ updated_at dans ta table
 
+    public function getByObjectif(string $objectif): array
+    {
+        return $this->where('objectif', $objectif)->orderBy('created_at', 'DESC')->findAll();
+    }
+
+    public function getRecent(int $limit = 10): array
+    {
+        return $this->orderBy('created_at', 'DESC')->findAll($limit);
+    }
+
     // Validation par défaut (pour l'insertion initiale – seulement email/mdp)
     protected $validationRules = [
         'nom' => 'required|string|max_length[100]',

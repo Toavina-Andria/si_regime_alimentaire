@@ -22,6 +22,19 @@ class CodeBonus extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = '';
 
+    public function getValid(): array
+    {
+        return $this->where('est_valide', 1)
+            ->where('expires_at >', date('Y-m-d H:i:s'))
+            ->orderBy('created_at', 'DESC')
+            ->findAll();
+    }
+
+    public function getRecent(int $limit = 10): array
+    {
+        return $this->orderBy('created_at', 'DESC')->findAll($limit);
+    }
+
     // Relationships
     public function transactions()
     {

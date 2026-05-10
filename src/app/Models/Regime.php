@@ -59,6 +59,28 @@ class Regime extends Model
         ]
     ];
     protected $skipValidation = false;
+    public function getRecent(int $limit = 5): array
+    {
+        return $this->orderBy('created_at', 'DESC')->findAll($limit);
+    }
+
+    public function getWithVariation(string $direction = 'positif'): array
+    {
+        if ($direction === 'positif') {
+            return $this->where('variation_poids_kg >', 0)->orderBy('variation_poids_kg', 'DESC')->findAll();
+        }
+        return $this->where('variation_poids_kg <', 0)->orderBy('variation_poids_kg', 'ASC')->findAll();
+    }
+
+    public function getWithMinPrice(): array
+    {
+        return $this->select('regime.*, MIN(regime_prix.prix_base) as prix_min')
+            ->join('regime_prix', 'regime_prix.regime_id = regime.id', 'left')
+            ->groupBy('regime.id')
+            ->orderBy('regime.created_at', 'DESC')
+            ->findAll();
+    }
+
     // Relationships
     public function prix()
     {

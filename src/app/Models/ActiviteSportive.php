@@ -22,6 +22,16 @@ class ActiviteSportive extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
+    public function getByIntensite(int $niveau): array
+    {
+        return $this->where('intensite', $niveau)->orderBy('nom', 'ASC')->findAll();
+    }
+
+    public function getRecent(int $limit = 10): array
+    {
+        return $this->orderBy('created_at', 'DESC')->findAll($limit);
+    }
+
     // Relationships
     public function regimes()
     {
