@@ -8,6 +8,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="<?= base_url('assets/style.css') ?>">
+  <style>
+    .auth-container { max-width: 900px; }
+    .auth-form { max-width: 100%; }
+    .user-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin: 24px 0; }
+    .user-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .user-card:hover { background: rgba(255,255,255,0.12); border-color: rgba(82,183,136,0.5); transform: translateY(-2px); }
+    .user-card-admin { background: rgba(212,168,83,0.15); border-color: rgba(212,168,83,0.3); }
+    .user-card-admin:hover { background: rgba(212,168,83,0.25); border-color: rgba(212,168,83,0.6); }
+    .user-card-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #2D6A4F, #52B788); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; color: white; margin: 0 auto 10px; }
+    .user-card-admin .user-card-avatar { background: linear-gradient(135deg, #B8860B, #D4A853); }
+    .user-card-name { font-size: 15px; font-weight: 600; color: #fff; }
+    .user-card-email { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .user-card-badge { display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(212,168,83,0.2); color: #D4A853; }
+    .auth-tabs { display: flex; gap: 4px; background: rgba(255,255,255,0.06); border-radius: 12px; padding: 4px; margin-bottom: 8px; }
+    .auth-tab { flex: 1; padding: 10px 16px; border: none; border-radius: 10px; background: transparent; color: rgba(255,255,255,0.5); font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .auth-tab.active { background: rgba(255,255,255,0.1); color: #fff; }
+    .auth-tab:hover { color: #fff; }
+  </style>
 </head>
 <body>
   <div class="auth-container">
@@ -39,30 +57,69 @@
 
     <div class="auth-form">
       <div class="auth-form-header">
-        <h2>Connexion</h2>
-        <p>Connectez-vous à votre espace NutriPlan</p>
+        <h2>Connexion rapide</h2>
+        <p>Choisissez un compte pour vous connecter</p>
       </div>
 
       <?php if(session()->getFlashdata('error')): ?>
         <div class="auth-error">✗ <?= session()->getFlashdata('error') ?></div>
       <?php endif; ?>
 
-      <form action="<?= base_url('auth/doLogin') ?>" method="POST">
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" name="email" id="email" required placeholder="email@exemple.com">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="quick">Connexion rapide</button>
+        <button class="auth-tab" data-tab="form">Connexion par email</button>
+      </div>
+
+      <!-- Quick login cards -->
+      <div id="tab-quick">
+        <div class="user-card-grid">
+          <?php
+            $userModel = new \App\Models\Utilisateur();
+            $users = $userModel->orderBy('est_admin', 'DESC')->orderBy('nom', 'ASC')->findAll();
+          ?>
+          <?php foreach ($users as $u): ?>
+          <a href="<?= base_url('quick-login/' . $u['id']) ?>" class="user-card <?= !empty($u['est_admin']) ? 'user-card-admin' : '' ?>" style="text-decoration: none;">
+            <div class="user-card-avatar"><?= strtoupper(substr($u['prenom'] ?? $u['nom'], 0, 1)) ?></div>
+            <div class="user-card-name"><?= esc($u['prenom'] ?? '') ?> <?= esc($u['nom']) ?></div>
+            <div class="user-card-email"><?= esc($u['email']) ?></div>
+            <?php if (!empty($u['est_admin'])): ?>
+              <div class="user-card-badge">👨‍💼 Admin</div>
+            <?php endif; ?>
+          </a>
+          <?php endforeach; ?>
         </div>
-        <div class="form-group">
-          <label for="pwd">Mot de passe</label>
-          <input type="password" name="mot_de_passe" id="pwd" required placeholder="Votre mot de passe">
-        </div>
-        <button type="submit" class="auth-submit">Se connecter</button>
-      </form>
+      </div>
+
+      <!-- Form login -->
+      <div id="tab-form" style="display: none;">
+        <form action="<?= base_url('auth/doLogin') ?>" method="POST">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required placeholder="email@exemple.com">
+          </div>
+          <div class="form-group">
+            <label for="pwd">Mot de passe</label>
+            <input type="password" name="mot_de_passe" id="pwd" required placeholder="Votre mot de passe">
+          </div>
+          <button type="submit" class="auth-submit">Se connecter</button>
+        </form>
+      </div>
 
       <div class="auth-footer">
         Pas encore de compte ? <a href="<?= base_url('register') ?>">Créer un compte</a>
       </div>
     </div>
   </div>
+
+  <script>
+    document.querySelectorAll('.auth-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.auth-tab').forEach(function(t) { t.classList.remove('active'); });
+        this.classList.add('active');
+        document.getElementById('tab-quick').style.display = this.dataset.tab === 'quick' ? 'block' : 'none';
+        document.getElementById('tab-form').style.display = this.dataset.tab === 'form' ? 'block' : 'none';
+      });
+    });
+  </script>
 </body>
 </html>
