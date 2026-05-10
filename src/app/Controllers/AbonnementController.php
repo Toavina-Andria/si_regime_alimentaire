@@ -46,9 +46,9 @@ class AbonnementController extends BaseController
     }
     public function souscrireRegime()
     {
-        // Check if user is logged in
         $userId = session()->get('user_id') ?? session()->get('id');
-        self::checkLoggedIn();
+        if ($redirect = self::checkLoggedIn()) return $redirect;
+        if ($redirect = self::redirectAdmin()) return $redirect;
 
 
         // Get POST data
