@@ -80,28 +80,19 @@ class RegimeService
     // Update regime with validation
     public static function updateRegime($regimeId, $data)
     {
-        try {
-            $regimeModel = new Regime();
-            if (self::validateptcTotal($data['pct_viande'], $data['pct_volaille'], $data['pct_poisson']) === false) {
-                throw new \Exception('Le total des pourcentages de viande, volaille et poisson ne peut pas dépasser 100%.');
-            }
-            // Check if regime exists
-            $regime = $regimeModel->find($regimeId);
-            if (!$regime) {
-                throw new \Exception("Régime non trouvé.");
-            }
-
-            if (!$regimeModel->validate($data)) {
-                throw new \Exception('Erreur de validation: ' . implode(', ', $regimeModel->errors()));
-            }
-
-            if ($regimeModel->update($regimeId, $data)) {
-                throw new \Exception('Régime mis à jour avec succès');
-            } else {
-                throw new \Exception('Erreur lors de la mise à jour du régime: ');
-            }
-        } catch (\Throwable $th) {
-            throw new \Exception('Erreur lors de la mise à jour du régime: ' . $th->getMessage());
+        $regimeModel = new Regime();
+        if (!self::validateptcTotal($data['pct_viande'], $data['pct_volaille'], $data['pct_poisson'])) {
+            throw new \Exception('Le total des pourcentages de viande, volaille et poisson ne peut pas dépasser 100%.');
+        }
+        $regime = $regimeModel->find($regimeId);
+        if (!$regime) {
+            throw new \Exception("Régime non trouvé.");
+        }
+        if (!$regimeModel->validate($data)) {
+            throw new \Exception('Erreur de validation: ' . implode(', ', $regimeModel->errors()));
+        }
+        if (!$regimeModel->update($regimeId, $data)) {
+            throw new \Exception('Erreur lors de la mise à jour du régime.');
         }
     }
     public static function validateptcTotal($pctViande, $pctVolaille, $pctPoisson)
@@ -109,19 +100,11 @@ class RegimeService
         $total = $pctViande + $pctVolaille + $pctPoisson;
         return $total <= 100;
     }
-    // Delete regime
     public static function deleteRegime($regimeId)
     {
-        try {
-            $regimeModel = new Regime();
-
-            if ($regimeModel->delete($regimeId)) {
-                throw new \Exception('Régime supprimé avec succès');
-            } else {
-                throw new \Exception('Erreur lors de la suppression du régime: ');
-            }
-        } catch (\Throwable $th) {
-            throw new \Exception('Erreur lors de la suppression du régime: ' . $th->getMessage());
+        $regimeModel = new Regime();
+        if (!$regimeModel->delete($regimeId)) {
+            throw new \Exception('Erreur lors de la suppression du régime.');
         }
     }
 
