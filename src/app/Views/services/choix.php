@@ -16,13 +16,13 @@
     <div class="dashboard-layout services-page">
         <?= $this->include('bar/sidebar') ?>
         <!-- Topbar simplifié -->
-        <div class="main-content" style="padding: 0;">
+        <div class="main-content services-content">
             <div class="services-hero">
                 <h1>🍽️ Choisissez votre service</h1>
                 <p>NutriPlan met à votre disposition tous les outils pour réussir votre transformation.</p>
-                <div style="margin-top: 1rem;">
-                    <a href="<?= site_url('dashboard') ?>" class="btn-outline" style="background: white;">← Tableau de bord</a>
-                    <a href="<?= site_url('logout') ?>" class="btn-outline" style="margin-left: 0.5rem;">Déconnexion</a>
+                <div class="services-hero-actions">
+                    <a href="<?= site_url('dashboard') ?>" class="services-btn">← Tableau de bord</a>
+                    <a href="<?= site_url('logout') ?>" class="services-btn">Déconnexion</a>
                 </div>
             </div>
 
