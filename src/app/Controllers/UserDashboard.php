@@ -36,6 +36,12 @@ class UserDashboard extends BaseController
         $recent_activity = $this->getRecentActivity($userId);
         $wale = $this->dashboardService->getWallet($userId);
         $subscription = $this->dashboardService->getUserGoldSubscription($userId);
+        $current_regime = $this->dashboardService->getCurrentRegime($userId);
+        $weight_history = $this->dashboardService->getWeightHistory($userId);
+        $transactions = $this->dashboardService->getWalletTransactions($userId);
+        $regime_history = $this->dashboardService->getRegimeHistory($userId);
+        $streak_days = $this->dashboardService->getStreakDays($userId);
+        $total_days = $this->dashboardService->getTotalDays($userId);
         return view('dashboard/user/index', [
             'active'             => 'user-dashboard',
             'user'               => $user,
@@ -43,11 +49,14 @@ class UserDashboard extends BaseController
             'objective'          => $objective,
             'categorie_imc'      => $imcData['categorie_imc'],
             'suggestions'        => $suggestions,
-            'streak_days'        => $user['streak_days'] ?? 0,
-            'total_days'         => $user['total_days'] ?? 0,
-            'subscription'       => $subscription,// For future use if needed
-            'current_regime'     =>  null,
+            'streak_days'        => $streak_days,
+            'total_days'         => $total_days,
+            'subscription'       => $subscription,
+            'current_regime'     => $current_regime,
             'wallet'             => $wale ?? null,
+            'weight_history'     => $weight_history,
+            'transactions'       => $transactions,
+            'regime_history'     => $regime_history,
             'kpi_users'          => $kpi_users,
             'kpi_users_trend'    => $kpi_users_trend,
             'kpi_regimes'        => $kpi_regimes,
