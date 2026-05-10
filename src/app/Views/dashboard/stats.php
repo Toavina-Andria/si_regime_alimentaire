@@ -1,132 +1,202 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Mes statistiques – NutriPlan</title>
-    <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriPlan — Statistiques</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
 </head>
 <body>
 <div class="dashboard-layout">
-    <?= $this->include('bar/sidebar') ?>
-    <div class="main-content">
-        <header class="topbar">
-            <div class="topbar-left">
-                <h1 class="page-title">📊 Mes statistiques</h1>
-            </div>
-            <div class="topbar-right">
-                <a href="<?= base_url('dashboard') ?>" class="btn-outline">← Retour au tableau de bord</a>
-            </div>
-        </header>
 
-        <main class="page-content">
-            <div class="page-header">
-                <p class="page-subtitle">Suivez votre progression</p>
-            </div>
+  <?= $this->include('bar/sidebar') ?>
 
-            <!-- Cartes KPI stats -->
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-value"><?= $imc ?? '—' ?></div>
-                    <div class="kpi-label">IMC actuel</div>
-                    <?php if ($categorie_imc): ?>
-                        <div class="kpi-trend"><?= $categorie_imc ?></div>
-                    <?php endif; ?>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-value"><?= $nb_regimes ?></div>
-                    <div class="kpi-label">Régimes souscrits</div>
-                </div>
-                <?php if ($regime_actif): ?>
-                <div class="kpi-card">
-                    <div class="kpi-value">Actif</div>
-                    <div class="kpi-label">Régime en cours</div>
-                    <div class="kpi-trend"><?= esc($regime_actif['statut']) ?></div>
-                </div>
-                <?php endif; ?>
-            </div>
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" aria-label="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div class="breadcrumb">
+          <a href="<?= base_url('admin/dashboard') ?>">Accueil</a>
+          <span>/</span>
+          <span class="current">Statistiques</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-search">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="Rechercher..." aria-label="Rechercher">
+        </div>
+        <button class="notification-btn" aria-label="Notifications">🔔<span class="notification-dot"></span></button>
+      </div>
+    </header>
 
-            <!-- Graphique évolution du poids -->
-            <div class="chart-card" style="margin-bottom: 30px;">
-                <div class="chart-card-header">
-                    <div class="chart-card-title">📈 Évolution de votre poids</div>
-                    <div class="chart-card-subtitle">kg</div>
-                </div>
-                <div class="chart-container bar">
-                    <canvas id="weightChart" 
-                        data-labels='<?= $poids_labels ?>' 
-                        data-values='<?= $poids_values ?>'>
-                    </canvas>
-                </div>
-            </div>
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">Statistiques</h1>
+        <p class="page-subtitle">Indicateurs clés et analyse des données</p>
+      </div>
 
-            <!-- Progression vers l'objectif -->
-            <div class="chart-card">
-                <div class="chart-card-header">
-                    <div class="chart-card-title">🎯 Progression vers votre objectif</div>
-                    <div class="chart-card-subtitle"><?= $objectif_data['label'] ?? 'Non défini' ?></div>
-                </div>
-                <?php if (!empty($objectif_data)): ?>
-                    <div style="padding: 20px;">
-                        <div style="margin-bottom: 15px;">
-                            <strong>Actuel :</strong> <?= $objectif_data['actuel'] ?> 
-                            &nbsp;|&nbsp; 
-                            <strong>Cible :</strong> <?= $objectif_data['cible'] ?>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: <?= $objectif_data['pourcentage'] ?>%; background: #2D6A4F;">
-                                <?= $objectif_data['pourcentage'] ?>%
-                            </div>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <p>Complétez votre profil pour voir votre progression.</p>
-                <?php endif; ?>
-            </div>
-        </main>
-    </div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <div class="kpi-icon dark-green">👥</div>
+          </div>
+          <div class="kpi-value"><?= $global_stats['total_users'] ?? 0 ?></div>
+          <div class="kpi-label">Utilisateurs</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <div class="kpi-icon green">🥗</div>
+          </div>
+          <div class="kpi-value"><?= $global_stats['total_regimes'] ?? 0 ?></div>
+          <div class="kpi-label">Régimes</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <div class="kpi-icon gold">📋</div>
+          </div>
+          <div class="kpi-value"><?= $global_stats['total_subscriptions'] ?? 0 ?></div>
+          <div class="kpi-label">Souscriptions</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <div class="kpi-icon" style="background:rgba(212,168,83,0.2);">💰</div>
+          </div>
+          <div class="kpi-value"><?= number_format($global_stats['gold_revenue'] ?? 0, 0) ?>€</div>
+          <div class="kpi-label">Revenus Gold</div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">📈 Inscriptions</div>
+            <div class="chart-card-subtitle">12 derniers mois</div>
+          </div>
+          <div class="chart-container bar">
+            <canvas id="inscriptionsChart"
+              data-labels='<?= json_encode($inscriptions_trend['labels'] ?? []) ?>'
+              data-values='<?= json_encode($inscriptions_trend['values'] ?? []) ?>'>
+            </canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">🎯 Objectifs</div>
+            <div class="chart-card-subtitle">Répartition</div>
+          </div>
+          <div class="chart-container donut">
+            <canvas id="objectifsChart"
+              data-labels='<?= json_encode($chart_objectifs['labels'] ?? []) ?>'
+              data-values='<?= json_encode($chart_objectifs['values'] ?? []) ?>'>
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">🥇 Top régimes</div>
+            <div class="chart-card-subtitle">Les plus souscrits</div>
+          </div>
+          <div class="chart-container bar">
+            <canvas id="topRegimesChart"
+              data-labels='<?= json_encode($chart_top_regimes['labels'] ?? []) ?>'
+              data-values='<?= json_encode($chart_top_regimes['values'] ?? []) ?>'>
+            </canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">⚖️ IMC</div>
+            <div class="chart-card-subtitle">Distribution</div>
+          </div>
+          <div class="chart-container donut">
+            <canvas id="imcChart"
+              data-labels='<?= json_encode($chart_imc['labels'] ?? []) ?>'
+              data-values='<?= json_encode($chart_imc['values'] ?? []) ?>'
+              data-colors='<?= json_encode($chart_imc['colors'] ?? []) ?>'>
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-card-header">
+          <div class="table-card-title">Statistiques globales</div>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Indicateur</th><th>Valeur</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Total utilisateurs</td><td><strong><?= $global_stats['total_users'] ?? 0 ?></strong></td></tr>
+            <tr><td>Total régimes</td><td><strong><?= $global_stats['total_regimes'] ?? 0 ?></strong></td></tr>
+            <tr><td>Total souscriptions</td><td><strong><?= $global_stats['total_subscriptions'] ?? 0 ?></strong></td></tr>
+            <tr><td>Revenus Gold</td><td><strong><?= number_format($global_stats['gold_revenue'] ?? 0, 2) ?> €</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-    // Graphique du poids
-    const ctx = document.getElementById('weightChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: JSON.parse(document.getElementById('weightChart').dataset.labels),
-            datasets: [{
-                label: 'Poids (kg)',
-                data: JSON.parse(document.getElementById('weightChart').dataset.values),
-                borderColor: '#2D6A4F',
-                backgroundColor: 'rgba(45, 106, 79, 0.1)',
-                tension: 0.3,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: { callbacks: { label: (ctx) => `${ctx.raw} kg` } }
-            }
-        }
+document.addEventListener('DOMContentLoaded', function () {
+  function initBar(id, label) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var labels = JSON.parse(el.dataset.labels || '[]');
+    var values = JSON.parse(el.dataset.values || '[]');
+    if (!labels.length) return;
+    new Chart(el, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: label,
+          data: values,
+          backgroundColor: 'rgba(45,106,79,0.7)',
+          borderColor: '#2D6A4F',
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { display: false } } }
     });
+  }
+  function initDoughnut(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var labels = JSON.parse(el.dataset.labels || '[]');
+    var values = JSON.parse(el.dataset.values || '[]');
+    var colors = JSON.parse(el.dataset.colors || '["#2D6A4F","#52B788","#D4A853","#B4432B"]');
+    if (!labels.length) return;
+    new Chart(el, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{ data: values, backgroundColor: colors, borderWidth: 0 }]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+  initBar('inscriptionsChart', 'Inscriptions');
+  initBar('topRegimesChart', 'Souscriptions');
+  initDoughnut('objectifsChart');
+  initDoughnut('imcChart');
+});
 </script>
-
-<style>
-    .progress-bar {
-        background-color: #e9ecef;
-        border-radius: 20px;
-        overflow: hidden;
-        height: 30px;
-    }
-    .progress-fill {
-        height: 100%;
-        color: white;
-        text-align: center;
-        line-height: 30px;
-        border-radius: 20px;
-        font-size: 14px;
-    }
-</style>
 </body>
 </html>
