@@ -24,7 +24,15 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>ID</th><th>Nom</th><th>Viande</th><th>Volaille</th><th>Poisson</th><th>Variation (kg)</th><th>Durée (j)</th><th>Actions</th>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Viande</th>
+                    <th>Volaille</th>
+                    <th>Poisson</th>
+                    <th>Variation (kg)</th>
+                    <th>Durée (j)</th>
+                    <th>Prix min (€)</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,6 +45,7 @@
                     <td><?= $r['pct_poisson'] ?>%</td>
                     <td><?= $r['variation_poids_kg'] > 0 ? '+' : '' ?><?= $r['variation_poids_kg'] ?> kg</td>
                     <td><?= $r['duree_jours'] ?> j</td>
+                    <td><?= isset($r['prix_min']) ? number_format($r['prix_min'], 2) : '—' ?> €</td>
                     <td>
                         <a href="<?= base_url('regime/admin/edit/' . $r['id']) ?>" class="btn-outline">✏️</a>
                         <a href="<?= base_url('regime/admin/delete/' . $r['id']) ?>" class="btn-outline" onclick="return confirm('Supprimer ce régime ?')">🗑️</a>
