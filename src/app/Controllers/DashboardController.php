@@ -84,6 +84,35 @@ class DashboardController extends BaseController
         return view('dashboard/activites', $data);
     }
 
+    public function storeActivite()
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $rules = [
+            'nom'            => 'required|min_length[2]|max_length[255]',
+            'description'    => 'permit_empty',
+            'intensite'      => 'required|in_list[1,2,3]',
+            'calories_heure' => 'required|numeric|greater_than[0]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'nom'            => $this->request->getPost('nom'),
+            'description'    => $this->request->getPost('description'),
+            'intensite'      => $this->request->getPost('intensite'),
+            'calories_heure' => $this->request->getPost('calories_heure'),
+        ];
+
+        if ($this->dashboardService->createActivite($data)) {
+            return redirect()->to('/admin/activites')->with('message', 'Activité ajoutée avec succès.');
+        }
+
+        return redirect()->back()->withInput()->with('error', 'Erreur lors de l\'ajout de l\'activité.');
+    }
+
     public function utilisateurs()
     {
         if ($redirect = $this->requireAdmin()) return $redirect;
