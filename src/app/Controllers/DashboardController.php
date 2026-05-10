@@ -6,6 +6,7 @@ use App\Models\ActiviteSportive;
 use App\Models\CodeBonus;
 use App\Models\Regime;
 use App\Models\Utilisateur;
+
 use App\Services\DashboardService;
 
 class DashboardController extends BaseController
@@ -84,4 +85,5 @@ class DashboardController extends BaseController
 
         return view('dashboard/utilisateurs', $data);
     }
+
 }
