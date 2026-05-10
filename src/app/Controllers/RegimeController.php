@@ -9,6 +9,7 @@ class RegimeController extends BaseController
 {
     private $regimeModel;
     private $regimeService;
+    private $regimePrixModel;
 
     public function __construct()
     {
@@ -46,20 +47,41 @@ class RegimeController extends BaseController
     // Détail régime (JSON pour AJAX)
     public function show($id)
     {
-        $regime = $this->regimeModel->find($id);
+        $regime = RegimeService::getRegimeById($id);
+        $regimeprix = RegimeService::getRegimePrixByRegimeId($id);
+        $activites = RegimeService::getActiviteByRegimeId($id);
+        $data = [
+            'regime' => $regime,
+            'prix' => $regimeprix,
+            'activites' => $activites,
+            'message' => 'initial'
+        ];
+        try {
+            if (!$regime) {
+                return $this->response->setStatusCode(404)->setJSON([
+                    'message' => 'Régime introuvable.'
+                ]);
+            }
 
-        if (!$regime) {
-            return $this->response->setStatusCode(404)->setJSON([
-                'message' => 'Régime introuvable.'
-            ]);
+            $accept = $this->request->getHeaderLine('Accept');
+            if ($this->request->isAJAX() || str_contains($accept, 'application/json')) {
+                return $this->response->setJSON($regime);
+            }
+            $data = [
+                'regime' => $regime,
+                'prix' => $regimeprix,
+                'activites' => $activites,
+                'message' => 'ok'
+            ];
+            return view('regime/detail', $data);
+        } catch (\Throwable $th) {
+            if ($th->getMessage() !== 'Trying to access array offset on null' )
+            {
+                $data['message'] = $th->getMessage();
+            }
+
+            return view('regime/detail',$data);
         }
-
-        $accept = $this->request->getHeaderLine('Accept');
-        if ($this->request->isAJAX() || str_contains($accept, 'application/json')) {
-            return $this->response->setJSON($regime);
-        }
-
-        return view('regime/detail', ['regime' => $regime]);
     }
 
     // Enregistrement
