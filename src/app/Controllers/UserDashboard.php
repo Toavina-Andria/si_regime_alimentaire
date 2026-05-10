@@ -31,8 +31,6 @@ class UserDashboard extends BaseController
         $objective = $this->dashboardService->getUserObjective($userId);
         $imcData = $this->dashboardService->getUserImcData($userId);
         $suggestions = $this->dashboardService->getUserSuggestions($userId);
-        $wallet = $this->dashboardService->getWallet($userId);
-        $subscription = $this->dashboardService->getUserGoldSubscription($userId);
 
         // Données pour KPI (garder si nécessaire)
         $kpi_users = $this->dashboardService->getTotalUsers();
@@ -43,7 +41,7 @@ class UserDashboard extends BaseController
         $chart_inscriptions = $this->dashboardService->getInscriptionsParMois();
         $chart_imc = $this->dashboardService->getRepartitionIMC();
         $recent_regimes = $this->dashboardService->getRecentRegimes(true, true);
-        $recent_activity = $this->getRecentActivity($userId);
+        $recent_activity = $this->dashboardService->getRecentActivity();
         $wale = $this->dashboardService->getWallet($userId);
         $subscription = $this->dashboardService->getUserGoldSubscription($userId);
         $current_regime = $this->dashboardService->getCurrentRegime($userId);

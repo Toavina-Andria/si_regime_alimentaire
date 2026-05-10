@@ -8,6 +8,9 @@ use App\Models\Regime;
 use App\Models\SouscriptionRegime;
 use App\Models\Portefeuille;
 use App\Models\RegimePrix;
+use App\Models\Utilisateur;
+use App\Models\UtilisateurAbonnement;
+use App\Models\TransactionPortefeuille;
 
 class DashboardService
 {
@@ -20,9 +23,10 @@ class DashboardService
     private UtilisateurAbonnement $utilisateurAbonnementModel;
     private HistoriquePoids $historiquePoidsModel;
     private string $dateFormat = 'Y-m-d H:i:s';
-
+    private $db;
     public function __construct()
     {
+        $this->db = \Config\Database::connect();
         $this->utilisateurModel = new Utilisateur();
         $this->regimeModel = new Regime();
         $this->regimePrixModel = new RegimePrix();
