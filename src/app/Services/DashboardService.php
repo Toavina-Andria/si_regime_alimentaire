@@ -417,16 +417,6 @@ class DashboardService
         return (new Utilisateur())->delete($id);
     }
 
-    public function getAllParametres(): array
-    {
-        return (new Parametre())->orderBy('clef', 'ASC')->findAll();
-    }
-
-    public function updateParametre(int $id, array $data)
-    {
-        return (new Parametre())->update($id, $data);
-    }
-
     public function getAllAbonnements(): array
     {
         return (new Abonnement())->orderBy('created_at', 'DESC')->findAll();

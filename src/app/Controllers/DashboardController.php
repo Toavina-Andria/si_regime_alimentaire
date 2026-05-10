@@ -259,24 +259,8 @@ class DashboardController extends BaseController
     {
         if ($redirect = $this->requireAdmin()) return $redirect;
 
-        $data['parametres'] = $this->dashboardService->getAllParametres();
         $data['active'] = 'parametres';
 
         return view('dashboard/parametres', $data);
-    }
-
-    public function updateParametres()
-    {
-        if ($redirect = $this->requireAdmin()) return $redirect;
-
-        $parametres = $this->request->getPost('parametres');
-        if (is_array($parametres)) {
-            $paramModel = new \App\Models\Parametre();
-            foreach ($parametres as $clef => $valeur) {
-                $paramModel->setValeur($clef, $valeur);
-            }
-        }
-
-        return redirect()->to('/admin/parametres')->with('message', 'Paramètres mis à jour.');
     }
 }
