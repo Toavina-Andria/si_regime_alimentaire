@@ -372,6 +372,11 @@ class DashboardService
         return (new ActiviteSportive())->insert($data);
     }
 
+    public function deleteActivite(int $id)
+    {
+        return (new ActiviteSportive())->delete($id);
+    }
+
     public function getAllUtilisateurs(): array
     {
         return (new Utilisateur())->orderBy('created_at', 'DESC')->findAll();

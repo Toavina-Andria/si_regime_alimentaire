@@ -113,6 +113,14 @@ class DashboardController extends BaseController
         return redirect()->back()->withInput()->with('error', 'Erreur lors de l\'ajout de l\'activité.');
     }
 
+    public function deleteActivite($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $this->dashboardService->deleteActivite($id);
+        return redirect()->to('/admin/activites')->with('message', 'Activité supprimée avec succès.');
+    }
+
     public function utilisateurs()
     {
         if ($redirect = $this->requireAdmin()) return $redirect;

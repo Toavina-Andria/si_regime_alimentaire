@@ -101,7 +101,7 @@
               <td>
                 <div class="action-btns">
                   <button class="action-btn" title="Modifier">✏️</button>
-                  <button class="action-btn delete" title="Supprimer">🗑️</button>
+                  <a href="<?= base_url('admin/activites/delete/' . $a['id']) ?>" class="action-btn delete" title="Supprimer" onclick="return confirm('Supprimer cette activité ?')">🗑️</a>
                 </div>
               </td>
             </tr>
