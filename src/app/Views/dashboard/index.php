@@ -9,17 +9,8 @@
 <div class="dashboard-layout">
     <?= view('bar/sidebar') ?>
     <div class="main-content">
-        <header class="topbar">
-            <div class="topbar-left">
-                <h1 class="page-title"><?= isset($user) ? 'Mon espace' : 'Tableau de bord Admin' ?></h1>
-            </div>
-            <div class="topbar-right">
-                <a href="<?= site_url('services') ?>" class="btn-outline">Services</a>
-                <a href="<?= site_url('logout') ?>" class="btn-outline">Déconnexion</a>
-            </div>
-        </header>
-
         <main class="page-content">
+            <button class="mobile-hamburger" aria-label="Menu">☰</button>
 
             <?php if (isset($user) && $user): ?>
             <div class="user-greeting">
