@@ -145,10 +145,10 @@ class RegimeService
     {
         $abonnentuserModel = new UtilisateurAbonnement();
         $abonnement = $abonnentuserModel
-            ->select('ua.*, a.taux_reduction')
-            ->join('abonnement a', 'a.id = ua.abonnement_id')
-            ->where('ua.utilisateur_id', $userId)
-            ->where('ua.date_fin >=', date(self::$dateFormat))
+            ->select('utilisateur_abonnement.*, a.taux_reduction')
+            ->join('abonnement a', 'a.id = utilisateur_abonnement.abonnement_id')
+            ->where('utilisateur_abonnement.utilisateur_id', $userId)
+            ->where('utilisateur_abonnement.date_fin >=', date(self::$dateFormat))
             ->first();
         return $abonnement;
     }
