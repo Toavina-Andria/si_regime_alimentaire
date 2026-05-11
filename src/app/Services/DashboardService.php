@@ -168,15 +168,7 @@ class DashboardService
 
     public function getStandardRevenue(): float
     {
-        $result = $this->db->table('souscription_regime sr')
-            ->select('SUM(sr.prix_paye) as total')
-            ->join('utilisateur_abonnement ua', 'ua.utilisateur_id = sr.utilisateur_id')
-            ->join('abonnement a', 'a.id = ua.abonnement_id')
-            ->where('a.statut !=', 'gold')
-            ->where('ua.statut', 'actif')
-            ->get()
-            ->getRowArray();
-        return round($result['total'] ?? 0, 2);
+        return round($this->getTotalRevenue() - $this->getGoldRevenue(), 2);
     }
 
     public function getTotalUsers(): int
