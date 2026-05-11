@@ -136,8 +136,8 @@ class RegimeService
 
     public static function validateUserPoints($userId, $prix)
     {
-        $portefeuilleModel = UtilisateurService::getPortefeuilleByUserId($userId);
-        $soldePoints = $portefeuilleModel['solde_points'];
+        $portefeuille = UtilisateurService::getPortefeuilleByUserId($userId);
+        $soldePoints = $portefeuille['solde_points'] ?? 0;
         return $soldePoints >= $prix;
     }
 
