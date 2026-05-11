@@ -1213,7 +1213,10 @@ textarea.form-input { resize: vertical; }
 .suggestions-section { margin: 2rem 0; }
 .section-header { margin-bottom: 1.5rem; }
 .section-title { font-size: 1.75rem; font-weight: 700; color: var(--color-text-primary); letter-spacing: -0.3px; }
-.suggestions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+.suggestions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; }
+.suggestions-grid-scroll { max-height: 480px; overflow-y: auto; padding-right: 0.5rem; }
+.suggestions-grid-scroll::-webkit-scrollbar { width: 6px; }
+.suggestions-grid-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 3px; }
 .suggestion-card { background: var(--color-surface); border-radius: 16px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.04); transition: transform 0.2s; border: 1px solid var(--color-border); }
 .suggestion-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
 .suggestion-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.75rem; }
