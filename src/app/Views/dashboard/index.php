@@ -83,7 +83,30 @@
                 <div class="kpi-card"><div class="kpi-value"><?= $kpi_users ?></div><div class="kpi-label">Utilisateurs</div></div>
                 <div class="kpi-card"><div class="kpi-value"><?= $kpi_regimes ?></div><div class="kpi-label">Régimes</div></div>
                 <div class="kpi-card"><div class="kpi-value"><?= $kpi_codes ?></div><div class="kpi-label">Codes (mois)</div></div>
-                <div class="kpi-card"><div class="kpi-value"><?= number_format($kpi_gold, 2) ?>€</div><div class="kpi-label">Revenus Gold</div></div>
+                <div class="kpi-card">
+                    <div class="kpi-value"><?= $kpi_users_trend > 0 ? '+' : '' ?><?= $kpi_users_trend ?>%</div>
+                    <div class="kpi-label">Croissance (30j)</div>
+                    <div class="kpi-trend <?= $kpi_users_trend >= 0 ? 'up' : 'down' ?>"><?= $kpi_users_trend >= 0 ? '↑' : '↓' ?> <?= abs($kpi_users_trend) ?>%</div>
+                </div>
+            </div>
+
+            <div class="kpi-grid" style="margin-bottom:28px;">
+                <div class="kpi-card" style="background:linear-gradient(135deg,#2D6A4F,#40916C);color:white;">
+                    <div class="kpi-value" style="color:white;"><?= number_format($total_revenue, 2) ?>€</div>
+                    <div class="kpi-label" style="color:rgba(255,255,255,0.8);">Revenus Total</div>
+                </div>
+                <div class="kpi-card" style="background:linear-gradient(135deg,#D4A853,#F0C040);">
+                    <div class="kpi-value"><?= number_format($gold_revenue, 2) ?>€</div>
+                    <div class="kpi-label">Revenus Gold</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value"><?= number_format($standard_revenue, 2) ?>€</div>
+                    <div class="kpi-label">Revenus Standard</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value"><?= number_format($total_revenue > 0 ? ($gold_revenue / $total_revenue) * 100 : 0, 1) ?>%</div>
+                    <div class="kpi-label">Part Gold</div>
+                </div>
             </div>
 
             <div class="charts-grid">

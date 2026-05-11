@@ -36,7 +36,6 @@ class DashboardController extends BaseController
             'kpi_users_trend'    => $this->dashboardService->getUserTrend(),
             'kpi_regimes'        => $this->dashboardService->getActiveRegimes(),
             'kpi_codes'          => $this->dashboardService->getCodesThisMonth(),
-            'kpi_gold'           => $this->dashboardService->getGoldRevenue(),
             'total_revenue'      => $this->dashboardService->getTotalRevenue(),
             'gold_revenue'       => $this->dashboardService->getGoldRevenue(),
             'standard_revenue'   => $this->dashboardService->getStandardRevenue(),
