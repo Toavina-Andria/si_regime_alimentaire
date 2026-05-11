@@ -109,7 +109,7 @@
                 <?php endif; ?>
             </div>
 
-            <div class="chart-card" style="margin-bottom: 30px;">
+            <div class="chart-card chart-card-mb">
                 <div class="chart-card-header">
                     <div class="chart-card-title">📈 Évolution de votre poids</div>
                     <div class="chart-card-subtitle">kg</div>
@@ -128,8 +128,8 @@
                     <div class="chart-card-subtitle"><?= $objectif_data['label'] ?? 'Non défini' ?></div>
                 </div>
                 <?php if (!empty($objectif_data)): ?>
-                    <div style="padding: 20px;">
-                        <div style="margin-bottom: 15px;">
+                    <div class="objective-padding">
+                        <div class="objective-mb">
                             <strong>Actuel :</strong> <?= $objectif_data['actuel'] ?>
                             &nbsp;|&nbsp;
                             <strong>Cible :</strong> <?= $objectif_data['cible'] ?>
@@ -191,21 +191,6 @@
 <?php endif; ?>
 </script>
 
-<style>
-    .progress-bar {
-        background-color: #e9ecef;
-        border-radius: 20px;
-        overflow: hidden;
-        height: 30px;
-    }
-    .progress-fill {
-        height: 100%;
-        color: white;
-        text-align: center;
-        line-height: 30px;
-        border-radius: 20px;
-        font-size: 14px;
-    }
-</style>
+
 </body>
 </html>

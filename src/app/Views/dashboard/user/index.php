@@ -4,25 +4,6 @@
     <meta charset="UTF-8">
     <title>Tableau de bord – NutriPlan</title>
     <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
-    <style>
-        .user-greeting { background: white; border-radius: 32px; padding: 1.5rem 2rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .user-stats { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
-        .stat-badge { background: #e9f4ef; padding: 0.5rem 1rem; border-radius: 40px; font-size: 0.85rem; }
-        .suggestions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; max-height: 480px; overflow-y: auto; padding-right: 0.5rem; }
-        .suggestions-grid::-webkit-scrollbar { width: 6px; }
-        .suggestions-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 3px; }
-        .suggestion-card { background: white; border-radius: 16px; padding: 1.25rem 1.5rem; border: 1px solid var(--color-border); }
-        .suggestion-header h3 { font-size: 1.1rem; font-weight: 600; }
-        .suggestion-card .badge { font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 40px; }
-        .badge.gain { background: #2D6A4F; color: white; }
-        .badge.loss { background: #C1392B; color: white; }
-        .badge.stable { background: #D4A853; color: white; }
-        .suggestion-desc { font-size: 0.9rem; color: var(--color-text-secondary); }
-        .suggestion-diet { font-size: 0.85rem; color: var(--color-text-muted); }
-        .price-tag { background: #f0f0f0; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; margin-right: 0.5rem; }
-        .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
-        @media (max-width: 768px) { .bottom-grid { grid-template-columns: 1fr; } }
-    </style>
 </head>
 <body>
 <div class="dashboard-layout">
@@ -51,7 +32,7 @@
                 <?php if (empty($suggestions)): ?>
                     <div class="alert alert-info">Aucun régime pour le moment.</div>
                 <?php else: ?>
-                    <div class="suggestions-grid">
+                    <div class="suggestions-grid suggestions-grid-scroll">
                         <?php foreach ($suggestions as $s): $r = $s['regime']; ?>
                         <div class="suggestion-card">
                             <div class="suggestion-header">
@@ -102,7 +83,7 @@
                 </div>
                 <div class="activity-card">
                     <div class="activity-card-title">💰 Mon portefeuille</div>
-                    <div class="stat-number" style="font-size: 1.5rem; margin-bottom: 0.75rem;"><?= number_format($wallet['solde_points'] ?? 0, 2) ?> points</div>
+                    <div class="kpi-value" style="margin-bottom: 0.75rem;"><?= number_format($wallet['solde_points'] ?? 0, 2) ?> points</div>
                     <hr>
                     <div class="activity-card-title">⭐ Mon abonnement</div>
                     <?php if ($subscription): ?>

@@ -14,7 +14,7 @@
   <div class="main-content">
     <main class="page-content">
       <button class="mobile-hamburger" aria-label="Menu">☰</button>
-      <div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
+      <div class="page-header page-header-row">
         <div>
           <h1 class="page-title">Régimes alimentaires</h1>
           <p class="page-subtitle">Gérez les régimes proposés aux utilisateurs</p>
@@ -39,10 +39,10 @@
           <tbody>
             <?php if (empty($regimes)): ?>
             <tr>
-              <td colspan="8" style="text-align:center; color:var(--color-text-muted); padding:48px;">
-                <div style="font-size:36px; margin-bottom:12px; opacity:0.5;">🥗</div>
-                <div style="font-size:16px; font-weight:600; margin-bottom:4px;">Aucun régime</div>
-                <div style="font-size:13px;">Créez votre premier régime alimentaire</div>
+              <td colspan="8" class="empty-table">
+                <div class="empty-table-icon">🥗</div>
+                <div class="empty-table-title">Aucun régime</div>
+                <div class="empty-table-text">Créez votre premier régime alimentaire</div>
               </td>
             </tr>
             <?php else: ?>
