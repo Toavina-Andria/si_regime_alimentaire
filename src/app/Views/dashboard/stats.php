@@ -116,49 +116,51 @@
                 <?php endif; ?>
             </div>
 
-            <div class="chart-card chart-card-mb">
-                <div class="chart-card-header">
-                    <div class="chart-card-title">📈 Évolution de votre poids</div>
-                    <div class="chart-card-subtitle">kg</div>
-                </div>
-                <div class="chart-container bar">
-                    <canvas id="weightChart"
-                        data-labels='<?= $poids_labels ?? '[]' ?>'
-                        data-values='<?= $poids_values ?? '[]' ?>'>
-                    </canvas>
-                </div>
-                <form method="POST" action="<?= base_url('stats/poids') ?>" class="weight-form">
-                    <?= csrf_field() ?>
-                    <label for="poids_kg" class="weight-form-label">Mon poids aujourd'hui :</label>
-                    <div class="weight-form-input-wrap">
-                        <input type="number" id="poids_kg" name="poids_kg" step="0.1" min="20" max="500" placeholder="ex: 72.5" required class="form-input weight-form-input">
-                        <span class="weight-form-unit">kg</span>
+            <div class="stats-user-grid">
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div class="chart-card-title">📈 Évolution de votre poids</div>
+                        <div class="chart-card-subtitle">kg</div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-sm">Enregistrer</button>
-                </form>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-card-header">
-                    <div class="chart-card-title">🎯 Progression vers votre objectif</div>
-                    <div class="chart-card-subtitle"><?= $objectif_data['label'] ?? 'Non défini' ?></div>
-                </div>
-                <?php if (!empty($objectif_data)): ?>
-                    <div class="objective-padding">
-                        <div class="objective-mb">
-                            <strong>Actuel :</strong> <?= $objectif_data['actuel'] ?>
-                            &nbsp;|&nbsp;
-                            <strong>Cible :</strong> <?= $objectif_data['cible'] ?>
+                    <div class="chart-container bar">
+                        <canvas id="weightChart"
+                            data-labels='<?= $poids_labels ?? '[]' ?>'
+                            data-values='<?= $poids_values ?? '[]' ?>'>
+                        </canvas>
+                    </div>
+                    <form method="POST" action="<?= base_url('stats/poids') ?>" class="weight-form">
+                        <?= csrf_field() ?>
+                        <label for="poids_kg" class="weight-form-label">Mon poids aujourd'hui :</label>
+                        <div class="weight-form-input-wrap">
+                            <input type="number" id="poids_kg" name="poids_kg" step="0.1" min="20" max="500" placeholder="ex: 72.5" required class="form-input weight-form-input">
+                            <span class="weight-form-unit">kg</span>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: <?= $objectif_data['pourcentage'] ?>%;">
-                                <?= $objectif_data['pourcentage'] ?>%
+                        <button type="submit" class="btn btn-primary btn-sm">Enregistrer</button>
+                    </form>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div class="chart-card-title">🎯 Progression vers votre objectif</div>
+                        <div class="chart-card-subtitle"><?= $objectif_data['label'] ?? 'Non défini' ?></div>
+                    </div>
+                    <?php if (!empty($objectif_data)): ?>
+                        <div class="objective-padding">
+                            <div class="objective-mb">
+                                <strong>Actuel :</strong> <?= $objectif_data['actuel'] ?>
+                                &nbsp;|&nbsp;
+                                <strong>Cible :</strong> <?= $objectif_data['cible'] ?>
+                            </div>
+                            <div class="progress-bar stats-progress-bar">
+                                <div class="progress-fill" style="width: <?= $objectif_data['pourcentage'] ?>%;">
+                                    <?= $objectif_data['pourcentage'] ?>%
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php else: ?>
-                    <p>Complétez votre profil pour voir votre progression.</p>
-                <?php endif; ?>
+                    <?php else: ?>
+                        <p class="stats-user-empty">Complétez votre profil pour voir votre progression.</p>
+                    <?php endif; ?>
+                </div>
             </div>
             <?php endif; ?>
         </main>

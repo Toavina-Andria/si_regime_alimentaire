@@ -1006,6 +1006,15 @@ textarea.form-input { resize: vertical; }
 /* ==================== CHART CARD MARGIN ==================== */
 .chart-card-mb { margin-bottom: 30px; }
 
+/* ==================== USER STATS LAYOUT ==================== */
+.stats-user-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+.stats-user-empty { padding: 24px; color: var(--color-text-muted); }
+.stats-progress-bar { height: 20px; }
+
+@media (max-width: 900px) {
+  .stats-user-grid { grid-template-columns: 1fr; }
+}
+
 /* ==================== WEIGHT INPUT FORM ==================== */
 .weight-form { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--color-border); }
 .weight-form-label { font-size: 14px; font-weight: 500; white-space: nowrap; }
