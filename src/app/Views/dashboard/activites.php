@@ -24,7 +24,7 @@
         <div class="alert alert-danger"><?= implode('<br>', $errors) ?></div>
       <?php endif; ?>
 
-      <div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
+      <div class="page-header page-header-row">
         <div>
           <h1 class="page-title">Activités sportives</h1>
           <p class="page-subtitle">Gérez les activités physiques associées aux régimes</p>
@@ -47,17 +47,17 @@
           <tbody>
             <?php if (empty($activites)): ?>
             <tr>
-              <td colspan="6" style="text-align:center; color:var(--color-text-muted); padding:48px;">
-                <div style="font-size:36px; margin-bottom:12px; opacity:0.5;">🏃</div>
-                <div style="font-size:16px; font-weight:600; margin-bottom:4px;">Aucune activité</div>
-                <div style="font-size:13px;">Ajoutez votre première activité sportive</div>
+              <td colspan="6" class="empty-table">
+                <div class="empty-table-icon">🏃</div>
+                <div class="empty-table-title">Aucune activité</div>
+                <div class="empty-table-text">Ajoutez votre première activité sportive</div>
               </td>
             </tr>
             <?php else: ?>
             <?php foreach ($activites as $a): ?>
             <tr>
               <td><strong><?= esc($a['nom']) ?></strong></td>
-              <td style="color:var(--color-text-secondary); max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><?= esc($a['description']) ?></td>
+              <td class="text-truncate-250"><?= esc($a['description']) ?></td>
               <td>
                 <?php if ($a['intensite'] == 1): ?>
                 <span class="pill pill-success">Faible</span>
@@ -100,9 +100,9 @@
         </div>
         <div class="form-group">
           <label class="form-label">Description</label>
-          <textarea class="form-input" name="description" rows="3" placeholder="Description..." style="resize:vertical;"></textarea>
+          <textarea class="form-input" name="description" rows="3" placeholder="Description..."></textarea>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="form-grid-2">
           <div class="form-group">
             <label class="form-label">Intensité</label>
             <select class="form-input form-select" name="intensite">

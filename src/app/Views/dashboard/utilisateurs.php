@@ -18,7 +18,7 @@
         <div class="alert alert-success"><?= session()->getFlashdata('message') ?></div>
       <?php endif; ?>
 
-      <div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
+      <div class="page-header page-header-row">
         <div>
           <h1 class="page-title">Utilisateurs</h1>
           <p class="page-subtitle">Gérez les comptes utilisateurs de la plateforme</p>
@@ -44,10 +44,10 @@
           <tbody>
             <?php if (empty($utilisateurs)): ?>
             <tr>
-              <td colspan="10" style="text-align:center; color:var(--color-text-muted); padding:48px;">
-                <div style="font-size:36px; margin-bottom:12px; opacity:0.5;">👥</div>
-                <div style="font-size:16px; font-weight:600; margin-bottom:4px;">Aucun utilisateur</div>
-                <div style="font-size:13px;">Les utilisateurs inscrits apparaîtront ici</div>
+              <td colspan="10" class="empty-table">
+                <div class="empty-table-icon">👥</div>
+                <div class="empty-table-title">Aucun utilisateur</div>
+                <div class="empty-table-text">Les utilisateurs inscrits apparaîtront ici</div>
               </td>
             </tr>
             <?php else: ?>
@@ -99,11 +99,11 @@
       <div class="modal-body">
         <div class="form-group">
           <label class="form-label">Nom</label>
-          <input type="text" class="form-input" name="nom_display" readonly style="background:#f5f5f5;">
+          <input type="text" class="form-input" name="nom_display" readonly>
         </div>
         <div class="form-group">
           <label class="form-label">Email</label>
-          <input type="email" class="form-input" name="email_display" readonly style="background:#f5f5f5;">
+          <input type="email" class="form-input" name="email_display" readonly>
         </div>
         <div class="form-group">
           <label class="form-label">Rôle administrateur</label>

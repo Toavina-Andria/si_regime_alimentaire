@@ -86,9 +86,9 @@
         </div>
         <div class="form-group">
           <label class="form-label" for="regime_description">Description</label>
-          <textarea id="regime_description" class="form-input" name="description" rows="3" placeholder="Description du régime..." style="resize:vertical;"></textarea>
+          <textarea id="regime_description" class="form-input" name="description" rows="3" placeholder="Description du régime..."></textarea>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+        <div class="form-grid-3">
           <div class="form-group">
             <label class="form-label" for="regime_pct_viande">% Viande</label>
             <input id="regime_pct_viande" type="number" class="form-input" name="pct_viande" min="0" max="100" step="0.01" required>
@@ -102,7 +102,7 @@
             <input id="regime_pct_volaille" type="number" class="form-input" name="pct_volaille" min="0" max="100" step="0.01" required>
           </div>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="form-grid-2">
           <div class="form-group">
             <label class="form-label" for="regime_duree_jours">Durée (jours)</label>
             <input id="regime_duree_jours" type="number" class="form-input" name="duree_jours" min="1" required>

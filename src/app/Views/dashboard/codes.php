@@ -14,7 +14,7 @@
   <div class="main-content">
     <main class="page-content">
       <button class="mobile-hamburger" aria-label="Menu">☰</button>
-      <div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
+      <div class="page-header page-header-row">
         <div>
           <h1 class="page-title">Portefeuille & Codes</h1>
           <p class="page-subtitle">Gérez les codes bonus et consultez les transactions</p>
@@ -37,16 +37,16 @@
           <tbody>
             <?php if (empty($codes)): ?>
             <tr>
-              <td colspan="6" style="text-align:center; color:var(--color-text-muted); padding:48px;">
-                <div style="font-size:36px; margin-bottom:12px; opacity:0.5;">🎟️</div>
-                <div style="font-size:16px; font-weight:600; margin-bottom:4px;">Aucun code bonus</div>
-                <div style="font-size:13px;">Générez votre premier code bonus</div>
+              <td colspan="6" class="empty-table">
+                <div class="empty-table-icon">🎟️</div>
+                <div class="empty-table-title">Aucun code bonus</div>
+                <div class="empty-table-text">Générez votre premier code bonus</div>
               </td>
             </tr>
             <?php else: ?>
             <?php foreach ($codes as $c): ?>
             <tr>
-              <td><code style="font-family:var(--font-mono); background:var(--color-bg); padding:2px 8px; border-radius:4px; font-size:13px;"><?= esc($c['code']) ?></code></td>
+              <td><code class="code-display"><?= esc($c['code']) ?></code></td>
               <td><strong><?= $c['valeur_points'] ?> €</strong></td>
               <td>
                 <?php if ($c['est_valide']): ?>
@@ -94,7 +94,7 @@
           <label class="form-label">Date d'expiration</label>
           <input type="date" class="form-input" name="expires_at">
         </div>
-        <div class="form-group" id="codeValidGroup" style="display:none;">
+        <div class="form-group js-hidden" id="codeValidGroup">
           <label class="form-label">Statut</label>
           <select class="form-input form-select" name="est_valide">
             <option value="1">✅ Validé</option>
