@@ -27,10 +27,6 @@ $routes->group('admin', static function ($routes) {
     $routes->get('dashboard', 'DashboardController::index');
     $routes->get('stats', 'DashboardController::stats');
     $routes->get('regimes', 'DashboardController::regimes');
-    $routes->get('abonnements', 'DashboardController::abonnements');
-    $routes->post('abonnement/store', 'DashboardController::storeAbonnement');
-    $routes->post('abonnement/update/(:num)', 'DashboardController::updateAbonnement/$1');
-    $routes->get('abonnement/delete/(:num)', 'DashboardController::deleteAbonnement/$1');
     $routes->get('codes', 'DashboardController::codes');
     $routes->get('activites', 'DashboardController::activites');
     $routes->post('activites', 'DashboardController::storeActivite');
@@ -47,6 +43,7 @@ $routes->group('admin', static function ($routes) {
 $routes->get('export/bilan', 'ExportController::bilan');
 
 $routes->get('stats', 'StatsController::index');
+$routes->post('stats/poids', 'StatsController::storeWeight');
 
 $routes->get('regime/admin', 'RegimeController::index');
 $routes->get('regime/admin/create', 'RegimeController::create');

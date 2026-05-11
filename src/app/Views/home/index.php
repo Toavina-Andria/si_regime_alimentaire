@@ -495,8 +495,12 @@
   </section>
 </div>
 
-<footer>
-  <p>&copy; <?= date('Y') ?> NutriPlan. Tous droits réservés.</p>
+<footer class="app-footer" style="margin-top:0;">
+  <div class="footer-students">
+    <span>ETU004235 Toavina</span>
+    <span>ETU003936 Aiky</span>
+    <span>ETU004372 Célina</span>
+  </div>
 </footer>
 </body>
 </html>

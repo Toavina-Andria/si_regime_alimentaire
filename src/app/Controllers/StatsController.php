@@ -67,6 +67,34 @@ class StatsController extends BaseController
         ]);
     }
 
+    public function storeWeight()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/connexion');
+        }
+
+        $userId = session()->get('user_id');
+        $poids = $this->request->getPost('poids_kg');
+
+        if (!$poids || !is_numeric($poids) || $poids <= 0) {
+            return redirect()->back()->with('error', 'Veuillez entrer un poids valide.');
+        }
+
+        $poids = round((float) $poids, 2);
+
+        $historique = new HistoriquePoids();
+        $historique->insert([
+            'utilisateur_id' => $userId,
+            'poids_kg'       => $poids,
+            'mesure_le'      => date('Y-m-d'),
+        ]);
+
+        $userModel = new Utilisateur();
+        $userModel->skipValidation(true)->update($userId, ['poids_kg' => $poids]);
+
+        return redirect()->back()->with('success', 'Poids du jour enregistré.');
+    }
+
     private function getObjectifProgression($user)
     {
 

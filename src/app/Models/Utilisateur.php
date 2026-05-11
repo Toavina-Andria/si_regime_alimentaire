@@ -45,6 +45,29 @@ class Utilisateur extends Model
     protected $beforeInsert = ['hashPassword'];
     protected $beforeUpdate = ['hashPassword'];
 
+    public function adminUpdate(int $id, array $data): bool
+    {
+        $this->skipValidation = true;
+        $this->allowedFields[] = 'est_admin';
+        $result = $this->update($id, $data);
+        $this->skipValidation = false;
+        return $result;
+    }
+
+    public function adminDelete(int $id): bool
+    {
+        $this->skipValidation = true;
+        $this->db->transStart();
+        $this->db->table('souscription_regime')->where('utilisateur_id', $id)->delete();
+        $this->db->table('utilisateur_abonnement')->where('utilisateur_id', $id)->delete();
+        $this->db->table('portefeuille')->where('utilisateur_id', $id)->delete();
+        $this->db->table('historique_poids')->where('utilisateur_id', $id)->delete();
+        $this->db->table('transaction_portefeuille')->where('utilisateur_id', $id)->delete();
+        $result = $this->delete($id);
+        $this->db->transComplete();
+        return $result;
+    }
+
     public static $validationRulesProfil = [
         'date_naissance' => 'required|valid_date[Y-m-d]',
         'genre' => 'required|in_list[homme,femme]',
@@ -83,12 +106,11 @@ class Utilisateur extends Model
 
     protected function hashPassword(array $data)
     {
-        if (!isset($data['data']['mot_de_passe'])) {
+        if (!isset($data['data']['mot_de_passe']) || $data['data']['mot_de_passe'] === '') {
+            unset($data['data']['mot_de_passe']);
             return $data;
         }
-        if ($data['data']['mot_de_passe'] !== '') {
-            $data['data']['mot_de_passe'] = password_hash($data['data']['mot_de_passe'], PASSWORD_BCRYPT);
-        }
+        $data['data']['mot_de_passe'] = password_hash($data['data']['mot_de_passe'], PASSWORD_BCRYPT);
         return $data;
     }
 

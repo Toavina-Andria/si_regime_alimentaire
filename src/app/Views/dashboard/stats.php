@@ -10,16 +10,8 @@
 <div class="dashboard-layout">
     <?= $this->include('bar/sidebar') ?>
     <div class="main-content">
-        <header class="topbar">
-            <div class="topbar-left">
-                <h1 class="page-title">📊 Statistiques</h1>
-            </div>
-            <div class="topbar-right">
-                <a href="<?= base_url('admin/dashboard') ?>" class="btn-outline">← Retour</a>
-            </div>
-        </header>
-
         <main class="page-content">
+            <button class="mobile-hamburger" aria-label="Menu">☰</button>
 
             <?php if (isset($total_users)): ?>
             <div class="kpi-grid">
@@ -96,6 +88,13 @@
             <div class="page-header">
                 <p class="page-subtitle">Suivez votre progression</p>
             </div>
+
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="alert-inline">✅ <?= session()->getFlashdata('success') ?></div>
+            <?php elseif (session()->getFlashdata('error')): ?>
+                <div class="alert-inline error">❌ <?= session()->getFlashdata('error') ?></div>
+            <?php endif; ?>
+
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <div class="kpi-value"><?= $imc ?? '—' ?></div>
@@ -117,42 +116,54 @@
                 <?php endif; ?>
             </div>
 
-            <div class="chart-card" style="margin-bottom: 30px;">
-                <div class="chart-card-header">
-                    <div class="chart-card-title">📈 Évolution de votre poids</div>
-                    <div class="chart-card-subtitle">kg</div>
-                </div>
-                <div class="chart-container bar">
-                    <canvas id="weightChart"
-                        data-labels='<?= $poids_labels ?? '[]' ?>'
-                        data-values='<?= $poids_values ?? '[]' ?>'>
-                    </canvas>
-                </div>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-card-header">
-                    <div class="chart-card-title">🎯 Progression vers votre objectif</div>
-                    <div class="chart-card-subtitle"><?= $objectif_data['label'] ?? 'Non défini' ?></div>
-                </div>
-                <?php if (!empty($objectif_data)): ?>
-                    <div style="padding: 20px;">
-                        <div style="margin-bottom: 15px;">
-                            <strong>Actuel :</strong> <?= $objectif_data['actuel'] ?>
-                            &nbsp;|&nbsp;
-                            <strong>Cible :</strong> <?= $objectif_data['cible'] ?>
+            <div class="stats-user-grid">
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div class="chart-card-title">📈 Évolution de votre poids</div>
+                        <div class="chart-card-subtitle">kg</div>
+                    </div>
+                    <div class="chart-container bar">
+                        <canvas id="weightChart"
+                            data-labels='<?= $poids_labels ?? '[]' ?>'
+                            data-values='<?= $poids_values ?? '[]' ?>'>
+                        </canvas>
+                    </div>
+                    <form method="POST" action="<?= base_url('stats/poids') ?>" class="weight-form">
+                        <?= csrf_field() ?>
+                        <label for="poids_kg" class="weight-form-label">Mon poids aujourd'hui :</label>
+                        <div class="weight-form-input-wrap">
+                            <input type="number" id="poids_kg" name="poids_kg" step="0.1" min="20" max="500" placeholder="ex: 72.5" required class="form-input weight-form-input">
+                            <span class="weight-form-unit">kg</span>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: <?= $objectif_data['pourcentage'] ?>%; background: #2D6A4F;">
-                                <?= $objectif_data['pourcentage'] ?>%
+                        <button type="submit" class="btn btn-primary btn-sm">Enregistrer</button>
+                    </form>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div class="chart-card-title">🎯 Progression vers votre objectif</div>
+                        <div class="chart-card-subtitle"><?= $objectif_data['label'] ?? 'Non défini' ?></div>
+                    </div>
+                    <?php if (!empty($objectif_data)): ?>
+                        <div class="objective-padding">
+                            <div class="objective-mb">
+                                <strong>Actuel :</strong> <?= $objectif_data['actuel'] ?>
+                                &nbsp;|&nbsp;
+                                <strong>Cible :</strong> <?= $objectif_data['cible'] ?>
+                            </div>
+                            <div class="progress-bar stats-progress-bar">
+                                <div class="progress-fill" style="width: <?= $objectif_data['pourcentage'] ?>%;">
+                                    <?= $objectif_data['pourcentage'] ?>%
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php else: ?>
-                    <p>Complétez votre profil pour voir votre progression.</p>
-                <?php endif; ?>
+                    <?php else: ?>
+                        <p class="stats-user-empty">Complétez votre profil pour voir votre progression.</p>
+                    <?php endif; ?>
+                </div>
             </div>
             <?php endif; ?>
+            <?= $this->include('bar/footer') ?>
         </main>
     </div>
 </div>
@@ -199,21 +210,6 @@
 <?php endif; ?>
 </script>
 
-<style>
-    .progress-bar {
-        background-color: #e9ecef;
-        border-radius: 20px;
-        overflow: hidden;
-        height: 30px;
-    }
-    .progress-fill {
-        height: 100%;
-        color: white;
-        text-align: center;
-        line-height: 30px;
-        border-radius: 20px;
-        font-size: 14px;
-    }
-</style>
+
 </body>
 </html>

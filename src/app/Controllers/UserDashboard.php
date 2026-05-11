@@ -36,7 +36,7 @@ class UserDashboard extends BaseController
         $kpi_users = $this->dashboardService->getTotalUsers();
         $kpi_regimes = $this->dashboardService->getActiveRegimes();
         $kpi_codes = $this->dashboardService->getValidCodesCount();
-        $kpi_gold = $this->dashboardService->getUserGoldRevenue();
+        $kpi_gold = $this->dashboardService->getGoldRevenue();
         $kpi_users_trend = $this->dashboardService->getUserTrend();
         $chart_inscriptions = $this->dashboardService->getInscriptionsParMois();
         $chart_imc = $this->dashboardService->getRepartitionIMC();

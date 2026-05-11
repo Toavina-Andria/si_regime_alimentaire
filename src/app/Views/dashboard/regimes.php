@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NutriPlan — Régimes alimentaires</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
 </head>
 <body>
@@ -15,35 +12,9 @@
   <?= $this->include('bar/sidebar') ?>
 
   <div class="main-content">
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="hamburger" aria-label="Menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        </button>
-        <div class="breadcrumb">
-          <a href="<?= base_url('admin/dashboard') ?>">Accueil</a>
-          <span>/</span>
-          <span class="current">Régimes alimentaires</span>
-        </div>
-      </div>
-      <div class="topbar-right">
-        <div class="topbar-search">
-          <span class="search-icon">🔍</span>
-          <input type="text" placeholder="Rechercher..." aria-label="Rechercher">
-        </div>
-        <button class="notification-btn" aria-label="Notifications">
-          🔔
-          <span class="notification-dot"></span>
-        </button>
-      </div>
-    </header>
-
     <main class="page-content">
-      <div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
+      <button class="mobile-hamburger" aria-label="Menu">☰</button>
+      <div class="page-header page-header-row">
         <div>
           <h1 class="page-title">Régimes alimentaires</h1>
           <p class="page-subtitle">Gérez les régimes proposés aux utilisateurs</p>
@@ -68,10 +39,10 @@
           <tbody>
             <?php if (empty($regimes)): ?>
             <tr>
-              <td colspan="8" style="text-align:center; color:var(--color-text-muted); padding:48px;">
-                <div style="font-size:36px; margin-bottom:12px; opacity:0.5;">🥗</div>
-                <div style="font-size:16px; font-weight:600; margin-bottom:4px;">Aucun régime</div>
-                <div style="font-size:13px;">Créez votre premier régime alimentaire</div>
+              <td colspan="8" class="empty-table">
+                <div class="empty-table-icon">🥗</div>
+                <div class="empty-table-title">Aucun régime</div>
+                <div class="empty-table-text">Créez votre premier régime alimentaire</div>
               </td>
             </tr>
             <?php else: ?>
@@ -96,6 +67,7 @@
           </tbody>
         </table>
       </div>
+      <?= $this->include('bar/footer') ?>
     </main>
   </div>
 </div>
@@ -115,9 +87,9 @@
         </div>
         <div class="form-group">
           <label class="form-label" for="regime_description">Description</label>
-          <textarea id="regime_description" class="form-input" name="description" rows="3" placeholder="Description du régime..." style="resize:vertical;"></textarea>
+          <textarea id="regime_description" class="form-input" name="description" rows="3" placeholder="Description du régime..."></textarea>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+        <div class="form-grid-3">
           <div class="form-group">
             <label class="form-label" for="regime_pct_viande">% Viande</label>
             <input id="regime_pct_viande" type="number" class="form-input" name="pct_viande" min="0" max="100" step="0.01" required>
@@ -131,7 +103,7 @@
             <input id="regime_pct_volaille" type="number" class="form-input" name="pct_volaille" min="0" max="100" step="0.01" required>
           </div>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="form-grid-2">
           <div class="form-group">
             <label class="form-label" for="regime_duree_jours">Durée (jours)</label>
             <input id="regime_duree_jours" type="number" class="form-input" name="duree_jours" min="1" required>

@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Portefeuille;
 use App\Models\Regime;
 use App\Services\RegimeService;
 
@@ -48,10 +49,18 @@ class RegimeController extends BaseController
             return $this->response->setJSON($regime);
         }
 
+        $userId = session()->get('user_id');
+        $wallet = null;
+        if ($userId) {
+            $portefeuilleModel = new Portefeuille();
+            $wallet = $portefeuilleModel->where('utilisateur_id', $userId)->first();
+        }
+
         return view('regime/detail', [
             'regime' => $regime,
             'prix' => $regimeprix,
             'activites' => $activites,
+            'wallet' => $wallet,
             'message' => 'ok'
         ]);
     }

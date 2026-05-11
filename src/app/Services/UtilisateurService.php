@@ -42,7 +42,10 @@ class UtilisateurService
             throw new \Exception("Code bonus invalide : " . $code_bonus);
         }
 
-        if (!$code['est_valide'] || strtotime($code['expires_at']) < time()) {
+        if (!$code['est_valide']) {
+            throw new \Exception("Code bonus expiré");
+        }
+        if ($code['expires_at'] && strtotime($code['expires_at']) < time()) {
             throw new \Exception("Code bonus expiré");
         }
 

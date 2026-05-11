@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NutriPlan — Utilisateurs</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
 </head>
 <body>
@@ -15,39 +12,13 @@
   <?= $this->include('bar/sidebar') ?>
 
   <div class="main-content">
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="hamburger" aria-label="Menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        </button>
-        <div class="breadcrumb">
-          <a href="<?= base_url('admin/dashboard') ?>">Accueil</a>
-          <span>/</span>
-          <span class="current">Utilisateurs</span>
-        </div>
-      </div>
-      <div class="topbar-right">
-        <div class="topbar-search">
-          <span class="search-icon">🔍</span>
-          <input type="text" placeholder="Rechercher..." aria-label="Rechercher">
-        </div>
-        <button class="notification-btn" aria-label="Notifications">
-          🔔
-          <span class="notification-dot"></span>
-        </button>
-      </div>
-    </header>
-
     <main class="page-content">
+      <button class="mobile-hamburger" aria-label="Menu">☰</button>
       <?php if (session()->getFlashdata('message')): ?>
         <div class="alert alert-success"><?= session()->getFlashdata('message') ?></div>
       <?php endif; ?>
 
-      <div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
+      <div class="page-header page-header-row">
         <div>
           <h1 class="page-title">Utilisateurs</h1>
           <p class="page-subtitle">Gérez les comptes utilisateurs de la plateforme</p>
@@ -73,10 +44,10 @@
           <tbody>
             <?php if (empty($utilisateurs)): ?>
             <tr>
-              <td colspan="10" style="text-align:center; color:var(--color-text-muted); padding:48px;">
-                <div style="font-size:36px; margin-bottom:12px; opacity:0.5;">👥</div>
-                <div style="font-size:16px; font-weight:600; margin-bottom:4px;">Aucun utilisateur</div>
-                <div style="font-size:13px;">Les utilisateurs inscrits apparaîtront ici</div>
+              <td colspan="10" class="empty-table">
+                <div class="empty-table-icon">👥</div>
+                <div class="empty-table-title">Aucun utilisateur</div>
+                <div class="empty-table-text">Les utilisateurs inscrits apparaîtront ici</div>
               </td>
             </tr>
             <?php else: ?>
@@ -113,6 +84,7 @@
           </tbody>
         </table>
       </div>
+      <?= $this->include('bar/footer') ?>
     </main>
   </div>
 </div>
@@ -127,12 +99,16 @@
       <?= csrf_field() ?>
       <div class="modal-body">
         <div class="form-group">
+          <label class="form-label">Prénom</label>
+          <input type="text" class="form-input" name="prenom" required>
+        </div>
+        <div class="form-group">
           <label class="form-label">Nom</label>
-          <input type="text" class="form-input" name="nom_display" readonly style="background:#f5f5f5;">
+          <input type="text" class="form-input" name="nom" required>
         </div>
         <div class="form-group">
           <label class="form-label">Email</label>
-          <input type="email" class="form-input" name="email_display" readonly style="background:#f5f5f5;">
+          <input type="email" class="form-input" name="email" required>
         </div>
         <div class="form-group">
           <label class="form-label">Rôle administrateur</label>
@@ -160,8 +136,9 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.js-edit-user').forEach(function (btn) {
     btn.addEventListener('click', function () {
       form.action = '<?= base_url('admin/utilisateurs/update') ?>/' + btn.dataset.id;
-      form.elements.nom_display.value = btn.dataset.prenom + ' ' + btn.dataset.nom;
-      form.elements.email_display.value = btn.dataset.email;
+      form.elements.prenom.value = btn.dataset.prenom;
+      form.elements.nom.value = btn.dataset.nom;
+      form.elements.email.value = btn.dataset.email;
       form.elements.est_admin.value = btn.dataset.admin;
       openModal(modal);
     });

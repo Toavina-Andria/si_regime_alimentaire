@@ -5,22 +5,13 @@
     <title>Analyse des données – NutriPlan</title>
     <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css') ?>">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <style>
-        .analysis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin: 2rem; }
-        .stats-cards { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2rem; }
-        .stat-card { background: white; border-radius: 24px; padding: 1rem 1.5rem; text-align: center; min-width: 150px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .stat-number { font-size: 2rem; font-weight: bold; color: #2D6A4F; }
-        @media (max-width: 768px) { .analysis-grid { grid-template-columns: 1fr; margin: 1rem; } }
-    </style>
 </head>
 <body>
 <div class="dashboard-layout">
     <?= view('bar/sidebar') ?>
     <div class="main-content">
-        <header class="topbar">
-            <h1 class="page-title">📊 Analyse des données</h1>
-            <a href="<?= base_url('dashboard') ?>" class="btn-outline">← Retour</a>
-        </header>
+        <div class="page-content">
+            <button class="mobile-hamburger" aria-label="Menu">☰</button>
 
         <div class="stats-cards">
             <div class="stat-card"><div class="stat-number"><?= $global_stats['total_users'] ?></div><div>Utilisateurs</div></div>
@@ -50,8 +41,10 @@
                 <div class="chart-card-title">📈 Inscriptions (12 mois)</div>
                 <canvas id="inscriptionsChart" data-labels='<?= json_encode($inscriptions['labels']) ?>' data-values='<?= json_encode($inscriptions['values']) ?>'></canvas>
             </div>
+            <?= $this->include('bar/footer') ?>
         </div>
     </div>
+</div>
 </div>
 
 <script>

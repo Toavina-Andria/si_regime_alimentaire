@@ -144,6 +144,33 @@ class DashboardService
         return $result;
     }
 
+    public function getTotalRevenue(): float
+    {
+        $result = $this->db->table('souscription_regime')
+            ->select('SUM(prix_paye) as total')
+            ->get()
+            ->getRowArray();
+        return round($result['total'] ?? 0, 2);
+    }
+
+    public function getGoldRevenue(): float
+    {
+        $result = $this->db->table('souscription_regime sr')
+            ->select('SUM(sr.prix_paye) as total')
+            ->join('utilisateur_abonnement ua', 'ua.utilisateur_id = sr.utilisateur_id')
+            ->join('abonnement a', 'a.id = ua.abonnement_id')
+            ->where('a.statut', 'gold')
+            ->where('ua.statut', 'actif')
+            ->get()
+            ->getRowArray();
+        return round($result['total'] ?? 0, 2);
+    }
+
+    public function getStandardRevenue(): float
+    {
+        return round($this->getTotalRevenue() - $this->getGoldRevenue(), 2);
+    }
+
     public function getTotalUsers(): int
     {
         return (new Utilisateur())->countAllResults();
@@ -157,16 +184,6 @@ class DashboardService
     public function getValidCodesCount(): int
     {
         return (new CodeBonus())->where('est_valide', 1)->countAllResults();
-    }
-
-    public function getUserGoldRevenue(): float
-    {
-        $goldRevenue = $this->db->table('souscription_regime')
-            ->select('SUM(prix_paye) as total')
-            ->where('remise_appliquee', 15.00)
-            ->get()
-            ->getRowArray();
-        return round($goldRevenue['total'] ?? 0, 2);
     }
 
     public function getUserTrend(): int
@@ -253,11 +270,6 @@ class DashboardService
                          ->where('created_at >=', $startOfMonth)
                          ->where('created_at <=', $endOfMonth)
                          ->countAllResults();
-    }
-
-    public function getGoldRevenue(): float
-    {
-        return $this->getUserGoldRevenue();
     }
 
     public function getMonthlyInscriptions(): array
@@ -393,12 +405,12 @@ class DashboardService
 
     public function updateUtilisateur(int $id, array $data)
     {
-        return (new Utilisateur())->update($id, $data);
+        return (new Utilisateur())->adminUpdate($id, $data);
     }
 
     public function deleteUtilisateur(int $id)
     {
-        return (new Utilisateur())->delete($id);
+        return (new Utilisateur())->adminDelete($id);
     }
 
     public function getAllAbonnements(): array

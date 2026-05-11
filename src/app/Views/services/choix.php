@@ -79,6 +79,7 @@
             </div>
         </div>
     </div>
+    <?= view('bar/footer') ?>
 </body>
 
 </html>

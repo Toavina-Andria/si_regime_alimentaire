@@ -36,7 +36,9 @@ class DashboardController extends BaseController
             'kpi_users_trend'    => $this->dashboardService->getUserTrend(),
             'kpi_regimes'        => $this->dashboardService->getActiveRegimes(),
             'kpi_codes'          => $this->dashboardService->getCodesThisMonth(),
-            'kpi_gold'           => $this->dashboardService->getGoldRevenue(),
+            'total_revenue'      => $this->dashboardService->getTotalRevenue(),
+            'gold_revenue'       => $this->dashboardService->getGoldRevenue(),
+            'standard_revenue'   => $this->dashboardService->getStandardRevenue(),
             'chart_inscriptions' => $this->dashboardService->getMonthlyInscriptions(),
             'chart_imc'          => $this->dashboardService->getIMCDistribution(),
             'recent_regimes'     => $this->dashboardService->getRecentRegimes(),
@@ -188,6 +190,9 @@ class DashboardController extends BaseController
         if ($redirect = $this->requireAdmin()) return $redirect;
 
         $data = [
+            'prenom'    => $this->request->getPost('prenom'),
+            'nom'       => $this->request->getPost('nom'),
+            'email'     => $this->request->getPost('email'),
             'est_admin' => $this->request->getPost('est_admin') ? 1 : 0,
         ];
 

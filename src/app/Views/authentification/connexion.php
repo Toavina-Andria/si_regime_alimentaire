@@ -123,5 +123,6 @@
       });
     });
   </script>
+  <?= view('bar/footer') ?>
 </body>
 </html>

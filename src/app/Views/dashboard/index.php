@@ -9,17 +9,8 @@
 <div class="dashboard-layout">
     <?= view('bar/sidebar') ?>
     <div class="main-content">
-        <header class="topbar">
-            <div class="topbar-left">
-                <h1 class="page-title"><?= isset($user) ? 'Mon espace' : 'Tableau de bord Admin' ?></h1>
-            </div>
-            <div class="topbar-right">
-                <a href="<?= site_url('services') ?>" class="btn-outline">Services</a>
-                <a href="<?= site_url('logout') ?>" class="btn-outline">Déconnexion</a>
-            </div>
-        </header>
-
         <main class="page-content">
+            <button class="mobile-hamburger" aria-label="Menu">☰</button>
 
             <?php if (isset($user) && $user): ?>
             <div class="user-greeting">
@@ -92,7 +83,47 @@
                 <div class="kpi-card"><div class="kpi-value"><?= $kpi_users ?></div><div class="kpi-label">Utilisateurs</div></div>
                 <div class="kpi-card"><div class="kpi-value"><?= $kpi_regimes ?></div><div class="kpi-label">Régimes</div></div>
                 <div class="kpi-card"><div class="kpi-value"><?= $kpi_codes ?></div><div class="kpi-label">Codes (mois)</div></div>
-                <div class="kpi-card"><div class="kpi-value"><?= number_format($kpi_gold, 2) ?>€</div><div class="kpi-label">Revenus Gold</div></div>
+                <div class="kpi-card">
+                    <div class="kpi-value"><?= $kpi_users_trend > 0 ? '+' : '' ?><?= $kpi_users_trend ?>%</div>
+                    <div class="kpi-label">Croissance (30j)</div>
+                    <div class="kpi-trend <?= $kpi_users_trend >= 0 ? 'up' : 'down' ?>"><?= $kpi_users_trend >= 0 ? '↑' : '↓' ?> <?= abs($kpi_users_trend) ?>%</div>
+                </div>
+            </div>
+
+            <div class="revenue-card">
+                <div class="revenue-total">
+                    <div class="revenue-total-label">Revenus Total</div>
+                    <div class="revenue-total-amount"><?= number_format($total_revenue, 2) ?>€</div>
+                    <div class="revenue-total-period">Depuis le lancement</div>
+                </div>
+                <div class="revenue-divider"></div>
+                <div class="revenue-detail">
+                    <div class="revenue-detail-label">Répartition</div>
+                    <?php
+                    $gold_pct = $total_revenue > 0 ? round(($gold_revenue / $total_revenue) * 100, 1) : 0;
+                    $std_pct = $total_revenue > 0 ? round(($standard_revenue / $total_revenue) * 100, 1) : 0;
+                    ?>
+                    <div class="revenue-bar-wrapper">
+                        <div class="revenue-bar">
+                            <div class="revenue-bar-fill gold" style="width: <?= $gold_pct ?>%;"></div>
+                            <div class="revenue-bar-fill standard" style="width: <?= $std_pct ?>%;"></div>
+                        </div>
+                    </div>
+                    <div class="revenue-stats">
+                        <div class="revenue-stat">
+                            <span class="revenue-dot gold"></span>
+                            <span class="revenue-stat-label">Gold</span>
+                            <span class="revenue-stat-amount"><?= number_format($gold_revenue, 2) ?>€</span>
+                            <span class="revenue-stat-pct">(<?= $gold_pct ?>%)</span>
+                        </div>
+                        <div class="revenue-stat">
+                            <span class="revenue-dot standard"></span>
+                            <span class="revenue-stat-label">Standard</span>
+                            <span class="revenue-stat-amount"><?= number_format($standard_revenue, 2) ?>€</span>
+                            <span class="revenue-stat-pct">(<?= $std_pct ?>%)</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="charts-grid">
@@ -124,6 +155,7 @@
                 </table>
             </div>
             <?php endif; ?>
+            <?= $this->include('bar/footer') ?>
         </main>
     </div>
 </div>

@@ -93,5 +93,6 @@
       </form>
     </div>
   </div>
+  <?= view('bar/footer') ?>
 </body>
 </html>

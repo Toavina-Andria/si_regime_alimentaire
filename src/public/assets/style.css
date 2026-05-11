@@ -26,6 +26,7 @@ body {
   background: var(--color-bg);
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 20px;
@@ -255,6 +256,24 @@ body {
 
 .auth-footer a:hover {
   text-decoration: underline;
+}
+
+/* ==================== FOOTER ==================== */
+.app-footer {
+  margin-top: 24px;
+  padding: 16px 0;
+}
+
+.footer-students {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.footer-students span {
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
