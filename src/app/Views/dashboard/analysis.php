@@ -51,6 +51,7 @@
         </div>
     </div>
 </div>
+</div>
 
 <script>
     new Chart(document.getElementById('objectifChart'), { type: 'doughnut', data: { labels: JSON.parse(document.getElementById('objectifChart').dataset.labels), datasets: [{ data: JSON.parse(document.getElementById('objectifChart').dataset.values), backgroundColor: ['#2D6A4F','#52B788','#D4A853','#B4432B'] }] } });

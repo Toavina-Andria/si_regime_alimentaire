@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /* ==================== SIDEBAR ==================== */
 function initSidebar() {
-  const hamburger = document.querySelector('.hamburger');
+  const hamburger = document.querySelector('.mobile-hamburger, .hamburger');
   const sidebar = document.querySelector('.sidebar');
   let overlay = document.querySelector('.sidebar-overlay');
 
