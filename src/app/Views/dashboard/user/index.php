@@ -12,6 +12,12 @@
         <main class="page-content">
             <button class="mobile-hamburger" aria-label="Menu">☰</button>
 
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
+            <?php elseif (session()->getFlashdata('error')): ?>
+                <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
+            <?php endif; ?>
+
             <div class="user-greeting">
                 <h2>Bonjour, <?= esc($user['prenom']) ?> 🎉</h2>
                 <p><?= esc($user['email']) ?> · Membre depuis <?= date('F Y', strtotime($user['created_at'])) ?></p>

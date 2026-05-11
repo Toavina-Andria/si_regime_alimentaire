@@ -21,6 +21,12 @@
 
         <main class="page-content">
 
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
+            <?php elseif (session()->getFlashdata('error')): ?>
+                <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
+            <?php endif; ?>
+
             <div class="suggestion-card" style="max-width: 800px; margin-bottom: 20px;">
                 <p><strong>Description :</strong> <?= nl2br(esc($regime['description'] ?? 'Aucune description')) ?></p>
                 <p><strong>Variation de poids :</strong>
