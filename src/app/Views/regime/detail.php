@@ -111,10 +111,10 @@
                                 <?= $act['intensite'] == 1 ? 'Faible' : ($act['intensite'] == 2 ? 'Modérée' : 'Intense') ?>
                             </span>
                         </div>
-                        <p style="font-size:0.85rem;color:var(--color-text-secondary);margin:0.5rem 0;">
+                        <p class="regime-act-desc">
                             <?= esc($act['description'] ?? '') ?>
                         </p>
-                        <div style="display:flex;gap:1rem;font-size:0.85rem;color:var(--color-text-muted);margin-top:0.75rem;border-top:1px solid var(--color-border);padding-top:0.75rem;">
+                        <div class="regime-act-stats">
                             <span>🔥 <?= $act['calories_heure'] ?> kcal/h</span>
                             <span>📅 <?= $act['frequence_semaine'] ?>x/semaine</span>
                         </div>
