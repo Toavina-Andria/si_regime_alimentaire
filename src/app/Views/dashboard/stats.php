@@ -10,16 +10,8 @@
 <div class="dashboard-layout">
     <?= $this->include('bar/sidebar') ?>
     <div class="main-content">
-        <header class="topbar">
-            <div class="topbar-left">
-                <h1 class="page-title">📊 Statistiques</h1>
-            </div>
-            <div class="topbar-right">
-                <a href="<?= base_url('admin/dashboard') ?>" class="btn-outline">← Retour</a>
-            </div>
-        </header>
-
         <main class="page-content">
+            <button class="mobile-hamburger" aria-label="Menu">☰</button>
 
             <?php if (isset($total_users)): ?>
             <div class="kpi-grid">
