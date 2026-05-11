@@ -18,8 +18,17 @@ class RegimeController extends BaseController
         $this->regimeService = new RegimeService();
     }
 
+    private function requireAdmin()
+    {
+        if (!session()->get('logged_in') || !session()->get('est_admin')) {
+            return redirect()->to('/dashboard');
+        }
+        return null;
+    }
+
     public function index()
     {
+        if ($redirect = $this->requireAdmin()) return $redirect;
         $regimes = $this->regimeModel->orderBy('created_at', 'DESC')->paginate(10);
         return view('dashboard/regimes', [
             'regimes' => $regimes,
@@ -29,6 +38,7 @@ class RegimeController extends BaseController
 
     public function create()
     {
+        if ($redirect = $this->requireAdmin()) return $redirect;
         return view('regime/admin_create');
     }
 
@@ -67,6 +77,7 @@ class RegimeController extends BaseController
 
     public function store()
     {
+        if ($redirect = $this->requireAdmin()) return $redirect;
         $data = [
             'nom' => $this->request->getPost('nom'),
             'description' => $this->request->getPost('description'),
@@ -95,6 +106,7 @@ class RegimeController extends BaseController
 
     public function edit($id)
     {
+        if ($redirect = $this->requireAdmin()) return $redirect;
         $regime = $this->regimeModel->find($id);
         if (!$regime) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -104,6 +116,7 @@ class RegimeController extends BaseController
 
     public function update($id)
     {
+        if ($redirect = $this->requireAdmin()) return $redirect;
         $data = [
             'nom' => $this->request->getPost('nom'),
             'description' => $this->request->getPost('description'),
@@ -144,6 +157,7 @@ class RegimeController extends BaseController
 
     public function delete($id)
     {
+        if ($redirect = $this->requireAdmin()) return $redirect;
         try {
             RegimeService::deleteRegime($id);
             return redirect()->to('/regime/admin')->with('message', 'Régime supprimé avec succès.');
