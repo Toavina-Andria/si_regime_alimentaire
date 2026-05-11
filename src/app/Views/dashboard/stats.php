@@ -135,7 +135,7 @@
                             <strong>Cible :</strong> <?= $objectif_data['cible'] ?>
                         </div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: <?= $objectif_data['pourcentage'] ?>%; background: #2D6A4F;">
+                            <div class="progress-fill" style="width: <?= $objectif_data['pourcentage'] ?>%;">
                                 <?= $objectif_data['pourcentage'] ?>%
                             </div>
                         </div>

@@ -19,7 +19,7 @@ helper('navigation');
     <nav class="sidebar-nav">
 
         <?php if (session()->get('est_admin')): ?>
-            <div class="sidebar-section-label" style="margin-top: 20px; padding: 0 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.5px;">👨‍💼 Administration</div>
+            <div class="sidebar-section-label">👨‍💼 Administration</div>
 
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Tableau de bord</div>
@@ -63,7 +63,7 @@ helper('navigation');
         <?php endif; ?>
 
         <?php if (!session()->get('est_admin')): ?>
-        <div class="sidebar-section-label" style="margin-top: 20px; padding: 0 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.5px;">👤 Mon Espace</div>
+        <div class="sidebar-section-label">👤 Mon Espace</div>
 
         <div class="sidebar-section">
             <div class="sidebar-section-title">Vue d'ensemble</div>

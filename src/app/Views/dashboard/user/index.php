@@ -83,7 +83,7 @@
                 </div>
                 <div class="activity-card">
                     <div class="activity-card-title">💰 Mon portefeuille</div>
-                    <div class="kpi-value" style="margin-bottom: 0.75rem;"><?= number_format($wallet['solde_points'] ?? 0, 2) ?> points</div>
+                    <div class="kpi-value mb-3"><?= number_format($wallet['solde_points'] ?? 0, 2) ?> points</div>
                     <hr>
                     <div class="activity-card-title">⭐ Mon abonnement</div>
                     <?php if ($subscription): ?>
@@ -92,7 +92,7 @@
                     <?php else: ?>
                         <p>Aucun abonnement actif</p>
                     <?php endif; ?>
-                    <div style="margin-top: 1.25rem;">
+                    <div class="mt-4">
                         <a href="<?= site_url('wallet/code') ?>" class="btn-outline">➕ Ajouter un code</a>
                     </div>
                 </div>
