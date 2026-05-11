@@ -81,6 +81,7 @@
           </tbody>
         </table>
       </div>
+      <?= $this->include('bar/footer') ?>
     </main>
   </div>
 </div>

@@ -41,6 +41,7 @@
                 <div class="chart-card-title">📈 Inscriptions (12 mois)</div>
                 <canvas id="inscriptionsChart" data-labels='<?= json_encode($inscriptions['labels']) ?>' data-values='<?= json_encode($inscriptions['values']) ?>'></canvas>
             </div>
+            <?= $this->include('bar/footer') ?>
         </div>
     </div>
 </div>

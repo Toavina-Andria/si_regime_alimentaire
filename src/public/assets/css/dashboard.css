@@ -1189,6 +1189,25 @@ textarea.form-input { resize: vertical; }
   }
 }
 
+/* ==================== FOOTER ==================== */
+.app-footer {
+  margin-top: 32px;
+  padding: 20px 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-students {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.footer-students span {
+  font-weight: 500;
+}
+
 /* ==================== RESPONSIVE ==================== */
 .sidebar-overlay {
   display: none;

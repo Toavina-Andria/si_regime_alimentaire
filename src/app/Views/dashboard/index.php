@@ -155,6 +155,7 @@
                 </table>
             </div>
             <?php endif; ?>
+            <?= $this->include('bar/footer') ?>
         </main>
     </div>
 </div>
