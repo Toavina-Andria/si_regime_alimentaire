@@ -82,7 +82,7 @@
                         <?php if ($isBest): ?><div class="badge-reco">Meilleur rapport</div><?php endif; ?>
                         <div class="duration"><?= $p['duree_jours'] ?> jours</div>
                         <div class="amount"><?= number_format($p['prix_base'], 2) ?> <small>€</small></div>
-                        <div style="font-size:0.75rem;color:var(--color-text-muted);margin-top:0.25rem;">
+                        <div class="regime-price-perday">
                             soit <?= number_format($ppj, 2) ?> €/jour
                         </div>
                         <form method="POST" action="<?= base_url('regime/souscrire') ?>">
