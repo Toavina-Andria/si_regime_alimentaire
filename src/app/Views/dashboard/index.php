@@ -90,22 +90,39 @@
                 </div>
             </div>
 
-            <div class="kpi-grid" style="margin-bottom:28px;">
-                <div class="kpi-card" style="background:linear-gradient(135deg,#2D6A4F,#40916C);color:white;">
-                    <div class="kpi-value" style="color:white;"><?= number_format($total_revenue, 2) ?>€</div>
-                    <div class="kpi-label" style="color:rgba(255,255,255,0.8);">Revenus Total</div>
+            <div class="revenue-card">
+                <div class="revenue-total">
+                    <div class="revenue-total-label">Revenus Total</div>
+                    <div class="revenue-total-amount"><?= number_format($total_revenue, 2) ?>€</div>
+                    <div class="revenue-total-period">Depuis le lancement</div>
                 </div>
-                <div class="kpi-card" style="background:linear-gradient(135deg,#D4A853,#F0C040);">
-                    <div class="kpi-value"><?= number_format($gold_revenue, 2) ?>€</div>
-                    <div class="kpi-label">Revenus Gold</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-value"><?= number_format($standard_revenue, 2) ?>€</div>
-                    <div class="kpi-label">Revenus Standard</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-value"><?= number_format($total_revenue > 0 ? ($gold_revenue / $total_revenue) * 100 : 0, 1) ?>%</div>
-                    <div class="kpi-label">Part Gold</div>
+                <div class="revenue-divider"></div>
+                <div class="revenue-detail">
+                    <div class="revenue-detail-label">Répartition</div>
+                    <?php
+                    $gold_pct = $total_revenue > 0 ? round(($gold_revenue / $total_revenue) * 100, 1) : 0;
+                    $std_pct = $total_revenue > 0 ? round(($standard_revenue / $total_revenue) * 100, 1) : 0;
+                    ?>
+                    <div class="revenue-bar-wrapper">
+                        <div class="revenue-bar">
+                            <div class="revenue-bar-fill gold" style="width: <?= $gold_pct ?>%;"></div>
+                            <div class="revenue-bar-fill standard" style="width: <?= $std_pct ?>%;"></div>
+                        </div>
+                    </div>
+                    <div class="revenue-stats">
+                        <div class="revenue-stat">
+                            <span class="revenue-dot gold"></span>
+                            <span class="revenue-stat-label">Gold</span>
+                            <span class="revenue-stat-amount"><?= number_format($gold_revenue, 2) ?>€</span>
+                            <span class="revenue-stat-pct">(<?= $gold_pct ?>%)</span>
+                        </div>
+                        <div class="revenue-stat">
+                            <span class="revenue-dot standard"></span>
+                            <span class="revenue-stat-label">Standard</span>
+                            <span class="revenue-stat-amount"><?= number_format($standard_revenue, 2) ?>€</span>
+                            <span class="revenue-stat-pct">(<?= $std_pct ?>%)</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
