@@ -118,5 +118,6 @@
             </div>
         </main>
     </div>
+    <?= view('bar/footer') ?>
 </body>
 </html>
