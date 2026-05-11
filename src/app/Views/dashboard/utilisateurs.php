@@ -98,12 +98,16 @@
       <?= csrf_field() ?>
       <div class="modal-body">
         <div class="form-group">
+          <label class="form-label">Prénom</label>
+          <input type="text" class="form-input" name="prenom" required>
+        </div>
+        <div class="form-group">
           <label class="form-label">Nom</label>
-          <input type="text" class="form-input" name="nom_display" readonly>
+          <input type="text" class="form-input" name="nom" required>
         </div>
         <div class="form-group">
           <label class="form-label">Email</label>
-          <input type="email" class="form-input" name="email_display" readonly>
+          <input type="email" class="form-input" name="email" required>
         </div>
         <div class="form-group">
           <label class="form-label">Rôle administrateur</label>
@@ -131,8 +135,9 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.js-edit-user').forEach(function (btn) {
     btn.addEventListener('click', function () {
       form.action = '<?= base_url('admin/utilisateurs/update') ?>/' + btn.dataset.id;
-      form.elements.nom_display.value = btn.dataset.prenom + ' ' + btn.dataset.nom;
-      form.elements.email_display.value = btn.dataset.email;
+      form.elements.prenom.value = btn.dataset.prenom;
+      form.elements.nom.value = btn.dataset.nom;
+      form.elements.email.value = btn.dataset.email;
       form.elements.est_admin.value = btn.dataset.admin;
       openModal(modal);
     });

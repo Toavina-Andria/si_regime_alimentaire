@@ -405,12 +405,12 @@ class DashboardService
 
     public function updateUtilisateur(int $id, array $data)
     {
-        return (new Utilisateur())->update($id, $data);
+        return (new Utilisateur())->adminUpdate($id, $data);
     }
 
     public function deleteUtilisateur(int $id)
     {
-        return (new Utilisateur())->delete($id);
+        return (new Utilisateur())->adminDelete($id);
     }
 
     public function getAllAbonnements(): array

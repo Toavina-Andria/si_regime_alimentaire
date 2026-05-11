@@ -88,6 +88,13 @@
             <div class="page-header">
                 <p class="page-subtitle">Suivez votre progression</p>
             </div>
+
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="alert-inline">✅ <?= session()->getFlashdata('success') ?></div>
+            <?php elseif (session()->getFlashdata('error')): ?>
+                <div class="alert-inline error">❌ <?= session()->getFlashdata('error') ?></div>
+            <?php endif; ?>
+
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <div class="kpi-value"><?= $imc ?? '—' ?></div>
@@ -120,6 +127,15 @@
                         data-values='<?= $poids_values ?? '[]' ?>'>
                     </canvas>
                 </div>
+                <form method="POST" action="<?= base_url('stats/poids') ?>" class="weight-form">
+                    <?= csrf_field() ?>
+                    <label for="poids_kg" class="weight-form-label">Mon poids aujourd'hui :</label>
+                    <div class="weight-form-input-wrap">
+                        <input type="number" id="poids_kg" name="poids_kg" step="0.1" min="20" max="500" placeholder="ex: 72.5" required class="form-input weight-form-input">
+                        <span class="weight-form-unit">kg</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm">Enregistrer</button>
+                </form>
             </div>
 
             <div class="chart-card">

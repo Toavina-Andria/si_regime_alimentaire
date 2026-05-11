@@ -43,11 +43,6 @@ helper('navigation');
                     <span class="icon">🏃</span>
                     Activités sportives
                 </a>
-                <a href="<?= base_url('admin/abonnements') ?>"
-                    class="sidebar-link <?= navActive('admin/abonnements') ?>">
-                    <span class="icon">🎯</span>
-                    Abonnements
-                </a>
                 <a href="<?= base_url('admin/codes') ?>"
                     class="sidebar-link <?= navActive('admin/codes') ?>">
                     <span class="icon">💰</span>

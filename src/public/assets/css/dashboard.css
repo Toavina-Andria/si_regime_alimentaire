@@ -992,6 +992,7 @@ textarea.form-input { resize: vertical; }
 
 /* ==================== ALERT INLINE ==================== */
 .alert-inline { background: #D1FAE5; color: #065F46; padding: 14px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.alert-inline.error { background: #FEE2E2; color: #991B1B; }
 
 /* ==================== SIDEBAR SECTION LABEL ==================== */
 .sidebar-section-label { margin-top: 20px; padding: 0 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.5px; }
@@ -1004,6 +1005,13 @@ textarea.form-input { resize: vertical; }
 
 /* ==================== CHART CARD MARGIN ==================== */
 .chart-card-mb { margin-bottom: 30px; }
+
+/* ==================== WEIGHT INPUT FORM ==================== */
+.weight-form { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--color-border); }
+.weight-form-label { font-size: 14px; font-weight: 500; white-space: nowrap; }
+.weight-form-input-wrap { display: flex; align-items: center; gap: 8px; flex: 1; }
+.weight-form-input { max-width: 140px; }
+.weight-form-unit { font-size: 14px; color: var(--color-text-muted); }
 
 /* ==================== SPACING UTILITIES ==================== */
 .mt-4 { margin-top: 1.25rem; }

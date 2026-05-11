@@ -190,6 +190,9 @@ class DashboardController extends BaseController
         if ($redirect = $this->requireAdmin()) return $redirect;
 
         $data = [
+            'prenom'    => $this->request->getPost('prenom'),
+            'nom'       => $this->request->getPost('nom'),
+            'email'     => $this->request->getPost('email'),
             'est_admin' => $this->request->getPost('est_admin') ? 1 : 0,
         ];
 
