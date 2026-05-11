@@ -4,25 +4,9 @@ namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 
-/**
- * -------------------------------------------------------------------
- * User Agents
- * -------------------------------------------------------------------
- *
- * This file contains four arrays of user agent data. It is used by the
- * User Agent Class to help identify browser, platform, robot, and
- * mobile device data. The array keys are used to identify the device
- * and the array values are used to set the actual name of the item.
- */
 class UserAgents extends BaseConfig
 {
-    /**
-     * -------------------------------------------------------------------
-     * OS Platforms
-     * -------------------------------------------------------------------
-     *
-     * @var array<string, string>
-     */
+
     public array $platforms = [
         'windows nt 10.0' => 'Windows 10',
         'windows nt 6.3'  => 'Windows 8.1',
@@ -68,23 +52,13 @@ class UserAgents extends BaseConfig
         'symbian'         => 'Symbian OS',
     ];
 
-    /**
-     * -------------------------------------------------------------------
-     * Browsers
-     * -------------------------------------------------------------------
-     *
-     * The order of this array should NOT be changed. Many browsers return
-     * multiple browser types so we want to identify the subtype first.
-     *
-     * @var array<string, string>
-     */
     public array $browsers = [
         'OPR'    => 'Opera',
         'Flock'  => 'Flock',
         'Edge'   => 'Spartan',
         'Edg'    => 'Edge',
         'Chrome' => 'Chrome',
-        // Opera 10+ always reports Opera/9.80 and appends Version/<real version> to the user agent string
+
         'Opera.*?Version'   => 'Opera',
         'Opera'             => 'Opera',
         'MSIE'              => 'Internet Explorer',
@@ -112,31 +86,14 @@ class UserAgents extends BaseConfig
         'Vivaldi'           => 'Vivaldi',
     ];
 
-    /**
-     * -------------------------------------------------------------------
-     * Mobiles
-     * -------------------------------------------------------------------
-     *
-     * @var array<string, string>
-     */
     public array $mobiles = [
-        // legacy array, old values commented out
-        'mobileexplorer' => 'Mobile Explorer',
-        // 'openwave'             => 'Open Wave',
-        // 'opera mini'           => 'Opera Mini',
-        // 'operamini'            => 'Opera Mini',
-        // 'elaine'               => 'Palm',
-        'palmsource' => 'Palm',
-        // 'digital paths'        => 'Palm',
-        // 'avantgo'              => 'Avantgo',
-        // 'xiino'                => 'Xiino',
-        'palmscape' => 'Palmscape',
-        // 'nokia'                => 'Nokia',
-        // 'ericsson'             => 'Ericsson',
-        // 'blackberry'           => 'BlackBerry',
-        // 'motorola'             => 'Motorola'
 
-        // Phones and Manufacturers
+        'mobileexplorer' => 'Mobile Explorer',
+
+        'palmsource' => 'Palm',
+
+        'palmscape' => 'Palmscape',
+
         'motorola'             => 'Motorola',
         'nokia'                => 'Nokia',
         'palm'                 => 'Palm',
@@ -180,7 +137,6 @@ class UserAgents extends BaseConfig
         'open web'             => 'Open Web',
         'openweb'              => 'OpenWeb',
 
-        // Operating Systems
         'android'    => 'Android',
         'symbian'    => 'Symbian',
         'SymbianOS'  => 'SymbianOS',
@@ -188,7 +144,6 @@ class UserAgents extends BaseConfig
         'series60'   => 'Symbian S60',
         'windows ce' => 'Windows CE',
 
-        // Browsers
         'obigo'         => 'Obigo',
         'netfront'      => 'Netfront Browser',
         'openwave'      => 'Openwave Browser',
@@ -198,7 +153,6 @@ class UserAgents extends BaseConfig
         'opera mobi'    => 'Opera Mobile',
         'fennec'        => 'Firefox Mobile',
 
-        // Other
         'digital paths' => 'Digital Paths',
         'avantgo'       => 'AvantGo',
         'xiino'         => 'Xiino',
@@ -207,7 +161,6 @@ class UserAgents extends BaseConfig
         'docomo'        => 'NTT DoCoMo',
         'o2'            => 'O2',
 
-        // Fallback
         'mobile'     => 'Generic Mobile',
         'wireless'   => 'Generic Mobile',
         'j2me'       => 'Generic Mobile',
@@ -219,15 +172,6 @@ class UserAgents extends BaseConfig
         'cellphone'  => 'Generic Mobile',
     ];
 
-    /**
-     * -------------------------------------------------------------------
-     * Robots
-     * -------------------------------------------------------------------
-     *
-     * There are hundred of bots but these are the most common.
-     *
-     * @var array<string, string>
-     */
     public array $robots = [
         'googlebot'            => 'Googlebot',
         'google-pagerenderer'  => 'Google Page Renderer',

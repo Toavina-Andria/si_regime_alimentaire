@@ -21,8 +21,7 @@ class UserDashboard extends BaseController
 
         $userId = session()->get('user_id');
         $user = $this->dashboardService->getUserById($userId);
-        
-        // Si l'utilisateur n'existe pas, détruire session
+
         if (!$user) {
             session()->destroy();
             return redirect()->to('/connexion');
@@ -34,7 +33,6 @@ class UserDashboard extends BaseController
         $wallet = $this->dashboardService->getWallet($userId);
         $subscription = $this->dashboardService->getUserGoldSubscription($userId);
 
-        // Données pour KPI (garder si nécessaire)
         $kpi_users = $this->dashboardService->getTotalUsers();
         $kpi_regimes = $this->dashboardService->getActiveRegimes();
         $kpi_codes = $this->dashboardService->getValidCodesCount();

@@ -109,7 +109,6 @@
   </div>
 </div>
 
-<!-- Modal Nouvel / Modifier abonnement -->
 <div class="modal-overlay" id="modalAbonnement">
   <div class="modal">
     <div class="modal-header">

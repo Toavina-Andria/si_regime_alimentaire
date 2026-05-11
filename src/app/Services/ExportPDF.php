@@ -64,7 +64,6 @@ class ExportPDF
         $pdf->AddPage();
         $pdf->SetAutoPageBreak(true, 20);
 
-        // --- Section utilisateur ---
         $pdf->sectionTitle('Informations personnelles');
 
         $pdf->infoRow('Nom complet :', $user['nom'] . ' ' . $user['prenom']);
@@ -89,7 +88,6 @@ class ExportPDF
 
         $pdf->Ln(4);
 
-        // --- Section IMC ---
         if (!empty($stats['imc'])) {
             $pdf->sectionTitle('Indice de Masse Corporelle (IMC)');
 
@@ -119,7 +117,6 @@ class ExportPDF
             $pdf->Ln(4);
         }
 
-        // --- Section Abonnement ---
         if (!empty($stats['abonnement'])) {
             $pdf->sectionTitle('Abonnement');
 
@@ -142,7 +139,6 @@ class ExportPDF
 
         $pdf->Ln(8);
 
-        // --- Footer message ---
         $pdf->SetDrawColor(200, 200, 200);
         $pdf->Line(10, $pdf->GetY(), 200, $pdf->GetY());
         $pdf->Ln(3);

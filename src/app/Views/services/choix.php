@@ -26,7 +26,7 @@
             </div>
 
             <div class="services-grid">
-                <!-- 1. Tableau de bord -->
+
                 <a href="<?= site_url('dashboard') ?>" class="service-card">
                     <div class="service-icon">📊</div>
                     <div class="service-title">Tableau de bord</div>
@@ -34,7 +34,6 @@
                     <div class="service-action">Accéder <span>→</span></div>
                 </a>
 
-                <!-- 2. Régimes -->
                 <a href="<?= site_url('regimes') ?>" class="service-card">
                     <div class="service-icon">🥗</div>
                     <div class="service-title">Régimes</div>
@@ -42,7 +41,6 @@
                     <div class="service-action">Explorer <span>→</span></div>
                 </a>
 
-                <!-- 3. Statistiques -->
                 <a href="<?= site_url('stats') ?>" class="service-card">
                     <div class="service-icon">📈</div>
                     <div class="service-title">Statistiques</div>
@@ -50,7 +48,6 @@
                     <div class="service-action">Visualiser <span>→</span></div>
                 </a>
 
-                <!-- 4. acExport PDF -->
                 <a href="<?= site_url('export/bilan') ?>" class="service-card">
                     <div class="service-icon">📄</div>
                     <div class="service-title">Export PDF</div>
@@ -58,7 +55,6 @@
                     <div class="service-action">Télécharger <span>→</span></div>
                 </a>
 
-                <!-- 5. Mon profil -->
                 <a href="<?= site_url('auth/profil') ?>" class="service-card">
                     <div class="service-icon">👤</div>
                     <div class="service-title">Mon profil</div>
@@ -66,21 +62,20 @@
                     <div class="service-action">Modifier <span>→</span></div>
                 </a>
 
-                <!-- 6. Porte‑monnaie (code argent) -->
                 <a href="<?= site_url('wallet/code') ?>" class="service-card">
                     <div class="service-icon">💰</div>
                     <div class="service-title">Porte‑monnaie</div>
                     <div class="service-desc">Ajoutez des crédits avec un code bonus, consultez vos points.</div>
                     <div class="service-action">Gérer <span>→</span></div>
                 </a>
-                <!-- 7. Analyse des données -->
+
                 <a href="<?= site_url('analysis') ?>" class="service-card">
                     <div class="service-icon">📊</div>
                     <div class="service-title">Analyse des données</div>
                     <div class="service-desc">Statistiques avancées, tendances, top régimes et répartition des utilisateurs.</div>
                     <div class="service-action">Explorer <span>→</span></div>
                 </a>
-                <!-- Vous pouvez ajouter d’autres cartes selon vos besoins -->
+
             </div>
         </div>
     </div>

@@ -32,6 +32,7 @@
 
                 <div class="code-card">
                     <form action="<?= base_url('code/verify') ?>" method="post">
+                        <?= csrf_field() ?>
                         <label for="code">Code bonus</label>
                         <input type="text" id="code" name="code" placeholder="Ex: WELCOME10" required>
                         <button type="submit" class="btn btn-primary">Valider le code</button>

@@ -1,9 +1,7 @@
 <?php
 
 if (!function_exists('navActive')) {
-    /**
-     * Returns "active" when current URL path matches one of given menu paths.
-     */
+
     function navActive($paths, ?string $currentUrl = null): string
     {
         $currentUrl = $currentUrl ?? current_url();

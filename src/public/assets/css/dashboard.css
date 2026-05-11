@@ -1113,3 +1113,5 @@ ul { list-style: none; }
 .btn-outline { background: transparent; border: 1px solid var(--color-primary); color: var(--color-primary); padding: 0.5rem 1rem; border-radius: 40px; cursor: pointer; }
 .btn-primary { background: var(--color-primary); border: none; color: white; padding: 0.5rem 1rem; border-radius: 40px; cursor: pointer; }
 .alert-info { background: #e9f4f1; border-left: 4px solid #2D6A4F; padding: 1rem; border-radius: 12px; }
+.alert-success { background: #e9f4ef; border-left: 4px solid #2D6A4F; padding: 1rem; border-radius: 12px; color: #1e4a3a; }
+.alert-danger { background: #fef2f2; border-left: 4px solid #C1392B; padding: 1rem; border-radius: 12px; color: #991b1b; }

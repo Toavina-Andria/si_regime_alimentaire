@@ -13,21 +13,10 @@ class RegimeController extends BaseController
 
     public function __construct()
     {
-        // Vérifier que l'utilisateur est connecté
-        if (!session()->get('logged_in')) {
-            exit('Accès non autorisé. Veuillez vous connecter.');
-        }
-
-        // Optionnel : restreindre aux admins (exemple : email spécifique)
-        // if (session()->get('user_email') !== 'admin@exemple.com') {
-        //     exit('Accès réservé aux administrateurs.');
-        // }
-
         $this->regimeModel = new Regime();
         $this->regimeService = new RegimeService();
     }
 
-    // Liste des régimes
     public function index()
     {
         $regimes = $this->regimeModel->orderBy('created_at', 'DESC')->paginate(10);
@@ -37,54 +26,36 @@ class RegimeController extends BaseController
         ]);
     }
 
-    // Formulaire de création
     public function create()
     {
         return view('regime/admin_create');
     }
 
-
-    // Détail régime (JSON pour AJAX)
     public function show($id)
     {
         $regime = RegimeService::getRegimeById($id);
         $regimeprix = RegimeService::getRegimePrixByRegimeId($id);
         $activites = RegimeService::getActiviteByRegimeId($id);
-        $data = [
+        if (!$regime) {
+            if ($this->request->isAJAX() || str_contains($this->request->getHeaderLine('Accept'), 'application/json')) {
+                return $this->response->setStatusCode(404)->setJSON(['message' => 'Régime introuvable.']);
+            }
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $accept = $this->request->getHeaderLine('Accept');
+        if ($this->request->isAJAX() || str_contains($accept, 'application/json')) {
+            return $this->response->setJSON($regime);
+        }
+
+        return view('regime/detail', [
             'regime' => $regime,
             'prix' => $regimeprix,
             'activites' => $activites,
-            'message' => 'initial'
-        ];
-        try {
-            if (!$regime) {
-                return $this->response->setStatusCode(404)->setJSON([
-                    'message' => 'Régime introuvable.'
-                ]);
-            }
-
-            $accept = $this->request->getHeaderLine('Accept');
-            if ($this->request->isAJAX() || str_contains($accept, 'application/json')) {
-                return $this->response->setJSON($regime);
-            }
-            $data = [
-                'regime' => $regime,
-                'prix' => $regimeprix,
-                'activites' => $activites,
-                'message' => 'ok'
-            ];
-            return view('regime/detail', $data);
-        } catch (\Throwable $th) {
-            if ($th->getMessage() !== 'Trying to access array offset on null' )
-            {
-                $data['message'] = $th->getMessage();
-            }
-
-            return view('regime/detail',$data);
-        }
+            'message' => 'ok'
+        ]);
     }
 
-    // Enregistrement
     public function store()
     {
         $data = [
@@ -96,7 +67,6 @@ class RegimeController extends BaseController
             'variation_poids_kg' => $this->request->getPost('variation_poids_kg'),
             'duree_jours' => $this->request->getPost('duree_jours'),
         ];
-
 
         try {
             RegimeService::createRegime($data);
@@ -114,7 +84,6 @@ class RegimeController extends BaseController
 
     }
 
-    // Formulaire d'édition
     public function edit($id)
     {
         $regime = $this->regimeModel->find($id);
@@ -124,7 +93,6 @@ class RegimeController extends BaseController
         return view('regime/admin_edit', ['regime' => $regime]);
     }
 
-    // Mise à jour
     public function update($id)
     {
         $data = [
@@ -145,7 +113,6 @@ class RegimeController extends BaseController
         }
     }
 
-    // Souscrire à un régime
     public function souscrire()
     {
         $userId = session()->get('user_id');
@@ -166,7 +133,6 @@ class RegimeController extends BaseController
         }
     }
 
-    // Suppression
     public function delete($id)
     {
         try {

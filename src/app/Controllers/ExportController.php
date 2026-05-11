@@ -18,7 +18,6 @@ class ExportController extends BaseController
         $userModel = new Utilisateur();
         $user = $userModel->find($userId);
 
-        // Calcul IMC
         $imc = null;
         $categorie = null;
         if ($user && !empty($user['taille_cm']) && !empty($user['poids_kg'])) {
@@ -26,7 +25,6 @@ class ExportController extends BaseController
             $categorie = $userModel->categorieIMC($imc);
         }
 
-        // Abonnement actuel
         $abonnement = AbonnementServices::getUserActiveAbonnementWithDetails($userId);
 
         $stats = [

@@ -20,19 +20,17 @@ class Utilisateur extends Model
     protected array $casts = [];
     protected array $castHandlers = [];
 
-    // Dates
     protected $useTimestamps = true;
     protected $dateFormat = 'datetime';
     protected $createdField = 'created_at';
-    protected $updatedField = '';  // pas de champ updated_at dans ta table
+    protected $updatedField = '';
 
-    // Validation par défaut (pour l'insertion initiale – seulement email/mdp)
     protected $validationRules = [
         'nom' => 'required|string|max_length[100]',
         'prenom' => 'required|string|max_length[100]',
         'email' => 'required|valid_email|is_unique[utilisateur.email,id,{id}]',
         'mot_de_passe' => 'required|min_length[6]|max_length[255]',
-        // Les autres champs ne sont pas requis ici (seront ajoutés plus tard)
+
     ];
 
     protected $validationMessages = [
@@ -43,12 +41,10 @@ class Utilisateur extends Model
 
     protected $skipValidation = false;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert = ['hashPassword'];
     protected $beforeUpdate = ['hashPassword'];
 
-    // Règles spécifiques pour la mise à jour du profil (deuxième étape)
     public static $validationRulesProfil = [
         'date_naissance' => 'required|valid_date[Y-m-d]',
         'genre' => 'required|in_list[homme,femme]',
@@ -76,16 +72,15 @@ class Utilisateur extends Model
             'in_list' => 'L\'objectif doit être "augmenter_poids", "reduire_poids" ou "imc_ideal".'
         ]
     ];
-    // rule nom prenoms email mot_de_passe sont requis à l'inscription, les autres champs sont requis à la mise à jour du profil (validation dans controller)
+
     public static $validationRulesInscription = [
         'nom' => 'required|string|max_length[100]',
         'prenom' => 'required|string|max_length[100]',
         'email' => 'required|valid_email|is_unique[utilisateur.email,id,{id}]',
         'mot_de_passe' => 'required|min_length[6]|max_length[255]',
-        // Les autres champs ne sont pas requis à l'inscription
+
     ];
 
-    // Hachage automatique
     protected function hashPassword(array $data)
     {
         if (!isset($data['data']['mot_de_passe'])) {
@@ -97,7 +92,6 @@ class Utilisateur extends Model
         return $data;
     }
 
-    // Calcul IMC (optionnel)
     public function calculerIMC(?float $taille_cm = null, ?float $poids_kg = null): ?float
     {
         $taille = $taille_cm ?? $this['taille_cm'] ?? null;
@@ -109,13 +103,11 @@ class Utilisateur extends Model
         return null;
     }
 
-    // Vérification mot de passe
     public function verifyPassword(string $password): bool
     {
         return password_verify($password, $this->getAttribute('mot_de_passe'));
     }
 
-    // catégorie IMC selon valeur
     public function categorieIMC(?float $imc = null): ?string
     {
         if ($imc === null)

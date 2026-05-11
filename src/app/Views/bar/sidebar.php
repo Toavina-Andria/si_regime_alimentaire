@@ -17,10 +17,10 @@ helper('navigation');
 
 ?>
     <nav class="sidebar-nav">
-        <!-- ADMIN SECTION - Only visible for admin -->
+
         <?php if (session()->get('est_admin')): ?>
             <div class="sidebar-section-label" style="margin-top: 20px; padding: 0 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.5px;">👨‍💼 Administration</div>
-            
+
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Tableau de bord</div>
                 <a href="<?= base_url('admin/dashboard') ?>"
@@ -64,20 +64,11 @@ helper('navigation');
                 </a>
             </div>
 
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">Configuration</div>
-                <a href="<?= base_url('admin/parametres') ?>"
-                    class="sidebar-link <?= navActive('admin/parametres') ?>">
-                    <span class="icon">⚙️</span>
-                    Paramètres
-                </a>
-            </div>
         <?php endif; ?>
 
-        <!-- USER SECTION - Only visible for regular users -->
         <?php if (!session()->get('est_admin')): ?>
         <div class="sidebar-section-label" style="margin-top: 20px; padding: 0 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.5px;">👤 Mon Espace</div>
-        
+
         <div class="sidebar-section">
             <div class="sidebar-section-title">Vue d'ensemble</div>
             <a href="<?= base_url('dashboard') ?>"
@@ -93,11 +84,6 @@ helper('navigation');
                 class="sidebar-link <?= navActive('stats') ?>">
                 <span class="icon">📉</span>
                 Mes statistiques
-            </a>
-            <a href="<?= base_url('analysis') ?>"
-                class="sidebar-link <?= navActive('analysis') ?>">
-                <span class="icon">🔍</span>
-                Analyse des données
             </a>
             <a href="<?= base_url('export/bilan') ?>"
                 class="sidebar-link <?= navActive('export/bilan') ?>">

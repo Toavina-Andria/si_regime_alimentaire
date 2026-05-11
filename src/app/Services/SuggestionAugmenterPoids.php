@@ -16,26 +16,20 @@ class SuggestionAugmenterPoids
         $this->db = \Config\Database::connect();
     }
 
-    /**
-     * Retourne une liste de régimes recommandés pour prendre du poids.
-     * Basée sur variation_poids_kg > 0.
-     *
-     * @return array
-     */
     public function getSuggestions(): array
     {
-        // Récupérer les régimes avec variation positive (gain de poids)
+
         $regimeModel = new Regime();
         $regimes = $regimeModel
             ->where('variation_poids_kg >', 0)
-            ->orderBy('variation_poids_kg', 'DESC') // les plus efficaces d'abord
+            ->orderBy('variation_poids_kg', 'DESC')
             ->findAll();
 
         $suggestions = [];
         foreach ($regimes as $regime) {
-            // Prix disponibles
+
             $prixOptions = $this->getPrixByRegime($regime['id']);
-            // Activités sportives associées
+
             $activites = $this->getActivitesByRegime($regime['id']);
 
             $suggestions[] = [
@@ -44,7 +38,7 @@ class SuggestionAugmenterPoids
                 'activites'   => $activites,
             ];
 
-            if (count($suggestions) >= 3) break; // limite à 3 suggestions
+            if (count($suggestions) >= 3) break;
         }
 
         return $suggestions;

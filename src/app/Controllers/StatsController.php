@@ -18,7 +18,6 @@ class StatsController extends BaseController
         $userModel = new Utilisateur();
         $user = $userModel->find($userId);
 
-        // 1. Calcul IMC actuel
         $imc = null;
         $categorieImc = null;
         if ($user && !empty($user['taille_cm']) && !empty($user['poids_kg'])) {
@@ -26,7 +25,6 @@ class StatsController extends BaseController
             $categorieImc = $userModel->categorieIMC($imc);
         }
 
-        // 2. Historique des poids (pour le graphique)
         $poidsModel = new HistoriquePoids();
         $weightHistory = $poidsModel
             ->where('utilisateur_id', $userId)
@@ -40,13 +38,11 @@ class StatsController extends BaseController
             $poidsValues[] = (float) $w['poids_kg'];
         }
 
-        // Si peu de données, on ajoute le poids actuel si différent
         if (count($weightHistory) == 0 && !empty($user['poids_kg'])) {
             $poidsLabels[] = 'Actuel';
             $poidsValues[] = (float) $user['poids_kg'];
         }
 
-        // 3. Nombre de régimes souscrits
         $souscriptionModel = new SouscriptionRegime();
         $nbRegimes = $souscriptionModel->where('utilisateur_id', $userId)->countAllResults();
         $regimeActif = $souscriptionModel
@@ -57,8 +53,6 @@ class StatsController extends BaseController
             ->get()
             ->getRowArray();
 
-        // 4. Données pour le graphique d'objectif (ex: progression estimée)
-        // (fictif mais peut être amélioré)
         $objectifData = $this->getObjectifProgression($user);
 
         return view('dashboard/stats', [
@@ -75,7 +69,7 @@ class StatsController extends BaseController
 
     private function getObjectifProgression($user)
     {
-        // Exemple : si l'objectif est de perdre du poids, on calcule la progression
+
         $objectif = $user['objectif'] ?? null;
         $taille = $user['taille_cm'] ?? null;
         $poidsActuel = $user['poids_kg'] ?? null;
@@ -88,7 +82,7 @@ class StatsController extends BaseController
         $imcActuel = $poidsActuel / ($tailleM * $tailleM);
 
         if ($objectif === 'reduire_poids') {
-            $imcCible = 22; // IMC idéal pour la perte (exemple)
+            $imcCible = 22;
             $label = 'Perte de poids';
             $actuel = $imcActuel;
             $cible = $imcCible;
@@ -97,7 +91,7 @@ class StatsController extends BaseController
             $label = 'Gain de poids';
             $actuel = $imcActuel;
             $cible = $imcCible;
-        } else { // imc_ideal
+        } else {
             $imcCible = 22;
             $label = 'IMC idéal';
             $actuel = $imcActuel;

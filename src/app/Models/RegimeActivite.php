@@ -20,7 +20,6 @@ class RegimeActivite extends Model
     protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
 
-    // Relationships
     public function regime()
     {
         return $this->belongsTo(Regime::class, 'regime_id', 'id');

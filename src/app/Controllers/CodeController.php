@@ -10,7 +10,6 @@ class CodeController extends BaseController
         return view('code/form');
     }
 
-    //---------------------------------insert code---------------------------------
     public function verifier()
     {
         $code = $this->request->getPost('code');
@@ -22,10 +21,10 @@ class CodeController extends BaseController
         $result = UtilisateurService::redeemCode($code, $id_user);
         $data = [];
         if ($result['success']) {
-            $data['status'] = 1; // Code is valid
+            $data['status'] = 1;
             $data['message'] = $result['message'];
         } else {
-            $data['status'] = 0; // Code is invalid
+            $data['status'] = 0;
             $data['message'] = $result['message'];
         }
         return view('code/form', $data);

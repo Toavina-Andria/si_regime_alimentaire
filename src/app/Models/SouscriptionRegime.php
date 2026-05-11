@@ -22,7 +22,6 @@ class SouscriptionRegime extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = '';
 
-    // Relationships
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class, 'utilisateur_id', 'id');

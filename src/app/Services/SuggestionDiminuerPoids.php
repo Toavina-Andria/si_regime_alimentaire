@@ -20,7 +20,7 @@ class SuggestionDiminuerPoids
         $regimeModel = new Regime();
         $regimes = $regimeModel
             ->where('variation_poids_kg <', 0)
-            ->orderBy('variation_poids_kg', 'ASC') // perte la plus forte d'abord
+            ->orderBy('variation_poids_kg', 'ASC')
             ->findAll();
 
         $suggestions = [];

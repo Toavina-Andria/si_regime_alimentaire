@@ -100,7 +100,6 @@
   </div>
 </div>
 
-<!-- Modal Nouveau Régime -->
 <div class="modal-overlay" id="modalRegime">
   <div class="modal">
     <div class="modal-header">
@@ -213,7 +212,7 @@
         }
       });
     });
-     // Submit the form via fetch to send AJAX headers and handle JSON responses
+
     if (form) {
       var originalSubmitText = submitBtn ? submitBtn.textContent : 'Envoyer';
       form.addEventListener('submit', async function (e) {
@@ -250,10 +249,10 @@
               alert(msg);
             }
           } else if (res.redirected) {
-            // Follow server redirect (PRG) when controller returns a redirect
+
             window.location = res.url;
           } else {
-            // Fallback: reload to reflect changes
+
             window.location.reload();
           }
         } catch (err) {

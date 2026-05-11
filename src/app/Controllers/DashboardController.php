@@ -84,6 +84,96 @@ class DashboardController extends BaseController
         return view('dashboard/activites', $data);
     }
 
+    public function storeActivite()
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $rules = [
+            'nom'            => 'required|min_length[2]|max_length[255]',
+            'description'    => 'permit_empty',
+            'intensite'      => 'required|in_list[1,2,3]',
+            'calories_heure' => 'required|numeric|greater_than[0]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'nom'            => $this->request->getPost('nom'),
+            'description'    => $this->request->getPost('description'),
+            'intensite'      => $this->request->getPost('intensite'),
+            'calories_heure' => $this->request->getPost('calories_heure'),
+        ];
+
+        if ($this->dashboardService->createActivite($data)) {
+            return redirect()->to('/admin/activites')->with('message', 'Activité ajoutée avec succès.');
+        }
+
+        return redirect()->back()->withInput()->with('error', 'Erreur lors de l\'ajout de l\'activité.');
+    }
+
+    public function deleteActivite($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $this->dashboardService->deleteActivite($id);
+        return redirect()->to('/admin/activites')->with('message', 'Activité supprimée avec succès.');
+    }
+
+    public function updateActivite($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data = [
+            'nom'            => $this->request->getPost('nom'),
+            'description'    => $this->request->getPost('description'),
+            'intensite'      => $this->request->getPost('intensite'),
+            'calories_heure' => $this->request->getPost('calories_heure'),
+        ];
+
+        $this->dashboardService->updateActivite($id, $data);
+        return redirect()->to('/admin/activites')->with('message', 'Activité mise à jour avec succès.');
+    }
+
+    public function storeCode()
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data = [
+            'code'          => $this->request->getPost('code'),
+            'valeur_points' => $this->request->getPost('valeur_points'),
+            'est_valide'    => 1,
+            'expires_at'    => $this->request->getPost('expires_at') ?: null,
+        ];
+
+        $this->dashboardService->createCode($data);
+        return redirect()->to('/admin/codes')->with('message', 'Code bonus créé avec succès.');
+    }
+
+    public function updateCode($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data = [
+            'code'          => $this->request->getPost('code'),
+            'valeur_points' => $this->request->getPost('valeur_points'),
+            'est_valide'    => $this->request->getPost('est_valide') ? 1 : 0,
+            'expires_at'    => $this->request->getPost('expires_at') ?: null,
+        ];
+
+        $this->dashboardService->updateCode($id, $data);
+        return redirect()->to('/admin/codes')->with('message', 'Code bonus mis à jour.');
+    }
+
+    public function deleteCode($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $this->dashboardService->deleteCode($id);
+        return redirect()->to('/admin/codes')->with('message', 'Code bonus supprimé.');
+    }
+
     public function utilisateurs()
     {
         if ($redirect = $this->requireAdmin()) return $redirect;
@@ -91,6 +181,26 @@ class DashboardController extends BaseController
         $data['utilisateurs'] = $this->dashboardService->getAllUtilisateurs();
 
         return view('dashboard/utilisateurs', $data);
+    }
+
+    public function updateUtilisateur($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $data = [
+            'est_admin' => $this->request->getPost('est_admin') ? 1 : 0,
+        ];
+
+        $this->dashboardService->updateUtilisateur($id, $data);
+        return redirect()->to('/admin/utilisateurs')->with('message', 'Utilisateur mis à jour.');
+    }
+
+    public function deleteUtilisateur($id)
+    {
+        if ($redirect = $this->requireAdmin()) return $redirect;
+
+        $this->dashboardService->deleteUtilisateur($id);
+        return redirect()->to('/admin/utilisateurs')->with('message', 'Utilisateur supprimé.');
     }
 
     public function abonnements()
@@ -145,12 +255,4 @@ class DashboardController extends BaseController
         return redirect()->to('/admin/abonnements')->with('success', 'Abonnement supprimé.');
     }
 
-    public function parametres()
-    {
-        if ($redirect = $this->requireAdmin()) return $redirect;
-
-        $data['active'] = 'parametres';
-
-        return view('dashboard/parametres', $data);
-    }
 }

@@ -46,6 +46,7 @@
       <?php $validation = \Config\Services::validation(); ?>
 
       <form action="<?= base_url('auth/updateProfil') ?>" method="POST">
+        <?= csrf_field() ?>
         <div class="form-row">
           <div class="form-group">
             <label>Date de naissance</label>

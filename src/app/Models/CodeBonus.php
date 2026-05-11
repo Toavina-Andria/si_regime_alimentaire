@@ -35,7 +35,6 @@ class CodeBonus extends Model
         return $this->orderBy('created_at', 'DESC')->findAll($limit);
     }
 
-    // Relationships
     public function transactions()
     {
         return $this->hasMany(TransactionPortefeuille::class, 'code_bonus_id', 'id');

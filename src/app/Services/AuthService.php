@@ -49,7 +49,7 @@ class AuthService
             UtilisateurService::validateUser($id_user);
 
             $utilisateurModel = new Utilisateur();
-            if ($utilisateurModel->update($id_user, $data) === false) { // Use model rather than builder
+            if ($utilisateurModel->update($id_user, $data) === false) {
                 $errors = $utilisateurModel->errors();
                 $errorMsg = !empty($errors) ? implode(', ', $errors) : "Erreur inconnue lors de la mise à jour";
                 throw new \Exception($errorMsg);

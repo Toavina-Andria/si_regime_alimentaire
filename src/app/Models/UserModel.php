@@ -22,7 +22,7 @@ class UserModel extends Model
 
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
-    protected $updatedField  = null; // pas de champ updated_at dans ta table
+    protected $updatedField  = null;
 
     protected $validationRules = [
         'email' => 'required|valid_email|is_unique[utilisateur.email]',
