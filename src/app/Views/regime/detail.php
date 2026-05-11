@@ -97,12 +97,12 @@
             <?php endif; ?>
 
             <?php if (!empty($activites)): ?>
-            <div class="chart-card" style="max-width:860px;margin:0 auto 2rem;">
+            <div class="chart-card regime-section">
                 <div class="chart-card-header">
                     <div class="chart-card-title">🏋️ Activités sportives associées</div>
                     <div class="chart-card-subtitle">Activités recommandées pour ce régime</div>
                 </div>
-                <div class="suggestions-grid" style="padding:1.5rem;">
+                <div class="suggestions-grid regime-card-grid">
                     <?php foreach ($activites as $act): ?>
                     <div class="suggestion-card">
                         <div class="suggestion-header">
