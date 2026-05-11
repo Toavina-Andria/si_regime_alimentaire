@@ -85,11 +85,6 @@ helper('navigation');
                 <span class="icon">📉</span>
                 Mes statistiques
             </a>
-            <a href="<?= base_url('analysis') ?>"
-                class="sidebar-link <?= navActive('analysis') ?>">
-                <span class="icon">🔍</span>
-                Analyse des données
-            </a>
             <a href="<?= base_url('export/bilan') ?>"
                 class="sidebar-link <?= navActive('export/bilan') ?>">
                 <span class="icon">📄</span>
