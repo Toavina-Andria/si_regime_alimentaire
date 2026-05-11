@@ -15,34 +15,8 @@
   <?= $this->include('bar/sidebar') ?>
 
   <div class="main-content">
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="hamburger" aria-label="Menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        </button>
-        <div class="breadcrumb">
-          <a href="<?= base_url('admin/dashboard') ?>">Accueil</a>
-          <span>/</span>
-          <span class="current">Régimes alimentaires</span>
-        </div>
-      </div>
-      <div class="topbar-right">
-        <div class="topbar-search">
-          <span class="search-icon">🔍</span>
-          <input type="text" placeholder="Rechercher..." aria-label="Rechercher">
-        </div>
-        <button class="notification-btn" aria-label="Notifications">
-          🔔
-          <span class="notification-dot"></span>
-        </button>
-      </div>
-    </header>
-
     <main class="page-content">
+      <button class="mobile-hamburger" aria-label="Menu">☰</button>
       <div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
         <div>
           <h1 class="page-title">Régimes alimentaires</h1>

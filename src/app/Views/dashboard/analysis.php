@@ -17,10 +17,8 @@
 <div class="dashboard-layout">
     <?= view('bar/sidebar') ?>
     <div class="main-content">
-        <header class="topbar">
-            <h1 class="page-title">📊 Analyse des données</h1>
-            <a href="<?= base_url('dashboard') ?>" class="btn-outline">← Retour</a>
-        </header>
+        <div class="page-content">
+            <button class="mobile-hamburger" aria-label="Menu">☰</button>
 
         <div class="stats-cards">
             <div class="stat-card"><div class="stat-number"><?= $global_stats['total_users'] ?></div><div>Utilisateurs</div></div>
