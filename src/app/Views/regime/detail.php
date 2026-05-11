@@ -23,7 +23,7 @@
                     <h1 class="page-title"><?= esc($regime['nom']) ?></h1>
                     <p class="page-subtitle">Détails du régime alimentaire</p>
                 </div>
-                <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+                <div class="regime-header-actions">
                     <?php if ($wallet): ?>
                         <span class="points-badge">⭐ <?= number_format($wallet['solde_points'], 2) ?> points</span>
                     <?php else: ?>
@@ -66,7 +66,7 @@
             </div>
 
             <?php if (!empty($prix)): ?>
-            <div class="chart-card" style="max-width:860px;margin:0 auto 2rem;">
+            <div class="chart-card regime-section">
                 <div class="chart-card-header">
                     <div class="chart-card-title">💰 Tarifs</div>
                     <div class="chart-card-subtitle">Choisissez la durée de votre abonnement</div>
